@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+
+:root {
+  --bg: #f8f9fb; /* softer white */
+  --bg-sidebar: #f2f3f5; /* soft gray */
+  --text-main: #2d2d2d; /* soft dark */
+  --text-secondary: #4a4a4a;
+  --border-soft: #e2e5e8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* ⭐ REQUIRED FOR SCROLL FIX */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* stop whole-page scrolling */
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-main);
+}
