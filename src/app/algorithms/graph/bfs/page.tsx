@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function BFSPage() {
   return (
     <div>
@@ -44,6 +46,7 @@ export default function BFSPage() {
         <li>Time: O(V + E)</li>
         <li>Space: O(V)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function BellmanFordPage() {
   return (
     <div>
@@ -39,6 +41,7 @@ export default function BellmanFordPage() {
         <li>Time: O(V × E)</li>
         <li>Space: O(V)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

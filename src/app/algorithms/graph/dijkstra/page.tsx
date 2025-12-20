@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function DijkstraPage() {
   return (
     <div>
@@ -41,6 +43,7 @@ export default function DijkstraPage() {
         <li>Time: O((V + E) log V)</li>
         <li>Space: O(V)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

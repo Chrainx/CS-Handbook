@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function FloydWarshallPage() {
   return (
     <div>
@@ -31,6 +33,7 @@ export default function FloydWarshallPage() {
         <li>Time: O(V³)</li>
         <li>Space: O(V²)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

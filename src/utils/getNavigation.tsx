@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { categoryOrder, topicOrder } from './topicOrder'
 
 export interface NavItem {
   name: string
@@ -7,49 +8,51 @@ export interface NavItem {
   children: NavItem[]
 }
 
-export function getNavigation(rootDir: string = './src/app'): NavItem[] {
-  const ignore = [
-    'components',
-    'styles',
-    'globals.css',
-    'layout.tsx',
-    'page.tsx',
-    'favicon.ico',
-  ]
+export function getNavigation(
+  rootDir: string = './src/app/algorithms'
+): NavItem[] {
+  const nav: NavItem[] = []
 
-  function walk(dir: string, basePath: string = ''): NavItem[] {
-    const fullPath = path.join(process.cwd(), dir)
-    const entries = fs.readdirSync(fullPath, { withFileTypes: true })
+  // Loop through categories in custom order
+  for (const category of categoryOrder) {
+    const categoryPath = path.join(rootDir, category)
 
-    const nav: NavItem[] = []
+    // skip categories that don't exist
+    if (!fs.existsSync(categoryPath)) continue
 
-    for (const entry of entries) {
-      if (ignore.includes(entry.name)) continue
+    // category overview page
+    const categoryPageExists = fs.existsSync(
+      path.join(categoryPath, 'page.tsx')
+    )
 
-      const entryPath = path.join(dir, entry.name)
-      const urlPath = '/' + path.join(basePath, entry.name)
-
-      if (entry.isDirectory()) {
-        const pageExists = fs.existsSync(
-          path.join(fullPath, entry.name, 'page.tsx')
-        )
-
-        const children = walk(entryPath, path.join(basePath, entry.name))
-
-        nav.push({
-          name: formatName(entry.name),
-          path: pageExists ? urlPath : null,
-          children,
-        })
-      }
+    const categoryItem: NavItem = {
+      name: formatName(category),
+      path: categoryPageExists ? `/algorithms/${category}` : null,
+      children: [],
     }
 
-    return nav
+    // now add topics in custom order
+    const topics = topicOrder[category] || []
+    for (const topic of topics) {
+      const topicPath = path.join(categoryPath, topic)
+
+      if (!fs.existsSync(topicPath)) continue
+      const topicPageExists = fs.existsSync(path.join(topicPath, 'page.tsx'))
+
+      categoryItem.children.push({
+        name: formatName(topic),
+        path: topicPageExists ? `/algorithms/${category}/${topic}` : null,
+        children: [],
+      })
+    }
+
+    nav.push(categoryItem)
   }
 
-  return walk(rootDir)
+  return nav
 }
 
+// Format text (e.g., "merge-sort" → "Merge Sort")
 function formatName(name: string): string {
   return name.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }

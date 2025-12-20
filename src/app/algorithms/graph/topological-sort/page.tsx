@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function TopologicalSortPage() {
   return (
     <div>
@@ -40,6 +42,7 @@ export default function TopologicalSortPage() {
         <li>Time: O(V + E)</li>
         <li>Space: O(V)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

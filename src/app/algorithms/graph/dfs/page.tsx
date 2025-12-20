@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function DFSPage() {
   return (
     <div>
@@ -30,6 +32,7 @@ export default function DFSPage() {
         <li>Time: O(V + E)</li>
         <li>Space: O(V)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

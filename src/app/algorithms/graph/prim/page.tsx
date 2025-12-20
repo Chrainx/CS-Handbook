@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function PrimPage() {
   return (
     <div>
@@ -40,6 +42,7 @@ export default function PrimPage() {
         <li>Time: O(E log V)</li>
         <li>Space: O(V)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

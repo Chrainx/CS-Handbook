@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function KruskalPage() {
   return (
     <div>
@@ -36,6 +38,7 @@ export default function KruskalPage() {
         <li>Space: O(V)</li>
         <li>With Union–Find (path compression): Almost O(1) per union/find</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }
