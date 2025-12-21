@@ -28,7 +28,6 @@ export const topicOrder: Record<string, string[]> = {
     'topological-sort',
     'dijkstra',
     'bellman-ford',
-    'floyd-warshall',
     'prim',
     'kruskal',
   ],

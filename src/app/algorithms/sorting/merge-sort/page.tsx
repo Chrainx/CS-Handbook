@@ -13,18 +13,7 @@ export default function MergeSortPage() {
       </p>
 
       <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
-        Why Merge Sort Works
-      </h2>
-
-      <ul className="list-disc list-inside text-(--text-secondary)">
-        <li>Split the array into two halves</li>
-        <li>Recursively sort the left half</li>
-        <li>Recursively sort the right half</li>
-        <li>Merge the two sorted halves</li>
-      </ul>
-
-      <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
-        Key Insight
+        Core Idea
       </h2>
 
       <p className="text-(--text-secondary)">

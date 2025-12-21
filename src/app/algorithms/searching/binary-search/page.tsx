@@ -10,6 +10,21 @@ export default function BinarySearchPage() {
         the search interval in half.
       </p>
 
+      <h2 className="text-xl font-semibold mt-6 mb-2">Core Idea</h2>
+
+      <p className="mb-4">
+        Binary Search works by maintaining a search range in which the target
+        can possibly exist. At each step, the middle element is compared with
+        the target. Based on this comparison, one half of the remaining elements
+        is discarded, since the target cannot lie there.
+      </p>
+
+      <p className="mb-4">
+        This process continues until the target is found or the search range
+        becomes empty. The requirement that the array is sorted is what allows
+        this safe elimination of half the search space at every step.
+      </p>
+
       <h2 className="text-xl font-semibold mt-6 mb-2">Pseudocode</h2>
       <pre className="bg-gray-200 p-4 rounded">
         {`function binarySearch(arr, target):
