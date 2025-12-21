@@ -10,7 +10,13 @@ export const categoryOrder = [
 
 // Order of topics inside each category
 export const topicOrder: Record<string, string[]> = {
-  sorting: ['merge-sort', 'quick-sort', 'heap-sort'],
+  sorting: [
+    'insertion-sort',
+    'selection-sort',
+    'merge-sort',
+    'quick-sort',
+    'heap-sort',
+  ],
 
   searching: ['binary-search'],
 

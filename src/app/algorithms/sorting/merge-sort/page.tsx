@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function MergeSortPage() {
   return (
     <div>
@@ -76,6 +78,7 @@ function merge(left, right):
         <li>When worst-case guarantees are needed</li>
         <li>When recursion depth is not an issue</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

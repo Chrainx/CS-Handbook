@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function BinarySearchPage() {
   return (
     <div>
@@ -27,6 +29,7 @@ export default function BinarySearchPage() {
         <li>Time: O(log n)</li>
         <li>Space: O(1)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

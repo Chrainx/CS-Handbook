@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function QuickSortPage() {
   return (
     <div>
@@ -40,6 +42,7 @@ export default function QuickSortPage() {
         <li>Worst: O(n²)</li>
         <li>Space: O(log n) (recursive)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

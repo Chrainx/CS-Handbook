@@ -4,23 +4,62 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { NavItem } from '@/utils/getNavigation'
 
-export default function Sidebar({ nav }: { nav: NavItem[] }) {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">CS Handbook</h1>
-      <nav className="space-y-2">
-        {/* Home link */}
-        <Link href="/" className="text-blue-600 block mb-3">
-          🏠 Home
-        </Link>
+/* ---------------------------------------------
+   FILTER TREE FUNCTION (fix for your error)
+---------------------------------------------- */
+function filterTree(tree: NavItem[], query: string): NavItem[] {
+  if (!query.trim()) return tree
 
-        {nav.map((section, index) => (
-          <Section key={index} data={section} />
-        ))}
-      </nav>
-    </div>
+  const lower = query.toLowerCase()
+
+  return tree
+    .map((item) => {
+      const nameMatch = item.name.toLowerCase().includes(lower)
+      const filteredChildren = filterTree(item.children, query)
+
+      if (nameMatch || filteredChildren.length > 0) {
+        return {
+          ...item,
+          children: filteredChildren,
+        }
+      }
+      return null
+    })
+    .filter(Boolean) as NavItem[]
+}
+
+/* --------------------------------------------- */
+
+export default function Sidebar({ nav }: { nav: NavItem[] }) {
+  const [query, setQuery] = useState('')
+
+  const filtered = filterTree(nav, query)
+
+  return (
+    <aside className="h-full overflow-y-auto bg-(--bg-sidebar) border-r border-(--border-soft) p-6">
+      <h1 className="text-2xl font-bold mb-4">CS Handbook</h1>
+
+      {/* SEARCH INPUT */}
+      <input
+        type="text"
+        placeholder="Search..."
+        className="w-full p-2 mb-4 border rounded"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+
+      <Link href="/" className="text-blue-600 block mb-3">
+        🏠 Home
+      </Link>
+
+      {filtered.map((section, index) => (
+        <Section key={index} data={section} />
+      ))}
+    </aside>
   )
 }
+
+/* --------------------------------------------- */
 
 function Section({ data }: { data: NavItem }) {
   const [open, setOpen] = useState(true)

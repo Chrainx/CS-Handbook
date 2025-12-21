@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function InsertionSortPage() {
   return (
     <div>
@@ -32,6 +34,7 @@ export default function InsertionSortPage() {
         <li>Worst: O(n²)</li>
         <li>Space: O(1)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }

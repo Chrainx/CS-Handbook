@@ -1,3 +1,5 @@
+import NextPrev from '@/components/nextPrev'
+
 export default function SelectionSortPage() {
   return (
     <div>
@@ -29,6 +31,7 @@ export default function SelectionSortPage() {
         <li>Time: O(n²)</li>
         <li>Space: O(1)</li>
       </ul>
+      <NextPrev />
     </div>
   )
 }
