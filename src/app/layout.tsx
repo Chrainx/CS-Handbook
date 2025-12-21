@@ -11,16 +11,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="flex h-screen w-screen overflow-hidden">
-        {/* FIXED SIDEBAR */}
-        <aside className="w-64 h-full overflow-y-auto bg-(--bg-sidebar) border-r border-(--border-soft)">
+      <body className="h-screen w-screen overflow-hidden flex">
+        <aside className="w-64 h-full">
           <Sidebar nav={nav} />
         </aside>
 
-        {/* SCROLLABLE PAGE CONTENT */}
-        <main className="flex-1 h-full overflow-y-auto p-8 bg-(--bg)">
-          {children}
-        </main>
+        <main className="flex-1 h-full overflow-y-auto p-8">{children}</main>
       </body>
     </html>
   )

@@ -1,110 +1,129 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { NavItem } from '@/utils/getNavigation'
+import { usePathname } from 'next/navigation'
 
-/* ---------------------------------------------
-   FILTER TREE FUNCTION (fix for your error)
----------------------------------------------- */
 function filterTree(tree: NavItem[], query: string): NavItem[] {
   if (!query.trim()) return tree
-
-  const lower = query.toLowerCase()
+  const q = query.toLowerCase()
 
   return tree
-    .map((item) => {
-      const nameMatch = item.name.toLowerCase().includes(lower)
-      const filteredChildren = filterTree(item.children, query)
-
-      if (nameMatch || filteredChildren.length > 0) {
-        return {
-          ...item,
-          children: filteredChildren,
-        }
-      }
+    .map((node) => {
+      const match = node.name.toLowerCase().includes(q)
+      const kids = filterTree(node.children, query)
+      if (match || kids.length > 0) return { ...node, children: kids }
       return null
     })
     .filter(Boolean) as NavItem[]
 }
 
-/* --------------------------------------------- */
-
 export default function Sidebar({ nav }: { nav: NavItem[] }) {
   const [query, setQuery] = useState('')
-
-  const filtered = filterTree(nav, query)
+  const filtered = useMemo(() => filterTree(nav, query), [nav, query])
+  const pathname = usePathname()
 
   return (
     <aside className="h-full overflow-y-auto bg-(--bg-sidebar) border-r border-(--border-soft) p-6">
-      <h1 className="text-2xl font-bold mb-4">CS Handbook</h1>
+      <div className="mb-4">
+        <h1 className="text-xl font-bold">CS Handbook</h1>
+      </div>
 
-      {/* SEARCH INPUT */}
       <input
-        type="text"
-        placeholder="Search..."
-        className="w-full p-2 mb-4 border rounded"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search..."
+        className="w-full mb-4 px-3 py-2 text-sm rounded border border-(--border-soft) bg-white"
       />
 
-      <Link href="/" className="text-blue-600 block mb-3">
-        🏠 Home
-      </Link>
+      <nav className="space-y-2">
+        <Link href="/" className="block text-sm font-medium hover:underline">
+          🏠 Home
+        </Link>
 
-      {filtered.map((section, index) => (
-        <Section key={index} data={section} />
-      ))}
+        <div className="pt-2 space-y-2">
+          {filtered.map((item, i) => (
+            <TreeNode key={i} node={item} depth={0} pathname={pathname} />
+          ))}
+        </div>
+      </nav>
     </aside>
   )
 }
 
-/* --------------------------------------------- */
-
-function Section({ data }: { data: NavItem }) {
+function TreeNode({
+  node,
+  depth,
+  pathname,
+}: {
+  node: NavItem
+  depth: number
+  pathname: string
+}) {
+  const isActive = node.path === pathname
+  const isDescendantActive = node.children.some((child) =>
+    pathname.startsWith(child.path ?? '')
+  )
   const [open, setOpen] = useState(true)
+  const hasChildren = node.children.length > 0
+
+  // 🔧 STYLE TUNING
+  const indent = depth === 0 ? 'ml-0' : 'ml-3'
+  const textSize = depth === 0 ? 'text-base font-semibold' : 'text-sm'
+
+  const baseColor = isActive
+    ? 'text-blue-600 font-semibold'
+    : 'text-(--text-secondary)'
 
   return (
-    <div>
-      <button
-        className="font-semibold text-left w-full"
-        onClick={() => setOpen(!open)}
-      >
-        {data.name}
-      </button>
+    <div className={indent}>
+      <div className="flex items-center gap-2 py-0.5">
+        {hasChildren ? (
+          <button
+            onClick={() => setOpen(!open)}
+            className="w-4 text-xs opacity-60 hover:opacity-100"
+            type="button"
+          >
+            {open ? '▾' : '▸'}
+          </button>
+        ) : (
+          <span className="w-4" />
+        )}
 
-      {open && (
-        <div className="ml-4 mt-1 space-y-1">
-          {data.path && (
-            <Link href={data.path} className="text-blue-600 block">
+        {node.path ? (
+          <Link
+            href={node.path}
+            className={`${textSize} ${baseColor} hover:underline`}
+          >
+            {node.name}
+          </Link>
+        ) : (
+          <span className={`${textSize} ${baseColor}`}>{node.name}</span>
+        )}
+      </div>
+
+      {open && hasChildren && (
+        <div className="space-y-0.5">
+          {node.path && (
+            <Link
+              href={node.path}
+              className={`ml-6 block text-xs ${
+                isActive ? 'text-blue-600 font-semibold' : 'text-blue-600'
+              } hover:underline`}
+            >
               Overview
             </Link>
           )}
 
-          {data.children.map((child, index) => (
-            <Child key={index} data={child} />
+          {node.children.map((child, i) => (
+            <TreeNode
+              key={i}
+              node={child}
+              depth={depth + 1}
+              pathname={pathname}
+            />
           ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-function Child({ data }: { data: NavItem }) {
-  return (
-    <div className="ml-3">
-      {data.path ? (
-        <Link href={data.path} className="text-blue-600 block">
-          {data.name}
-        </Link>
-      ) : (
-        <div>
-          <span className="font-medium">{data.name}</span>
-          <div className="ml-3">
-            {data.children.map((child, index) => (
-              <Child key={index} data={child} />
-            ))}
-          </div>
         </div>
       )}
     </div>

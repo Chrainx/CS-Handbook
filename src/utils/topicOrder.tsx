@@ -8,6 +8,8 @@ export const categoryOrder = [
   'math',
 ]
 
+export type Category = (typeof categoryOrder)[number]
+
 // Order of topics inside each category
 export const topicOrder: Record<string, string[]> = {
   sorting: [

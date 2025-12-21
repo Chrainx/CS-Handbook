@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { categoryOrder, topicOrder } from './topicOrder'
+import { categoryOrder, topicOrder, Category } from './topicOrder'
 
 export interface NavItem {
   name: string
@@ -11,90 +11,104 @@ export interface NavItem {
 export function getNavigation(): NavItem[] {
   const nav: NavItem[] = []
 
-  // 1) ALGORITHMS SECTION (uses custom order)
+  // Algorithms
   const algoRoot = path.join(process.cwd(), 'src/app/algorithms')
   if (fs.existsSync(algoRoot)) {
-    const algoChildren: NavItem[] = []
-
-    // categories in custom order
-    for (const category of categoryOrder) {
-      const catDir = path.join(algoRoot, category)
-      if (!fs.existsSync(catDir)) continue
-
-      const catPageExists = fs.existsSync(path.join(catDir, 'page.tsx'))
-
-      const topics = topicOrder[category] || []
-      const topicChildren: NavItem[] = []
-
-      // topics in custom order
-      for (const topic of topics) {
-        const topicDir = path.join(catDir, topic)
-        if (!fs.existsSync(topicDir)) continue
-
-        const topicPageExists = fs.existsSync(path.join(topicDir, 'page.tsx'))
-
-        topicChildren.push({
-          name: formatName(topic),
-          path: topicPageExists ? `/algorithms/${category}/${topic}` : null,
-          children: [],
-        })
-      }
-
-      algoChildren.push({
-        name: formatName(category),
-        path: catPageExists ? `/algorithms/${category}` : null,
-        children: topicChildren,
-      })
-    }
-
-    nav.push({
-      name: 'Algorithms',
-      path: '/algorithms',
-      children: algoChildren,
-    })
+    nav.push(buildAlgorithms(algoRoot))
   }
 
-  // 2) DATA STRUCTURES SECTION (still filesystem order for now)
+  // Data Structures
   const dsRoot = path.join(process.cwd(), 'src/app/data-structures')
   if (fs.existsSync(dsRoot)) {
-    const dsChildren = walk(dsRoot, '/data-structures')
-
     nav.push({
       name: 'Data Structures',
-      path: '/data-structures',
-      children: dsChildren,
+      path: fs.existsSync(path.join(dsRoot, 'page.tsx'))
+        ? '/data-structures'
+        : null,
+      children: walk(dsRoot, '/data-structures'),
     })
   }
 
   return nav
 }
 
-// Generic walker used for data-structures for now
-function walk(dir: string, urlBase: string): NavItem[] {
+function buildAlgorithms(algoRoot: string): NavItem {
+  const existing = listDirs(algoRoot)
+
+  const ordered = categoryOrder.filter((c) => existing.includes(c))
+
+  const categorySet = new Set(categoryOrder)
+  const extras = existing.filter((c) => !categorySet.has(c as Category)).sort()
+
+  const categories = [...ordered, ...extras].map((category) => {
+    const catDir = path.join(algoRoot, category)
+    const catUrl = `/algorithms/${category}`
+    const hasPage = fs.existsSync(path.join(catDir, 'page.tsx'))
+
+    const topicDirs = listDirs(catDir)
+    const desired = topicOrder[category as Category] ?? []
+
+    const orderedTopics = desired.filter((t) => topicDirs.includes(t))
+    const extraTopics = topicDirs.filter((t) => !desired.includes(t)).sort()
+
+    const children: NavItem[] = [...orderedTopics, ...extraTopics].map(
+      (topic) => {
+        const tDir = path.join(catDir, topic)
+        const tUrl = `${catUrl}/${topic}`
+        const tHasPage = fs.existsSync(path.join(tDir, 'page.tsx'))
+
+        return {
+          name: formatName(topic),
+          path: tHasPage ? tUrl : null,
+          children: walk(tDir, tUrl),
+        }
+      }
+    )
+
+    return {
+      name: formatName(category),
+      path: hasPage ? catUrl : null,
+      children,
+    }
+  })
+
+  const algoHasPage = fs.existsSync(path.join(algoRoot, 'page.tsx'))
+
+  return {
+    name: 'Algorithms',
+    path: algoHasPage ? '/algorithms' : null,
+    children: categories,
+  }
+}
+
+function walk(dir: string, baseUrl: string): NavItem[] {
   if (!fs.existsSync(dir)) return []
 
   const entries = fs.readdirSync(dir, { withFileTypes: true })
-  const nav: NavItem[] = []
 
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue
+  return entries
+    .filter((e) => e.isDirectory())
+    .map((entry) => {
+      const fullDir = path.join(dir, entry.name)
+      const url = `${baseUrl}/${entry.name}`
+      const hasPage = fs.existsSync(path.join(fullDir, 'page.tsx'))
 
-    const folderPath = path.join(dir, entry.name)
-    const url = `${urlBase}/${entry.name}`
-
-    const pageExists = fs.existsSync(path.join(folderPath, 'page.tsx'))
-    const children = walk(folderPath, url)
-
-    nav.push({
-      name: formatName(entry.name),
-      path: pageExists ? url : null,
-      children,
+      return {
+        name: formatName(entry.name),
+        path: hasPage ? url : null,
+        children: walk(fullDir, url),
+      }
     })
-  }
-
-  return nav
 }
 
-function formatName(name: string): string {
+function listDirs(dir: string): string[] {
+  if (!fs.existsSync(dir)) return []
+  return fs
+    .readdirSync(dir, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+}
+
+function formatName(name: string) {
   return name.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
