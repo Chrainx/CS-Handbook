@@ -6,6 +6,7 @@
   --text-main: #2d2d2d; /* soft dark */
   --text-secondary: #4a4a4a;
   --border-soft: #e2e5e8;
+  --code-bg: #eef0f3;
 }
 
 @theme inline {
