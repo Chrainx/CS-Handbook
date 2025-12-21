@@ -5,15 +5,30 @@ import { useMemo, useState } from 'react'
 import { NavItem } from '@/utils/getNavigation'
 import { usePathname } from 'next/navigation'
 
-function filterTree(tree: NavItem[], query: string): NavItem[] {
-  if (!query.trim()) return tree
+function filterTree(nodes: NavItem[], query: string): NavItem[] {
+  if (!query) return nodes
+
   const q = query.toLowerCase()
 
-  return tree
+  return nodes
     .map((node) => {
-      const match = node.name.toLowerCase().includes(q)
-      const kids = filterTree(node.children, query)
-      if (match || kids.length > 0) return { ...node, children: kids }
+      const nodeMatches = node.name.toLowerCase().includes(q)
+
+      if (nodeMatches) {
+        // KEEP FULL SUBTREE
+        return node
+      }
+
+      const filteredChildren = filterTree(node.children, query)
+
+      if (filteredChildren.length > 0) {
+        // KEEP NODE WITH MATCHING CHILDREN
+        return {
+          ...node,
+          children: filteredChildren,
+        }
+      }
+
       return null
     })
     .filter(Boolean) as NavItem[]
