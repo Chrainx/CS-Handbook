@@ -111,10 +111,12 @@ function TreeNode({
             href={node.path}
             className={`${textSize} ${baseColor} hover:underline`}
           >
-            {node.name}
+            {node.displayName ?? node.name}
           </Link>
         ) : (
-          <span className={`${textSize} ${baseColor}`}>{node.name}</span>
+          <span className={`${textSize} ${baseColor}`}>
+            {node.displayName ?? node.name}
+          </span>
         )}
       </div>
 
