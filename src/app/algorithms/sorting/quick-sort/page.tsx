@@ -2,7 +2,7 @@ import NextPrev from '@/components/nextPrev'
 
 export default function QuickSortPage() {
   return (
-    <div className="max-w-3xl leading-relaxed space-y-4">
+    <div>
       <h1 className="text-3xl font-semibold text-(--text-main)">Quick Sort</h1>
 
       <p className="text-(--text-secondary)">

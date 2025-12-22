@@ -2,7 +2,7 @@ import NextPrev from '@/components/nextPrev'
 
 export default function HeapSortPage() {
   return (
-    <div className="max-w-3xl leading-relaxed space-y-4">
+    <div>
       <h1 className="text-3xl font-semibold text-(--text-main)">Heap Sort</h1>
 
       <p className="text-(--text-secondary)">

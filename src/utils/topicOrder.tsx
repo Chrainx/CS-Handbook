@@ -34,13 +34,10 @@ export const topicOrder: Record<string, string[]> = {
 
   'dynamic-programming': [
     'knapsack-0-1',
-    'unbounded-knapsack',
+    'coin-change',
     'longest-increasing-subsequence',
     'longest-common-subsequence',
     'edit-distance',
-    'matrix-chain-multiplication',
-    'coin-change',
-    'rod-cutting',
   ],
 
   greedy: [
