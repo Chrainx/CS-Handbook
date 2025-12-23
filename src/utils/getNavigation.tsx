@@ -24,7 +24,10 @@ function buildTree(dir: string, baseUrl: string): NavItem[] {
 
   const folders = fs
     .readdirSync(dir, { withFileTypes: true })
-    .filter((e) => e.isDirectory())
+    .filter(
+      (e) =>
+        e.isDirectory() && !e.name.startsWith('[') && !e.name.startsWith('(')
+    )
     .map((e) => e.name)
 
   const ordered = applyOrdering(folders, baseUrl)

@@ -1,17 +1,21 @@
-// Order of categories (GLOBAL order)
+// ===============================
+// Algorithms
+// ===============================
+
+// Order of algorithm categories
 export const categoryOrder = [
   'sorting',
   'searching',
   'graph',
   'dynamic-programming',
   'greedy',
-  'math',
 ]
 
 export type Category = (typeof categoryOrder)[number]
 
-// Order of topics inside each category
+// Order of topics inside each algorithm category
 export const topicOrder: Record<string, string[]> = {
+  // ---- Sorting ----
   sorting: [
     'insertion-sort',
     'selection-sort',
@@ -20,8 +24,10 @@ export const topicOrder: Record<string, string[]> = {
     'heap-sort',
   ],
 
+  // ---- Searching ----
   searching: ['binary-search'],
 
+  // ---- Graph Algorithms ----
   graph: [
     'bfs',
     'dfs',
@@ -32,6 +38,7 @@ export const topicOrder: Record<string, string[]> = {
     'kruskal',
   ],
 
+  // ---- Dynamic Programming ----
   'dynamic-programming': [
     'knapsack-0-1',
     'coin-change',
@@ -40,20 +47,20 @@ export const topicOrder: Record<string, string[]> = {
     'edit-distance',
   ],
 
-  greedy: [
-    'activity-selection',
-    'fractional-knapsack',
-    'job-sequencing',
-    'huffman-coding',
-    'interval-scheduling',
-  ],
+  // ---- Greedy ----
+  greedy: ['interval-scheduling', 'fractional-knapsack', 'huffman-coding'],
 
-  math: [
-    'gcd',
-    'lcm',
-    'sieve-of-eratosthenes',
-    'modular-exponentiation',
-    'modular-inverse',
-    'prime-factorization',
+  // ===============================
+  // Data Structures
+  // ===============================
+  'data-structures': [
+    'arrays',
+    'linked-lists',
+    'stack',
+    'queue',
+    'hash-table',
+    'heap',
+    'tree',
+    'graph',
   ],
 }

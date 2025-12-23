@@ -10,19 +10,79 @@ export default function NextPrev() {
   const pathname = usePathname()
   const parts = pathname.split('/').filter(Boolean)
 
-  // Routes we support:
-  // /algorithms
-  // /algorithms/:category
-  // /algorithms/:category/:topic
   if (parts.length === 0) return null
 
-  // If you want NextPrev ONLY inside algorithms pages, keep this guard:
-  if (parts[0] !== 'algorithms') return null
+  const section = parts[0] // 'algorithms' | 'data-structures' | others
 
+  // Only show NextPrev in Algorithms + Data Structures
+  if (section !== 'algorithms' && section !== 'data-structures') return null
+
+  // -------------------------
+  // Section: Data Structures
+  // -------------------------
+  if (section === 'data-structures') {
+    const dsTopic = (parts[1] ?? null) as string | null
+    const dsTopics = topicOrder['data-structures'] ?? []
+
+    let prev: NavLink | null = null
+    let next: NavLink | null = null
+
+    const lastAlgoCat = categoryOrder[categoryOrder.length - 1]
+    const lastAlgoTopics = topicOrder[lastAlgoCat] ?? []
+    const lastAlgoTopic =
+      lastAlgoTopics.length > 0
+        ? lastAlgoTopics[lastAlgoTopics.length - 1]
+        : null
+
+    // /data-structures (overview)
+    if (!dsTopic) {
+      // Prev goes back to last algorithms topic (or /algorithms if somehow empty)
+      if (lastAlgoTopic) {
+        prev = {
+          href: `/algorithms/${lastAlgoCat}/${lastAlgoTopic}`,
+          label: format(lastAlgoTopic),
+        }
+      } else {
+        prev = { href: `/algorithms`, label: 'Algorithms Overview' }
+      }
+
+      // Next goes to first DS topic page (if you have DS subpages)
+      if (dsTopics.length > 0) {
+        const first = dsTopics[0]
+        next = { href: `/data-structures/${first}`, label: format(first) }
+      }
+
+      return <NavBar prev={prev} next={next} />
+    }
+
+    // /data-structures/:topic
+    const idx = dsTopics.indexOf(dsTopic)
+    if (idx === -1) return null
+
+    // Prev: previous DS topic OR DS overview
+    if (idx > 0) {
+      const prevTopic = dsTopics[idx - 1]
+      prev = { href: `/data-structures/${prevTopic}`, label: format(prevTopic) }
+    } else {
+      prev = { href: `/data-structures`, label: 'Data Structures Overview' }
+    }
+
+    // Next: next DS topic OR null (end)
+    if (idx < dsTopics.length - 1) {
+      const nextTopic = dsTopics[idx + 1]
+      next = { href: `/data-structures/${nextTopic}`, label: format(nextTopic) }
+    }
+
+    return <NavBar prev={prev} next={next} />
+  }
+
+  // -------------------------
+  // Section: Algorithms (your existing logic, with 1 bridge)
+  // -------------------------
   const category = (parts[1] ?? null) as string | null
   const topic = (parts[2] ?? null) as string | null
 
-  // Special case: /algorithms overview page
+  // /algorithms overview page
   if (!category) {
     const firstCat = categoryOrder[0]
     const next: NavLink = {
@@ -32,7 +92,6 @@ export default function NextPrev() {
     return <NavBar prev={null} next={next} />
   }
 
-  // Unknown category? (e.g. typo in URL)
   if (!isCategory(category)) return null
 
   const catIndex = categoryOrder.indexOf(category)
@@ -41,14 +100,10 @@ export default function NextPrev() {
   let prev: NavLink | null = null
   let next: NavLink | null = null
 
-  // -------------------------
   // Case A: /algorithms/:category (overview)
-  // -------------------------
   if (!topic) {
-    // Prev: previous category's last topic OR previous category overview (choose behavior)
     if (catIndex > 0) {
       const prevCat = categoryOrder[catIndex - 1]
-      // docs-style: go to previous category's last topic if exists, else overview
       const prevTopics = topicOrder[prevCat] ?? []
       if (prevTopics.length > 0) {
         const last = prevTopics[prevTopics.length - 1]
@@ -60,11 +115,9 @@ export default function NextPrev() {
         }
       }
     } else {
-      // first category overview -> previous is /algorithms
       prev = { href: `/algorithms`, label: 'Algorithms Overview' }
     }
 
-    // Next: first topic in this category, else next category overview
     if (topics.length > 0) {
       const first = topics[0]
       next = { href: `/algorithms/${category}/${first}`, label: format(first) }
@@ -79,12 +132,8 @@ export default function NextPrev() {
     return <NavBar prev={prev} next={next} />
   }
 
-  // -------------------------
   // Case B: /algorithms/:category/:topic (topic page)
-  // -------------------------
   const index = topics.indexOf(topic)
-
-  // If topic not found in topicOrder, don't guess. (prevents broken links)
   if (index === -1) return null
 
   // Prev: previous topic OR category overview
@@ -95,14 +144,13 @@ export default function NextPrev() {
       label: format(prevTopic),
     }
   } else {
-    // first topic -> category overview
     prev = {
       href: `/algorithms/${category}`,
       label: `${format(category)} Overview`,
     }
   }
 
-  // Next: next topic OR next category overview
+  // Next: next topic OR next category overview OR bridge to data structures
   if (index < topics.length - 1) {
     const nextTopic = topics[index + 1]
     next = {
@@ -110,13 +158,16 @@ export default function NextPrev() {
       label: format(nextTopic),
     }
   } else {
-    // last topic -> next category overview (or if none, null)
+    // last topic in this category
     if (catIndex < categoryOrder.length - 1) {
       const nextCat = categoryOrder[catIndex + 1]
       next = {
         href: `/algorithms/${nextCat}`,
         label: `${format(nextCat)} Overview`,
       }
+    } else {
+      // ✅ LAST ALGORITHMS TOPIC → go to Data Structures overview
+      next = { href: `/data-structures`, label: `Data Structures Overview` }
     }
   }
 
