@@ -1,5 +1,6 @@
 import './globals.css'
 import Sidebar from '@/components/sidebar'
+import Banner from '@/components/banner'
 import { getNavigation } from '@/utils/getNavigation'
 
 export default function RootLayout({
@@ -16,7 +17,10 @@ export default function RootLayout({
           <Sidebar nav={nav} />
         </aside>
 
-        <main className="flex-1 h-full overflow-y-auto p-8">{children}</main>
+        <main className="flex-1 h-full overflow-y-auto p-8">
+          <Banner />
+          <div>{children}</div>
+        </main>
       </body>
     </html>
   )
