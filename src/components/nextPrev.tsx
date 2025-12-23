@@ -2,177 +2,182 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { topicOrder, categoryOrder, type Category } from '@/utils/topicOrder'
+import { sections } from '@/utils/section'
 
 type NavLink = { href: string; label: string }
+
+const sectionKeys = Object.keys(sections) as (keyof typeof sections)[]
 
 export default function NextPrev() {
   const pathname = usePathname()
   const parts = pathname.split('/').filter(Boolean)
-
   if (parts.length === 0) return null
 
-  const section = parts[0] // 'algorithms' | 'data-structures' | others
+  const section = sectionKeys.find(
+    (k) => sections[k].path.replace('/', '') === parts[0]
+  )
+  if (!section) return null
 
-  // Only show NextPrev in Algorithms + Data Structures
-  if (section !== 'algorithms' && section !== 'data-structures') return null
+  const sectionConfig = sections[section]
+  const sectionIndex = sectionKeys.indexOf(section)
 
-  // -------------------------
-  // Section: Data Structures
-  // -------------------------
-  if (section === 'data-structures') {
-    const dsTopic = (parts[1] ?? null) as string | null
-    const dsTopics = topicOrder['data-structures'] ?? []
+  const topic = parts[1] ?? null
+  const subTopic = parts[2] ?? null
 
-    let prev: NavLink | null = null
-    let next: NavLink | null = null
-
-    const lastAlgoCat = categoryOrder[categoryOrder.length - 1]
-    const lastAlgoTopics = topicOrder[lastAlgoCat] ?? []
-    const lastAlgoTopic =
-      lastAlgoTopics.length > 0
-        ? lastAlgoTopics[lastAlgoTopics.length - 1]
-        : null
-
-    // /data-structures (overview)
-    if (!dsTopic) {
-      // Prev goes back to last algorithms topic (or /algorithms if somehow empty)
-      if (lastAlgoTopic) {
-        prev = {
-          href: `/algorithms/${lastAlgoCat}/${lastAlgoTopic}`,
-          label: format(lastAlgoTopic),
-        }
-      } else {
-        prev = { href: `/algorithms`, label: 'Algorithms Overview' }
-      }
-
-      // Next goes to first DS topic page (if you have DS subpages)
-      if (dsTopics.length > 0) {
-        const first = dsTopics[0]
-        next = { href: `/data-structures/${first}`, label: format(first) }
-      }
-
-      return <NavBar prev={prev} next={next} />
-    }
-
-    // /data-structures/:topic
-    const idx = dsTopics.indexOf(dsTopic)
-    if (idx === -1) return null
-
-    // Prev: previous DS topic OR DS overview
-    if (idx > 0) {
-      const prevTopic = dsTopics[idx - 1]
-      prev = { href: `/data-structures/${prevTopic}`, label: format(prevTopic) }
-    } else {
-      prev = { href: `/data-structures`, label: 'Data Structures Overview' }
-    }
-
-    // Next: next DS topic OR null (end)
-    if (idx < dsTopics.length - 1) {
-      const nextTopic = dsTopics[idx + 1]
-      next = { href: `/data-structures/${nextTopic}`, label: format(nextTopic) }
-    }
-
-    return <NavBar prev={prev} next={next} />
-  }
-
-  // -------------------------
-  // Section: Algorithms (your existing logic, with 1 bridge)
-  // -------------------------
-  const category = (parts[1] ?? null) as string | null
-  const topic = (parts[2] ?? null) as string | null
-
-  // /algorithms overview page
-  if (!category) {
-    const firstCat = categoryOrder[0]
-    const next: NavLink = {
-      href: `/algorithms/${firstCat}`,
-      label: `${format(firstCat)} Overview`,
-    }
-    return <NavBar prev={null} next={next} />
-  }
-
-  if (!isCategory(category)) return null
-
-  const catIndex = categoryOrder.indexOf(category)
-  const topics = topicOrder[category] ?? []
+  const topics = sectionConfig.order
+  const subTopics = topic ? sectionConfig.subOrder?.[topic] ?? null : null
 
   let prev: NavLink | null = null
   let next: NavLink | null = null
 
-  // Case A: /algorithms/:category (overview)
+  /* -------------------------
+     SECTION OVERVIEW
+     /algorithms  or  /data-structures
+     ------------------------- */
   if (!topic) {
-    if (catIndex > 0) {
-      const prevCat = categoryOrder[catIndex - 1]
-      const prevTopics = topicOrder[prevCat] ?? []
-      if (prevTopics.length > 0) {
-        const last = prevTopics[prevTopics.length - 1]
-        prev = { href: `/algorithms/${prevCat}/${last}`, label: format(last) }
-      } else {
-        prev = {
-          href: `/algorithms/${prevCat}`,
-          label: `${format(prevCat)} Overview`,
-        }
-      }
-    } else {
-      prev = { href: `/algorithms`, label: 'Algorithms Overview' }
+    // prev → last leaf of previous section (NOT its overview)
+    if (sectionIndex > 0) {
+      const prevSectionKey = sectionKeys[sectionIndex - 1]
+      const last = lastLeafInSection(prevSectionKey)
+      prev = { href: last.href, label: last.label }
     }
 
+    // next → first topic overview
     if (topics.length > 0) {
-      const first = topics[0]
-      next = { href: `/algorithms/${category}/${first}`, label: format(first) }
-    } else if (catIndex < categoryOrder.length - 1) {
-      const nextCat = categoryOrder[catIndex + 1]
       next = {
-        href: `/algorithms/${nextCat}`,
-        label: `${format(nextCat)} Overview`,
+        href: `${sectionConfig.path}/${topics[0]}`,
+        label: format(topics[0]),
       }
     }
 
     return <NavBar prev={prev} next={next} />
   }
 
-  // Case B: /algorithms/:category/:topic (topic page)
-  const index = topics.indexOf(topic)
-  if (index === -1) return null
+  /* -------------------------
+     TOPIC OVERVIEW
+     /algorithms/sorting
+     /algorithms/greedy
+     /data-structures/arrays  (usually leaf, but still fine)
+     ------------------------- */
+  if (!subTopic) {
+    const topicIndex = topics.indexOf(topic)
+    if (topicIndex === -1) return null
 
-  // Prev: previous topic OR category overview
-  if (index > 0) {
-    const prevTopic = topics[index - 1]
+    // prev → last leaf of previous topic (or section overview if first topic)
+    if (topicIndex > 0) {
+      const prevTopic = topics[topicIndex - 1]
+      const last = lastLeafInTopic(section, prevTopic)
+      prev = { href: last.href, label: last.label }
+    } else {
+      prev = {
+        href: sectionConfig.path,
+        label: `${formatSection(section)} Overview`,
+      }
+    }
+
+    // next → first subtopic if exists, else next topic overview, else next section overview
+    if (subTopics && subTopics.length > 0) {
+      next = {
+        href: `${sectionConfig.path}/${topic}/${subTopics[0]}`,
+        label: format(subTopics[0]),
+      }
+    } else if (topicIndex < topics.length - 1) {
+      const nextTopic = topics[topicIndex + 1]
+      next = {
+        href: `${sectionConfig.path}/${nextTopic}`,
+        label: format(nextTopic),
+      }
+    } else if (sectionIndex < sectionKeys.length - 1) {
+      const nextSectionKey = sectionKeys[sectionIndex + 1]
+      next = {
+        href: sections[nextSectionKey].path,
+        label: `${formatSection(nextSectionKey)} Overview`,
+      }
+    }
+
+    return <NavBar prev={prev} next={next} />
+  }
+
+  /* -------------------------
+     SUBTOPIC PAGE
+     /algorithms/sorting/insertion-sort
+     ------------------------- */
+  if (!subTopics) return null
+
+  const subIndex = subTopics.indexOf(subTopic)
+  if (subIndex === -1) return null
+
+  // prev
+  if (subIndex > 0) {
     prev = {
-      href: `/algorithms/${category}/${prevTopic}`,
-      label: format(prevTopic),
+      href: `${sectionConfig.path}/${topic}/${subTopics[subIndex - 1]}`,
+      label: format(subTopics[subIndex - 1]),
     }
   } else {
     prev = {
-      href: `/algorithms/${category}`,
-      label: `${format(category)} Overview`,
+      href: `${sectionConfig.path}/${topic}`,
+      label: `${format(topic)} Overview`,
     }
   }
 
-  // Next: next topic OR next category overview OR bridge to data structures
-  if (index < topics.length - 1) {
-    const nextTopic = topics[index + 1]
+  // next
+  if (subIndex < subTopics.length - 1) {
     next = {
-      href: `/algorithms/${category}/${nextTopic}`,
-      label: format(nextTopic),
+      href: `${sectionConfig.path}/${topic}/${subTopics[subIndex + 1]}`,
+      label: format(subTopics[subIndex + 1]),
     }
   } else {
-    // last topic in this category
-    if (catIndex < categoryOrder.length - 1) {
-      const nextCat = categoryOrder[catIndex + 1]
+    const topicIndex = topics.indexOf(topic)
+    if (topicIndex < topics.length - 1) {
+      const nextTopic = topics[topicIndex + 1]
       next = {
-        href: `/algorithms/${nextCat}`,
-        label: `${format(nextCat)} Overview`,
+        href: `${sectionConfig.path}/${nextTopic}`,
+        label: format(nextTopic),
       }
-    } else {
-      // ✅ LAST ALGORITHMS TOPIC → go to Data Structures overview
-      next = { href: `/data-structures`, label: `Data Structures Overview` }
+    } else if (sectionIndex < sectionKeys.length - 1) {
+      const nextSectionKey = sectionKeys[sectionIndex + 1]
+      next = {
+        href: sections[nextSectionKey].path,
+        label: `${formatSection(nextSectionKey)} Overview`,
+      }
     }
   }
 
   return <NavBar prev={prev} next={next} />
+
+  /* -------------------------
+     Helpers (scoped)
+     ------------------------- */
+
+  function lastLeafInTopic(
+    sectionKey: keyof typeof sections,
+    topicKey: string
+  ) {
+    const sec = sections[sectionKey]
+    const subs = sec.subOrder?.[topicKey]
+    if (subs && subs.length > 0) {
+      const lastSub = subs[subs.length - 1]
+      return {
+        href: `${sec.path}/${topicKey}/${lastSub}`,
+        label: format(lastSub),
+      }
+    }
+    return {
+      href: `${sec.path}/${topicKey}`,
+      label: `${format(topicKey)} Overview`,
+    }
+  }
+
+  function lastLeafInSection(sectionKey: keyof typeof sections) {
+    const sec = sections[sectionKey]
+    const lastTopic = sec.order[sec.order.length - 1]
+    return lastLeafInTopic(sectionKey, lastTopic)
+  }
 }
+
+/* -------------------------
+   UI
+   ------------------------- */
 
 function NavBar({
   prev,
@@ -204,10 +209,10 @@ function NavBar({
   )
 }
 
-function isCategory(x: string): x is Category {
-  return (categoryOrder as readonly string[]).includes(x)
-}
-
 function format(str: string) {
   return str.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+function formatSection(key: string) {
+  return format(key)
 }

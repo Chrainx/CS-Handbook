@@ -9,29 +9,28 @@ function filterTree(nodes: NavItem[], query: string): NavItem[] {
   if (!query) return nodes
 
   const q = query.toLowerCase()
+  const result: NavItem[] = []
 
-  return nodes
-    .map((node) => {
-      const nodeMatches = node.name.toLowerCase().includes(q)
+  for (const node of nodes) {
+    const nodeMatches = node.name.toLowerCase().includes(q)
 
-      if (nodeMatches) {
-        // KEEP FULL SUBTREE
-        return node
-      }
+    if (nodeMatches) {
+      // keep node as-is (preserves order)
+      result.push(node)
+      continue
+    }
 
-      const filteredChildren = filterTree(node.children, query)
+    const filteredChildren = filterTree(node.children, query)
 
-      if (filteredChildren.length > 0) {
-        // KEEP NODE WITH MATCHING CHILDREN
-        return {
-          ...node,
-          children: filteredChildren,
-        }
-      }
+    if (filteredChildren.length > 0) {
+      result.push({
+        ...node,
+        children: filteredChildren,
+      })
+    }
+  }
 
-      return null
-    })
-    .filter(Boolean) as NavItem[]
+  return result
 }
 
 export default function Sidebar({ nav }: { nav: NavItem[] }) {
@@ -80,7 +79,7 @@ function TreeNode({
   const isDescendantActive = node.children.some((child) =>
     pathname.startsWith(child.path ?? '')
   )
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(isActive || isDescendantActive)
   const hasChildren = node.children.length > 0
 
   // 🔧 STYLE TUNING

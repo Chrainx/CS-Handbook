@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { categoryOrder, topicOrder, Category } from './topicOrder'
+import { sections } from './section'
 
 export interface NavItem {
   name: string
@@ -53,29 +53,36 @@ function buildTree(dir: string, baseUrl: string): NavItem[] {
 function applyOrdering(folders: string[], baseUrl: string): string[] {
   // root level
   if (baseUrl === '') {
-    return mergeOrder(folders, ['algorithms', 'data-structures'])
+    const root = Object.values(sections).map((s) => s.path.replace('/', ''))
+    return mergeOrder(folders, root)
   }
 
-  // algorithms categories
-  if (baseUrl === '/algorithms') {
-    return mergeOrder(folders, categoryOrder)
+  const section = Object.values(sections).find(
+    (s) => baseUrl === s.path || baseUrl.startsWith(s.path + '/')
+  )
+  if (!section) return [...folders].sort()
+
+  // section root
+  if (baseUrl === section.path) {
+    return mergeOrder(folders, section.order)
   }
 
-  // algorithm topics
-  const match = baseUrl.match(/^\/algorithms\/([^/]+)$/)
-  if (match) {
-    const category = match[1] as Category
-    const desired = topicOrder[category]
-    if (desired) {
-      return mergeOrder(folders, desired)
-    }
+  // deeper level (e.g. /algorithms/sorting)
+  const rest = baseUrl.slice(section.path.length + 1)
+  const key = rest.split('/')[0]
+
+  const subOrder = section.subOrder?.[key]
+  if (subOrder) {
+    return mergeOrder(folders, subOrder)
   }
 
-  // default: alphabetical
   return [...folders].sort()
 }
 
-function mergeOrder(actual: string[], desired: string[]): string[] {
+function mergeOrder(
+  actual: readonly string[],
+  desired: readonly string[]
+): string[] {
   const ordered = desired.filter((x) => actual.includes(x))
   const extras = actual.filter((x) => !desired.includes(x)).sort()
   return [...ordered, ...extras]
