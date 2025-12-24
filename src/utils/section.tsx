@@ -45,6 +45,7 @@ export const sections: Record<string, SectionConfig> = {
       'stack',
       'queue',
       'hash-table',
+      'sets',
       'heap',
       'tree',
       'graph',
