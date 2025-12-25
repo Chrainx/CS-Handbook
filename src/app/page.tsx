@@ -13,7 +13,9 @@ export default function HomePage() {
       {/* Category grid */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Categories</h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Active categories */}
           <CategoryCard
             title="Algorithms"
             href="/algorithms"
@@ -22,38 +24,40 @@ export default function HomePage() {
           <CategoryCard
             title="Data Structures"
             href="/data-structures"
-            description="Arrays, trees, heaps, hash tables, graphs."
+            description="Arrays, linked lists, stacks, queues, trees, graphs."
           />
-          <CategoryCard
+
+          {/* Coming soon */}
+          <ComingSoonCard
             title="Operating Systems"
-            href="/operating-systems"
-            description="Processes, threads, memory, scheduling."
+            description="Processes, threads, memory management, scheduling."
           />
-          <CategoryCard
+          <ComingSoonCard
             title="Networks"
-            href="/networks"
-            description="TCP/IP, routing, congestion control."
+            description="TCP/IP, routing, congestion control, protocols."
           />
-          <CategoryCard
+          <ComingSoonCard
             title="Security"
-            href="/security"
-            description="TLS, encryption, attacks, firewalls."
+            description="Cryptography, TLS, attacks, system security."
           />
-          <CategoryCard
+          <ComingSoonCard
             title="Machine Learning"
-            href="/machine-learning"
-            description="Regression, classification, deep learning."
+            description="Regression, classification, neural networks."
           />
         </div>
       </section>
 
       {/* Footer */}
       <footer className="text-center text-gray-500 py-10 text-sm">
-        Built with Next.js & Tailwind — by Fredy.
+        Built with Next.js & Tailwind — by Fredy
       </footer>
     </div>
   )
 }
+
+/* =========================
+   Components
+   ========================= */
 
 function CategoryCard({
   title,
@@ -72,5 +76,25 @@ function CategoryCard({
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-gray-600">{description}</p>
     </a>
+  )
+}
+
+function ComingSoonCard({
+  title,
+  description,
+}: {
+  title: string
+  description: string
+}) {
+  return (
+    <div className="p-6 border border-dashed border-(--border-soft) rounded-xl bg-(--bg) opacity-70 cursor-not-allowed">
+      <h3 className="text-xl font-semibold mb-2">
+        {title}{' '}
+        <span className="ml-2 text-xs text-gray-400 align-middle">
+          (Coming soon)
+        </span>
+      </h3>
+      <p className="text-gray-600">{description}</p>
+    </div>
   )
 }
