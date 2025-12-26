@@ -71,7 +71,7 @@ export default function NextPrev() {
     } else {
       prev = {
         href: sectionConfig.path,
-        label: `${formatSection(section)} Overview`,
+        label: `${formatSection(section)}`,
       }
     }
 
@@ -91,7 +91,7 @@ export default function NextPrev() {
       const nextSectionKey = sectionKeys[sectionIndex + 1]
       next = {
         href: sections[nextSectionKey].path,
-        label: `${formatSection(nextSectionKey)} Overview`,
+        label: `${formatSection(nextSectionKey)}`,
       }
     }
 
@@ -116,7 +116,7 @@ export default function NextPrev() {
   } else {
     prev = {
       href: `${sectionConfig.path}/${topic}`,
-      label: `${format(topic)} Overview`,
+      label: `${format(topic)}`,
     }
   }
 
