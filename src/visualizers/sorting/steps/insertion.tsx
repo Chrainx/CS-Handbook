@@ -1,8 +1,8 @@
-import { Step } from './types'
+import { SortingStep } from '../../steps/types'
 
-export function insertionSortSteps(arr: number[]): Step[] {
+export function insertionSortSteps(arr: number[]): SortingStep[] {
   const a = [...arr]
-  const steps: Step[] = []
+  const steps: SortingStep[] = []
 
   for (let i = 1; i < a.length; i++) {
     let j = i

@@ -1,39 +1,62 @@
-import { Step } from './sorting/steps/types'
+import { Step } from './steps/types'
 
-export function describeStep(step: Step, algorithm: string): string {
+export function describeStep(
+  step: Step,
+  context?: {
+    target?: number
+  }
+): string {
   switch (step.type) {
+    /* ===================== SORTING ===================== */
+
     case 'compare':
-      return `Comparing elements at index ${step.i} and ${step.j}.`
+      return `Comparing elements at indices ${step.i} and ${step.j}.`
 
     case 'swap':
-      return `Swapping elements at index ${step.i} and ${step.j}.`
+      return `Swapping elements at indices ${step.i} and ${step.j}.`
 
     case 'mark':
-      return `Marking index ${step.index} as the current minimum.`
-
-    case 'done':
-      return `Algorithm completed. The array is now sorted.`
+      return `Marking index ${step.index} as placed correctly.`
 
     case 'split':
-      return `Splitting the array into two parts: [${step.l}..${
-        step.mid
-      }] and [${step.mid + 1}..${step.r}].`
+      return `Splitting array range [${step.l}, ${step.r}] with mid at ${step.mid}.`
 
     case 'base':
-      return step.l === step.r
-        ? `Base case: single element at index ${step.l}`
-        : `Base case: empty range`
+      return `Base case reached for range [${step.l}, ${step.r}].`
 
     case 'buffer-init':
-      return `Create buffers for range [${step.l}, ${step.r}]`
+      return `Creating left and right buffers for merge.`
 
     case 'merge-compare':
-      return `Compare ${step.leftIndex}-th element of left buffer with ${step.rightIndex}-th element of right buffer`
+      return `Comparing elements from left and right buffers.`
 
     case 'merge-write':
-      return `Write ${step.value} from the ${step.from} subarray into position ${step.index}`
+      return `Writing value ${step.value} from ${step.from} buffer into index ${step.index}.`
 
-    default:
-      return ''
+    case 'done':
+      return `Sorting completed.`
+
+    /* ===================== BINARY SEARCH ===================== */
+
+    case 'bs-range':
+      return `Search range is now [${step.low}, ${step.high}]. Mid is at index ${step.mid}.`
+
+    case 'bs-compare':
+      return `Comparing target ${
+        context?.target ?? ''
+      } with middle element at index ${step.index}.`
+
+    case 'bs-found':
+      return `Target found at index ${step.index}.`
+
+    case 'bs-not-found':
+      return `Target is not present in the array.`
+
+    /* ===================== SAFETY ===================== */
+
+    default: {
+      const _exhaustive: never = step
+      return _exhaustive
+    }
   }
 }

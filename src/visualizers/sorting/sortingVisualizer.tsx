@@ -5,7 +5,7 @@ import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModa
 import { SORTING_ALGORITHMS } from './config'
 import Bars from './bars'
 import VisualizerLegend from '../legend/legend'
-import { Step } from './steps/types'
+import { SortingStep } from '../steps/types'
 import { insertionSortSteps } from './steps/insertion'
 import { selectionSortSteps } from './steps/selection'
 import { mergeSortSteps } from './steps/merge'
@@ -18,7 +18,10 @@ import StepControls from '@/visualizers/stepControls'
  * Algorithm → step-generator mapping
  * Each generator converts an input array into a sequence of visual steps.
  * ========================================================================== */
-const SORTING_STEP_GENERATORS: Record<string, (arr: number[]) => Step[]> = {
+const SORTING_STEP_GENERATORS: Record<
+  string,
+  (arr: number[]) => SortingStep[]
+> = {
   insertion: insertionSortSteps,
   selection: selectionSortSteps,
   merge: mergeSortSteps,
@@ -53,7 +56,7 @@ export default function SortingVisualizer() {
    * stepIndex = pointer into steps[]
    * ========================================================================== */
   const [array, setArray] = useState<number[]>(baseArray)
-  const [steps, setSteps] = useState<Step[]>([])
+  const [steps, setSteps] = useState<SortingStep[]>([])
   const [stepIndex, setStepIndex] = useState(0)
 
   /* ============================================================================
@@ -151,15 +154,17 @@ export default function SortingVisualizer() {
    * Step handler typing
    * Maps each step.type to a correctly-typed handler using discriminated unions.
    * ========================================================================== */
-  type StepHandler<T extends Step['type']> = (
-    step: Extract<Step, { type: T }>
+  type SortingStepHandler<T extends SortingStep['type']> = (
+    step: Extract<SortingStep, { type: T }>
   ) => void
 
   /* ============================================================================
    * Centralized step execution table
    * This is the heart of the visualizer state machine.
    * ========================================================================== */
-  const STEP_HANDLERS: { [K in Step['type']]: StepHandler<K> } = {
+  const STEP_HANDLERS: {
+    [K in SortingStep['type']]: SortingStepHandler<K>
+  } = {
     mark: (step) => {
       setMarkedIndex(step.index)
     },
@@ -239,9 +244,7 @@ export default function SortingVisualizer() {
 
     setStepIndex(targetIndex)
     setStepText(
-      targetIndex > 0 && algorithm
-        ? describeStep(steps[targetIndex - 1], algorithm)
-        : ''
+      targetIndex > 0 && algorithm ? describeStep(steps[targetIndex - 1]) : ''
     )
   }
 
@@ -249,9 +252,9 @@ export default function SortingVisualizer() {
    * Type-safe dispatcher for step handlers
    * Prevents union-to-never collapse.
    * ========================================================================== */
-  function runStepHandler<T extends Step['type']>(
+  function runStepHandler<T extends SortingStep['type']>(
     type: T,
-    step: Extract<Step, { type: T }>
+    step: Extract<SortingStep, { type: T }>
   ) {
     STEP_HANDLERS[type](step)
   }
@@ -263,7 +266,7 @@ export default function SortingVisualizer() {
     if (stepIndex >= steps.length) return
 
     const step = steps[stepIndex]
-    setStepText(describeStep(step, algorithm!))
+    setStepText(describeStep(step))
 
     resetTransientState()
     runStepHandler(step.type, step)

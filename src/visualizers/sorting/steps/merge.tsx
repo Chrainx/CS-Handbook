@@ -1,7 +1,7 @@
-import { Step } from './types'
+import { SortingStep } from '../../steps/types'
 
-export function mergeSortSteps(arr: number[]): Step[] {
-  const steps: Step[] = []
+export function mergeSortSteps(arr: number[]): SortingStep[] {
+  const steps: SortingStep[] = []
   const a = [...arr]
 
   function mergeSort(l: number, r: number) {
