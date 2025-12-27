@@ -1,4 +1,4 @@
-import { AlgorithmOption } from '@/components/visualizer/types'
+import { AlgorithmOption } from '@/components/visualizer-ui/types'
 
 export const SORTING_ALGORITHMS: AlgorithmOption[] = [
   {

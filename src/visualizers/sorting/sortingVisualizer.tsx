@@ -1,18 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import AlgorithmSelectModal from '@/components/visualizer/algorithmSelectModal'
+import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModal'
 import { SORTING_ALGORITHMS } from './config'
 import Bars from './bars'
-import VisualizerLegend from 'visualizers/legend'
+import VisualizerLegend from '../legend/legend'
 import { Step } from './steps/types'
 import { insertionSortSteps } from './steps/insertion'
 import { selectionSortSteps } from './steps/selection'
 import { mergeSortSteps } from './steps/merge'
 import { generateRandomArray } from '@/utils/random'
-import { describeStep } from 'visualizers/describeStep'
-import MergeBuffer from 'visualizers/buffer'
-import StepControls from 'visualizers/stepControls'
+import { describeStep } from '@/visualizers/describeStep'
+import MergeBuffer from '@/visualizers/buffer'
+import StepControls from '@/visualizers/stepControls'
 
 /* ============================================================================
  * Algorithm → step-generator mapping

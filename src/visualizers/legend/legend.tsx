@@ -1,6 +1,6 @@
 'use client'
 
-import { LEGEND_CONFIG } from './legendConfig'
+import { LEGEND_CONFIG } from './config'
 
 export default function VisualizerLegend({ algorithm }: { algorithm: string }) {
   const legend = LEGEND_CONFIG[algorithm]

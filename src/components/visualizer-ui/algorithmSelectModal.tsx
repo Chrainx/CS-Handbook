@@ -1,6 +1,6 @@
 'use client'
 
-import Modal from '../modal'
+import Modal from './modal'
 
 type Algorithm = {
   id: string

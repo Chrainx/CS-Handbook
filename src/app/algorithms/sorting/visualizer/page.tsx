@@ -1,4 +1,4 @@
-import SortingVisualizer from 'visualizers/sorting/sortingVisualizer'
+import SortingVisualizer from '@/visualizers/sorting/sortingVisualizer'
 
 export default function Page() {
   return (
