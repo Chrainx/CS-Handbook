@@ -15,6 +15,7 @@ export const sections: Record<string, SectionConfig> = {
         'merge-sort',
         'quick-sort',
         'heap-sort',
+        'visualizer',
       ],
       searching: ['binary-search'],
       graph: [
@@ -25,6 +26,7 @@ export const sections: Record<string, SectionConfig> = {
         'bellman-ford',
         'prim',
         'kruskal',
+        'visualizer',
       ],
       'dynamic-programming': [
         'knapsack-0-1',
