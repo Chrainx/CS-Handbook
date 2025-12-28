@@ -3,7 +3,7 @@
  * ========================================================================== */
 export type SortingStep =
   | { type: 'compare'; i: number; j: number }
-  | { type: 'swap'; i: number; j: number }
+  | { type: 'swap'; i: number; j: number; isPivotSwap?: boolean }
   | { type: 'mark'; index: number }
   | { type: 'split'; l: number; r: number; mid: number }
   | { type: 'base'; l: number; r: number }
@@ -26,6 +26,9 @@ export type SortingStep =
       r: number
       mid: number
     }
+  | { type: 'pivot'; pivotIndex: number; l: number; r: number }
+  | { type: 'quick-compare'; i: number; j: number; pivotIndex: number }
+  | { type: 'pivot-final'; pivotIndex: number }
   | { type: 'done' }
 
 /* ============================================================================

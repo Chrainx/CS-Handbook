@@ -10,6 +10,8 @@ function getBarColor({
   isOverwrite,
   isCompare,
   isBase,
+  isPivot,
+  isQuickCompare,
 }: {
   algorithm: string
   isSwap: boolean
@@ -17,6 +19,8 @@ function getBarColor({
   isOverwrite: boolean
   isCompare: boolean
   isBase: boolean
+  isPivot: boolean
+  isQuickCompare: boolean
 }) {
   if (algorithm === 'insertion') {
     if (isSwap) return 'bg-green-500'
@@ -38,6 +42,14 @@ function getBarColor({
     return 'bg-blue-500'
   }
 
+  if (algorithm === 'quick') {
+    if (isMarked) return 'bg-yellow-500' // pivot finalized
+    if (isPivot) return 'bg-purple-500' // active pivot
+    if (isQuickCompare) return 'bg-red-500'
+    if (isSwap) return 'bg-green-500' // swap during partition
+    return 'bg-blue-500'
+  }
+
   return 'bg-blue-500'
 }
 
@@ -50,6 +62,9 @@ export default function Bars({
   activeOverwrite,
   markedIndex,
   baseIndex,
+  pivotIndex,
+  quickCompareIndex,
+  quickBoundaryIndex,
 }: {
   algorithm: string
   data: number[]
@@ -59,6 +74,9 @@ export default function Bars({
   activeOverwrite: number | null
   markedIndex: number | null
   baseIndex: number | null
+  pivotIndex: number | null
+  quickCompareIndex: number | null
+  quickBoundaryIndex: number | null
 }) {
   const min = Math.min(...data)
   const offset = min <= 0 ? 1 - min : 0
@@ -80,6 +98,10 @@ export default function Bars({
         const isRangeEnd = activeRange && i === activeRange.r
         const isMid = activeRange?.mid === i
         const isBase = baseIndex === i
+
+        const isPivot = pivotIndex === i
+        const isQuickCompare = quickCompareIndex === i
+        const isQuickBoundary = quickBoundaryIndex === i
 
         return (
           <div
@@ -108,6 +130,8 @@ export default function Bars({
                   isOverwrite,
                   isCompare: !!isCompare,
                   isBase,
+                  isPivot,
+                  isQuickCompare,
                 }
               )}`}
               style={{ height: barHeight }}
@@ -119,6 +143,12 @@ export default function Bars({
             >
               {v}
             </span>
+
+            {algorithm === 'quick' && isQuickBoundary && (
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-700">
+                ▼
+              </div>
+            )}
           </div>
         )
       })}

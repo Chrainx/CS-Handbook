@@ -13,6 +13,7 @@ import { generateRandomArray } from '@/utils/random'
 import { describeStep } from '@/visualizers/describeStep'
 import MergeBuffer from '@/visualizers/buffer'
 import StepControls from '@/visualizers/stepControls'
+import { quickSortSteps } from './steps/quick'
 
 /* ============================================================================
  * Algorithm → step-generator mapping
@@ -25,6 +26,7 @@ const SORTING_STEP_GENERATORS: Record<
   insertion: insertionSortSteps,
   selection: selectionSortSteps,
   merge: mergeSortSteps,
+  quick: quickSortSteps,
 }
 
 function getAlgorithmName(id: string) {
@@ -93,6 +95,14 @@ export default function SortingVisualizer() {
   const [leftConsumed, setLeftConsumed] = useState(0)
   const [rightConsumed, setRightConsumed] = useState(0)
 
+  const [pivotIndex, setPivotIndex] = useState<number | null>(null)
+  const [quickCompareIndex, setQuickCompareIndex] = useState<number | null>(
+    null
+  )
+  const [quickBoundaryIndex, setQuickBoundaryIndex] = useState<number | null>(
+    null
+  )
+
   /* ============================================================================
    * Step narration text
    * ========================================================================== */
@@ -122,6 +132,9 @@ export default function SortingVisualizer() {
     setLeftConsumed(0)
     setRightConsumed(0)
     setBaseIndex(null)
+    setPivotIndex(null)
+    setQuickCompareIndex(null)
+    setQuickBoundaryIndex(null)
     setStepText('')
   }
 
@@ -135,6 +148,8 @@ export default function SortingVisualizer() {
     setActiveOverwrite(null)
     setActiveBufferCompare(null)
     setBaseIndex(null)
+    setPivotIndex(null)
+    setQuickCompareIndex(null)
   }
 
   /* ============================================================================
@@ -180,6 +195,19 @@ export default function SortingVisualizer() {
         ;[a[step.i], a[step.j]] = [a[step.j], a[step.i]]
         return a
       })
+
+      if (algorithm === 'quick') {
+        setMarkedIndex(null)
+
+        if (step.isPivotSwap) {
+          // ✅ partition ends
+          setQuickBoundaryIndex(null)
+          setPivotIndex(null)
+        } else {
+          // ✅ normal partition swap
+          setQuickBoundaryIndex((b) => (b !== null ? b + 1 : b))
+        }
+      }
     },
 
     split: (step) => {
@@ -220,6 +248,22 @@ export default function SortingVisualizer() {
       if (step.from === 'right') setRightConsumed((c) => c + 1)
     },
 
+    pivot: (step) => {
+      setPivotIndex(step.pivotIndex)
+      setQuickBoundaryIndex(step.l)
+      setActiveRange({ l: step.l, r: step.r })
+    },
+
+    'quick-compare': (step) => {
+      setQuickCompareIndex(step.j) // only j is being compared
+      setPivotIndex(step.pivotIndex)
+    },
+
+    'pivot-final': (step) => {
+      setMarkedIndex(step.pivotIndex)
+      setPivotIndex(null)
+    },
+
     done: () => {
       setMarkedIndex(null)
       setActiveRange(null)
@@ -239,12 +283,15 @@ export default function SortingVisualizer() {
 
     for (let i = 0; i < targetIndex; i++) {
       const step = steps[i]
+      resetTransientState()
       runStepHandler(step.type, step)
     }
 
     setStepIndex(targetIndex)
     setStepText(
-      targetIndex > 0 && algorithm ? describeStep(steps[targetIndex - 1]) : ''
+      targetIndex > 0 && algorithm
+        ? describeStep(steps[targetIndex - 1], { algorithm: algorithm })
+        : ''
     )
   }
 
@@ -266,7 +313,7 @@ export default function SortingVisualizer() {
     if (stepIndex >= steps.length) return
 
     const step = steps[stepIndex]
-    setStepText(describeStep(step))
+    setStepText(describeStep(step, { algorithm: algorithm }))
 
     resetTransientState()
     runStepHandler(step.type, step)
@@ -399,6 +446,9 @@ export default function SortingVisualizer() {
             activeOverwrite={activeOverwrite}
             baseIndex={baseIndex}
             markedIndex={markedIndex}
+            quickCompareIndex={quickCompareIndex}
+            quickBoundaryIndex={quickBoundaryIndex}
+            pivotIndex={pivotIndex}
           />
 
           <VisualizerLegend algorithm={algorithm} />
