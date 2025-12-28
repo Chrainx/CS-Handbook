@@ -8,6 +8,21 @@ type SearchArrayProps = {
   foundIndex: number | null
 }
 
+function getCellColor({
+  isFound,
+  isMid,
+  isEliminated,
+}: {
+  isFound: boolean
+  isMid: boolean
+  isEliminated: boolean
+}) {
+  if (isEliminated) return 'bg-gray-200 text-gray-400'
+  if (isFound) return 'bg-green-500 text-white'
+  if (isMid) return 'bg-red-500 text-white'
+  return 'bg-blue-500 text-black'
+}
+
 export default function SearchArray({
   values,
   low,
@@ -16,54 +31,30 @@ export default function SearchArray({
   foundIndex,
 }: SearchArrayProps) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        border: '4px solid black',
-        width: 'fit-content',
-      }}
-    >
+    <div className="flex gap-3 p-4 rounded border ">
       {values.map((value, index) => {
         const inRange =
           low !== null && high !== null && index >= low && index <= high
-        const isMid = index === mid
+
         const isFound = index === foundIndex
-        const eliminated =
-          low !== null && high !== null && !inRange && foundIndex === null
-
-        let bgColor = 'white'
-        let textColor = 'black'
-
-        if (eliminated) {
-          bgColor = '#e5e7eb'
-          textColor = '#9ca3af'
-        } else if (isFound) {
-          bgColor = '#22c55e'
-          textColor = 'white'
-        } else if (isMid) {
-          bgColor = '#3b82f6'
-          textColor = 'white'
-        }
+        const isMid = index === mid
+        const isEliminated = mid == null || (!inRange && foundIndex === null)
 
         return (
           <div
             key={index}
-            style={{
-              height: '64px',
-              width: '64px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '30px',
-              fontWeight: 'bold',
-              backgroundColor: bgColor,
-              color: textColor,
-              borderRight:
-                index === values.length - 1 ? 'none' : '4px solid black',
-            }}
+            className={`
+              relative inline-flex items-center justify-center 
+              border border-black transition-all duration-200 
+              ${getCellColor({
+                isFound,
+                isMid,
+                isEliminated,
+              })}
+            `}
+            style={{ width: 64, height: 64 }}
           >
-            {value}
+            <span className="text-xl font-bold font-mono">{value}</span>
           </div>
         )
       })}

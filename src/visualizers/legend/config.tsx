@@ -84,4 +84,26 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Buffer elements already written back to the main array',
     },
   ],
+  'binary-search': [
+    {
+      colorClass: 'bg-red-500',
+      label: 'Mid (M)',
+      description: 'Middle element of the current search range',
+    },
+    {
+      colorClass: 'bg-green-500',
+      label: 'Found',
+      description: 'Target value has been found',
+    },
+    {
+      colorClass: 'bg-blue-500',
+      label: 'Active Range',
+      description: 'Current portion of the array being searched',
+    },
+    {
+      colorClass: 'bg-gray-300',
+      label: 'Eliminated',
+      description: 'Elements excluded from further search',
+    },
+  ],
 }

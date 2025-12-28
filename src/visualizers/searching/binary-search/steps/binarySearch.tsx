@@ -40,7 +40,6 @@ export function binarySearchSteps(
       high = mid - 1
     }
   }
-
   steps.push({ type: 'bs-not-found' })
   return steps
 }

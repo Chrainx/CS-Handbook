@@ -3,6 +3,44 @@
 const CANVAS_HEIGHT = 220
 const LABEL_PADDING = 4
 
+function getBarColor({
+  algorithm,
+  isSwap,
+  isMarked,
+  isOverwrite,
+  isCompare,
+  isBase,
+}: {
+  algorithm: string
+  isSwap: boolean
+  isMarked: boolean
+  isOverwrite: boolean
+  isCompare: boolean
+  isBase: boolean
+}) {
+  if (algorithm === 'insertion') {
+    if (isSwap) return 'bg-green-500'
+    if (isCompare) return 'bg-red-500'
+    return 'bg-blue-500'
+  }
+
+  if (algorithm === 'selection') {
+    if (isSwap) return 'bg-green-500'
+    if (isMarked) return 'bg-yellow-500'
+    if (isCompare) return 'bg-red-500'
+    return 'bg-blue-500'
+  }
+
+  if (algorithm === 'merge') {
+    if (isCompare) return 'bg-red-500'
+    if (isOverwrite) return 'bg-green-500'
+    if (isBase) return 'bg-gray-500'
+    return 'bg-blue-500'
+  }
+
+  return 'bg-blue-500'
+}
+
 export default function Bars({
   algorithm,
   data,
@@ -26,44 +64,6 @@ export default function Bars({
   const offset = min <= 0 ? 1 - min : 0
   const normalized = data.map((v) => v + offset)
   const max = Math.max(...normalized, 1)
-
-  function getBarColor({
-    algorithm,
-    isSwap,
-    isMarked,
-    isOverwrite,
-    isCompare,
-    isBase,
-  }: {
-    algorithm: string
-    isSwap: boolean
-    isMarked: boolean
-    isOverwrite: boolean
-    isCompare: boolean
-    isBase: boolean
-  }) {
-    if (algorithm === 'insertion') {
-      if (isSwap) return 'bg-green-500'
-      if (isCompare) return 'bg-red-500'
-      return 'bg-blue-500'
-    }
-
-    if (algorithm === 'selection') {
-      if (isSwap) return 'bg-green-500'
-      if (isMarked) return 'bg-yellow-500'
-      if (isCompare) return 'bg-red-500'
-      return 'bg-blue-500'
-    }
-
-    if (algorithm === 'merge') {
-      if (isCompare) return 'bg-red-500'
-      if (isOverwrite) return 'bg-green-500'
-      if (isBase) return 'bg-gray-500'
-      return 'bg-blue-500'
-    }
-
-    return 'bg-blue-500'
-  }
 
   return (
     <div className="flex gap-3 border rounded p-4">

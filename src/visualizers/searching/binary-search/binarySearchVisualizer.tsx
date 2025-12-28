@@ -8,6 +8,7 @@ import { BinarySearchStep } from '@/visualizers/steps/types'
 import { binarySearchSteps } from './steps/binarySearch'
 import { describeStep } from '@/visualizers/describeStep'
 import { generateRandomArray } from '@/utils/random'
+import VisualizerLegend from '@/visualizers/legend/legend'
 
 export default function BinarySearchVisualizer() {
   /* ============================================================================
@@ -86,6 +87,7 @@ export default function BinarySearchVisualizer() {
         break
 
       case 'bs-not-found':
+        setMid(null)
         break
     }
   }
@@ -155,7 +157,7 @@ export default function BinarySearchVisualizer() {
       </div>
 
       {/* Array input */}
-      <div className="mb-4 flex items-center gap-4 rounded border bg-gray-50 px-4 py-3">
+      <div className="mb-4 flex items-center gap-2 rounded border bg-gray-50 px-4 py-3">
         <label className="text-sm text-gray-600">Sorted array</label>
         <input
           value={input}
@@ -171,7 +173,7 @@ export default function BinarySearchVisualizer() {
       </div>
 
       {/* Target controls */}
-      <div className="mb-4 flex items-center gap-4 rounded border bg-gray-50 px-4 py-3">
+      <div className="mb-4 flex items-center gap-2 rounded border bg-gray-50 px-4 py-3">
         <div className="text-sm">
           Target:
           <span className="ml-2 rounded bg-blue-100 px-2 py-0.5 font-semibold text-blue-700">
@@ -186,16 +188,15 @@ export default function BinarySearchVisualizer() {
         </button>
       </div>
 
-      {/* Visualization */}
-      <div className="mb-6 flex justify-center rounded bg-gray-50 px-6 py-8">
-        <SearchArray
-          values={array}
-          low={low}
-          high={high}
-          mid={mid}
-          foundIndex={foundIndex}
-        />
-      </div>
+      <SearchArray
+        values={array}
+        low={low}
+        high={high}
+        mid={mid}
+        foundIndex={foundIndex}
+      />
+
+      <VisualizerLegend algorithm="binary-search" />
 
       {/* Step narration */}
       {stepText && (
