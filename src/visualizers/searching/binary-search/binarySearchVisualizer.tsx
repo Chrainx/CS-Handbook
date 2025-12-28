@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import StepControls from '@/visualizers/stepControls'
 import SearchArray from '../searchArray'
 import TargetModal from './targetModal'
@@ -11,30 +11,26 @@ import { generateRandomArray } from '@/utils/random'
 
 export default function BinarySearchVisualizer() {
   /* ============================================================================
-   * Stable random initialization (SSR-safe, effect-free)
+   * Base data (random — SAFE because SSR is disabled)
    * ========================================================================== */
-  const initialArrayRef = useRef<number[] | null>(null)
-
-  if (initialArrayRef.current === null) {
-    initialArrayRef.current = generateRandomArray({
+  const [array, setArray] = useState<number[]>(() =>
+    generateRandomArray({
       size: 10,
       min: 0,
       max: 20,
       unique: true,
     }).sort((a, b) => a - b)
-  }
-
-  /* ============================================================================
-   * Data state
-   * ========================================================================== */
-  // eslint-disable-next-line react-hooks/refs
-  const [array, setArray] = useState<number[]>(initialArrayRef.current!)
-  const [input, setInput] = useState(array.join(','))
-  const [target, setTarget] = useState(array[Math.floor(array.length / 2)])
+  )
+  const [target, setTarget] = useState<number>(() => array[0])
   const [isTargetModalOpen, setIsTargetModalOpen] = useState(false)
 
   /* ============================================================================
-   * Derived steps (pure, deterministic)
+   * Input mirror
+   * ========================================================================== */
+  const [input, setInput] = useState(() => array.join(','))
+
+  /* ============================================================================
+   * Derived steps (pure, no state)
    * ========================================================================== */
   const steps: BinarySearchStep[] = binarySearchSteps(array, target)
 
@@ -55,7 +51,7 @@ export default function BinarySearchVisualizer() {
   /* ============================================================================
    * Helpers
    * ========================================================================== */
-  function resetVisualState() {
+  function clearVisualState() {
     setLow(null)
     setHigh(null)
     setMid(null)
@@ -64,10 +60,13 @@ export default function BinarySearchVisualizer() {
   }
 
   function reset() {
-    resetVisualState()
+    clearVisualState()
     setStepIndex(0)
   }
 
+  /* ============================================================================
+   * Step application
+   * ========================================================================== */
   function applyStep(step: BinarySearchStep) {
     setStepText(describeStep(step, { target }))
 
@@ -77,12 +76,15 @@ export default function BinarySearchVisualizer() {
         setHigh(step.high)
         setMid(step.mid)
         break
+
       case 'bs-compare':
         setMid(step.index)
         break
+
       case 'bs-found':
         setFoundIndex(step.index)
         break
+
       case 'bs-not-found':
         break
     }
@@ -96,13 +98,17 @@ export default function BinarySearchVisualizer() {
 
   function stepBack() {
     if (stepIndex <= 0) return
-    resetVisualState()
+
+    clearVisualState()
     for (let i = 0; i < stepIndex - 1; i++) {
       applyStep(steps[i])
     }
     setStepIndex((i) => i - 1)
   }
 
+  /* ============================================================================
+   * Load new array (explicit user action)
+   * ========================================================================== */
   function loadArray() {
     const parsed = input
       .split(',')
@@ -118,7 +124,6 @@ export default function BinarySearchVisualizer() {
     const sorted = [...parsed].sort((a, b) => a - b)
     setArray(sorted)
     setInput(sorted.join(','))
-    setTarget(sorted[Math.floor(sorted.length / 2)])
     reset()
   }
 
@@ -127,6 +132,7 @@ export default function BinarySearchVisualizer() {
    * ========================================================================== */
   return (
     <>
+      {/* Target modal */}
       <TargetModal
         open={isTargetModalOpen}
         initialValue={target}
@@ -138,6 +144,7 @@ export default function BinarySearchVisualizer() {
         }}
       />
 
+      {/* Header */}
       <div className="mb-6 rounded border bg-gray-50 px-4 py-3">
         <div className="text-sm text-gray-500">Current Algorithm</div>
         <div className="text-lg font-semibold">Binary Search</div>
@@ -147,6 +154,7 @@ export default function BinarySearchVisualizer() {
         </div>
       </div>
 
+      {/* Array input */}
       <div className="mb-4 flex items-center gap-4 rounded border bg-gray-50 px-4 py-3">
         <label className="text-sm text-gray-600">Sorted array</label>
         <input
@@ -162,6 +170,7 @@ export default function BinarySearchVisualizer() {
         </button>
       </div>
 
+      {/* Target controls */}
       <div className="mb-4 flex items-center gap-4 rounded border bg-gray-50 px-4 py-3">
         <div className="text-sm">
           Target:
@@ -177,6 +186,7 @@ export default function BinarySearchVisualizer() {
         </button>
       </div>
 
+      {/* Visualization */}
       <div className="mb-6 flex justify-center rounded bg-gray-50 px-6 py-8">
         <SearchArray
           values={array}
@@ -187,12 +197,14 @@ export default function BinarySearchVisualizer() {
         />
       </div>
 
+      {/* Step narration */}
       {stepText && (
         <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">
           {stepText}
         </div>
       )}
 
+      {/* Playback */}
       <StepControls
         canStepBack={stepIndex > 0}
         canStepForward={stepIndex < steps.length}
