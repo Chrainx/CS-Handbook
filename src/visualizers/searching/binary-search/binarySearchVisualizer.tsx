@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import StepControls from '@/visualizers/stepControls'
-import SearchArray from '../searchArray'
+import SearchArray from '../../primitives/searchArray'
 import TargetModal from './targetModal'
 import { BinarySearchStep } from '@/visualizers/steps/types'
 import { binarySearchSteps } from './steps/binarySearch'

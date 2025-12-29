@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModal'
 import { SORTING_ALGORITHMS } from './config'
-import Bars from './bars'
+import Bars from '../primitives/bars'
 import VisualizerLegend from '../legend/legend'
 import { SortingStep } from '../steps/types'
 import { insertionSortSteps } from './steps/insertion'

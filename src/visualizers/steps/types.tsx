@@ -1,5 +1,5 @@
 /* ============================================================================
- * Sorting steps (ALL sorting algorithms, including merge sort)
+ * Sorting steps (ALL sorting algorithms)
  * ========================================================================== */
 export type SortingStep =
   | { type: 'compare'; i: number; j: number }
@@ -56,6 +56,56 @@ export type BinarySearchStep =
     }
 
 /* ============================================================================
+ * Graph visualization steps
+ * This is the "visual language" for ALL graph algorithms.
+ * ========================================================================== */
+
+export type GraphStep =
+  // A node is discovered / focused (frontier)
+  | {
+      type: 'visit-node'
+      node: string
+    }
+
+  // A node is fully processed
+  | {
+      type: 'mark-visited'
+      node: string
+    }
+
+  // An edge becomes active (currently being explored)
+  | {
+      type: 'activate-edge'
+      from: string
+      to: string
+    }
+
+  // An edge relaxation attempt (Dijkstra / Bellman-Ford)
+  | {
+      type: 'relax-edge'
+      from: string
+      to: string
+    }
+
+  // An edge is chosen as part of final structure (MST, shortest path tree)
+  | {
+      type: 'choose-edge'
+      from: string
+      to: string
+    }
+
+  // Optional: highlight the current node (DFS stack / BFS queue head)
+  | {
+      type: 'set-active-node'
+      node: string | null
+    }
+
+  // Algorithm finished
+  | {
+      type: 'done'
+    }
+
+/* ============================================================================
  * Unified Step type (the visualization language)
  * ========================================================================== */
-export type Step = SortingStep | BinarySearchStep
+export type Step = SortingStep | BinarySearchStep | GraphStep

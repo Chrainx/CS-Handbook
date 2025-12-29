@@ -79,6 +79,28 @@ export function describeStep(
     case 'bs-not-found':
       return `Target is not present in the array.`
 
+    /* ===================== GRAPH ===================== */
+
+    case 'visit-node':
+      return `Visiting node ${step.node}.`
+
+    case 'mark-visited':
+      return `Node ${step.node} marked as visited.`
+
+    case 'activate-edge':
+      return `Exploring edge ${step.from} → ${step.to}.`
+
+    case 'relax-edge':
+      return `Relaxing edge ${step.from} → ${step.to}.`
+
+    case 'choose-edge':
+      return `Edge ${step.from} → ${step.to} chosen as part of result.`
+
+    case 'set-active-node':
+      return step.node
+        ? `Current active node is ${step.node}.`
+        : `No active node.`
+
     /* ===================== SAFETY ===================== */
 
     default: {
