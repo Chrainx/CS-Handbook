@@ -23,9 +23,9 @@ export const SORTING_ALGORITHMS: AlgorithmOption[] = [
     name: 'Quick Sort',
     description: 'Partitions the array around a pivot element',
   },
-  {
-    id: 'heap',
-    name: 'Heap Sort',
-    description: 'Uses a heap data structure to sort elements',
-  },
+  // {
+  //   id: 'heap',
+  //   name: 'Heap Sort',
+  //   description: 'Uses a heap data structure to sort elements',
+  // },
 ]

@@ -43,10 +43,10 @@ export default function SortingOverviewPage() {
           <strong>Divide and conquer sorts:</strong> Merge Sort, Quick Sort
           (efficient for large datasets)
         </li>
-        <li>
+        {/* <li>
           <strong>Heap-based sorts:</strong> Heap Sort (guaranteed performance,
           in-place)
-        </li>
+        </li> */}
       </ul>
 
       <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
@@ -88,12 +88,12 @@ export default function SortingOverviewPage() {
               <td className="border px-3 py-2">O(log n)</td>
               <td className="border px-3 py-2">No</td>
             </tr>
-            <tr>
+            {/* <tr>
               <td className="border px-3 py-2">Heap Sort</td>
               <td className="border px-3 py-2">O(n log n)</td>
               <td className="border px-3 py-2">O(1)</td>
               <td className="border px-3 py-2">No</td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>
@@ -116,9 +116,9 @@ export default function SortingOverviewPage() {
         <li>
           Use <strong>Quick Sort</strong> for fast average performance
         </li>
-        <li>
+        {/* <li>
           Use <strong>Heap Sort</strong> when memory usage must be minimal
-        </li>
+        </li> */}
       </ul>
 
       <NextPrev />

@@ -72,11 +72,16 @@ function applyOrdering(folders: string[], baseUrl: string): string[] {
   const key = rest.split('/')[0]
 
   const subOrder = section.subOrder?.[key]
+  const hidden = section.hiddenSubOrder?.[key] ?? []
+
+  // ⛔ remove hidden folders first
+  const visibleFolders = folders.filter((folder) => !hidden.includes(folder))
+
   if (subOrder) {
-    return mergeOrder(folders, subOrder)
+    return mergeOrder(visibleFolders, subOrder)
   }
 
-  return [...folders].sort()
+  return [...visibleFolders].sort()
 }
 
 function mergeOrder(

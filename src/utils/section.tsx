@@ -2,6 +2,7 @@ export type SectionConfig = {
   path: string
   order: readonly string[]
   subOrder?: Record<string, readonly string[]>
+  hiddenSubOrder?: Record<string, readonly string[]>
 }
 
 export const sections: Record<string, SectionConfig> = {
@@ -14,7 +15,7 @@ export const sections: Record<string, SectionConfig> = {
         'selection-sort',
         'merge-sort',
         'quick-sort',
-        'heap-sort',
+        //'heap-sort',
         'visualizer',
       ],
       searching: ['binary-search'],
@@ -36,6 +37,9 @@ export const sections: Record<string, SectionConfig> = {
         'edit-distance',
       ],
       greedy: ['interval-scheduling', 'fractional-knapsack', 'huffman-coding'],
+    },
+    hiddenSubOrder: {
+      sorting: ['heap-sort'],
     },
   },
 

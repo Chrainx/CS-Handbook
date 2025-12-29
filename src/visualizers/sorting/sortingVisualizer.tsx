@@ -14,6 +14,7 @@ import { describeStep } from '@/visualizers/describeStep'
 import MergeBuffer from '@/visualizers/buffer'
 import StepControls from '@/visualizers/stepControls'
 import { quickSortSteps } from './steps/quick'
+//import { heapSortSteps } from './steps/heap'
 
 /* ============================================================================
  * Algorithm → step-generator mapping
@@ -27,6 +28,7 @@ const SORTING_STEP_GENERATORS: Record<
   selection: selectionSortSteps,
   merge: mergeSortSteps,
   quick: quickSortSteps,
+  //heap: heapSortSteps,
 }
 
 function getAlgorithmName(id: string) {
