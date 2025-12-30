@@ -7,11 +7,7 @@ export type SortingStep =
   | { type: 'mark'; index: number }
   | { type: 'split'; l: number; r: number; mid: number }
   | { type: 'base'; l: number; r: number }
-  | {
-      type: 'merge-compare'
-      leftIndex: number
-      rightIndex: number
-    }
+  | { type: 'merge-compare'; leftIndex: number; rightIndex: number }
   | {
       type: 'merge-write'
       index: number
@@ -93,17 +89,25 @@ export type GraphStep =
       from: string
       to: string
     }
+  | { type: 'enqueue'; node: string }
+  | { type: 'dequeue'; node: string }
+  | {
+      type: 'push-stack'
+      node: string
+    }
+  | {
+      type: 'pop-stack'
+    }
 
   // Optional: highlight the current node (DFS stack / BFS queue head)
   | {
       type: 'set-active-node'
       node: string | null
     }
+  | { type: 'reset' }
 
   // Algorithm finished
-  | {
-      type: 'done'
-    }
+  | { type: 'done' }
 
 /* ============================================================================
  * Unified Step type (the visualization language)

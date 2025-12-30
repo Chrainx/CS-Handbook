@@ -81,6 +81,21 @@ export function describeStep(
 
     /* ===================== GRAPH ===================== */
 
+    case 'reset':
+      return ''
+
+    case 'enqueue':
+      return `Add node ${step.node} to the queue.`
+
+    case 'dequeue':
+      return `Remove node ${step.node} from the queue.`
+
+    case 'push-stack':
+      return `Push node ${step.node} onto the stack.`
+
+    case 'pop-stack':
+      return `Pop node from the stack.`
+
     case 'visit-node':
       return `Visiting node ${step.node}.`
 

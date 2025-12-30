@@ -106,4 +106,36 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Elements excluded from further search',
     },
   ],
+  graph: [
+    {
+      colorClass: 'fill-blue-500',
+      label: 'Unvisited',
+      description: 'Node has not been discovered yet',
+    },
+    {
+      colorClass: 'fill-yellow-400',
+      label: 'Visiting',
+      description: 'Node is discovered and in the frontier (queue / stack)',
+    },
+    {
+      colorClass: 'fill-green-500',
+      label: 'Visited',
+      description: 'Node has been fully processed',
+    },
+    {
+      colorClass: 'stroke-red-500',
+      label: 'Active Edge',
+      description: 'Edge currently being explored',
+    },
+    {
+      colorClass: 'stroke-purple-500',
+      label: 'Relaxed Edge',
+      description: 'Edge used to update a distance (shortest path)',
+    },
+    {
+      colorClass: 'stroke-green-600',
+      label: 'Chosen Edge',
+      description: 'Edge selected as part of final result (MST / path)',
+    },
+  ],
 }

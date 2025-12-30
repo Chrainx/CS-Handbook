@@ -10,4 +10,8 @@ export type GraphVisualState = {
   nodes: Record<string, NodeVisualState>
   edges: Record<string, EdgeVisualState>
   activeNode: string | null
+  queue: string[]
+  stack: string[]
 }
+
+export type GraphAlgorithmId = 'bfs' | 'dfs'

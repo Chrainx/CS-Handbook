@@ -3,43 +3,34 @@ import { GraphStep } from '@/visualizers/steps/types'
 
 export function bfsSteps(graph: GraphData, start: string): GraphStep[] {
   const steps: GraphStep[] = []
-
   const visited = new Set<string>()
   const queue: string[] = []
 
-  // adjacency list
-  const adj = new Map<string, string[]>()
-  graph.nodes.forEach((n) => adj.set(n.id, []))
-  graph.edges.forEach((e) => {
-    adj.get(e.from)?.push(e.to)
-    adj.get(e.to)?.push(e.from) // undirected
-  })
-
-  // start
-  steps.push({ type: 'visit-node', node: start })
+  // enqueue start
+  steps.push({ type: 'enqueue', node: start })
   queue.push(start)
   visited.add(start)
 
   while (queue.length > 0) {
-    const current = queue.shift()!
+    const node = queue.shift()!
+    steps.push({ type: 'dequeue', node })
+    steps.push({ type: 'visit-node', node })
 
-    steps.push({ type: 'set-active-node', node: current })
+    const neighbors = graph.edges
+      .filter((e) => e.from === node)
+      .map((e) => e.to)
 
-    for (const neighbor of adj.get(current) ?? []) {
-      steps.push({
-        type: 'activate-edge',
-        from: current,
-        to: neighbor,
-      })
+    for (const next of neighbors) {
+      steps.push({ type: 'activate-edge', from: node, to: next })
 
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor)
-        steps.push({ type: 'visit-node', node: neighbor })
-        queue.push(neighbor)
+      if (!visited.has(next)) {
+        visited.add(next)
+        steps.push({ type: 'enqueue', node: next })
+        queue.push(next)
       }
     }
 
-    steps.push({ type: 'mark-visited', node: current })
+    steps.push({ type: 'mark-visited', node })
   }
 
   steps.push({ type: 'done' })

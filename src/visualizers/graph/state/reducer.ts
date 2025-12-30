@@ -9,6 +9,8 @@ export const initialGraphVisualState: GraphVisualState = {
   nodes: {},
   edges: {},
   activeNode: null,
+  queue: [],
+  stack: [],
 }
 
 /* ============================================================================
@@ -25,6 +27,9 @@ export function graphReducer(
   step: GraphStep
 ): GraphVisualState {
   switch (step.type) {
+    case 'reset':
+      return initialGraphVisualState
+
     case 'visit-node': {
       return {
         ...state,
@@ -55,6 +60,34 @@ export function graphReducer(
           ...state.edges,
           [key]: 'active',
         },
+      }
+    }
+
+    case 'enqueue': {
+      return {
+        ...state,
+        queue: [...state.queue, step.node],
+      }
+    }
+
+    case 'dequeue': {
+      return {
+        ...state,
+        queue: state.queue.slice(1),
+      }
+    }
+
+    case 'push-stack': {
+      return {
+        ...state,
+        stack: [...state.stack, step.node],
+      }
+    }
+
+    case 'pop-stack': {
+      return {
+        ...state,
+        stack: state.stack.slice(0, -1),
       }
     }
 
