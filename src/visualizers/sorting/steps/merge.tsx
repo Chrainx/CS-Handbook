@@ -1,18 +1,16 @@
-import { SortingStep } from '../../steps/types'
+import { SortingStep } from '@/visualizers/steps/types'
 
 export function mergeSortSteps(arr: number[]): SortingStep[] {
   const steps: SortingStep[] = []
   const a = [...arr]
 
   function mergeSort(l: number, r: number) {
-    // ✅ BASE CASE: range of size 0 or 1
-    if (l >= r) {
-      steps.push({ type: 'base', l, r })
+    if (l === r) {
+      steps.push({ type: 'base', index: l })
       return
     }
 
     const mid = Math.floor((l + r) / 2)
-
     steps.push({ type: 'split', l, r, mid })
 
     mergeSort(l, mid)
@@ -21,14 +19,11 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
     const left = a.slice(l, mid + 1)
     const right = a.slice(mid + 1, r + 1)
 
-    // Buffer init
     steps.push({
       type: 'buffer-init',
-      left: [...left],
-      right: [...right],
-      l,
-      r,
-      mid,
+      left,
+      right,
+      writeIndex: l,
     })
 
     let i = 0
@@ -37,24 +32,24 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
 
     while (i < left.length && j < right.length) {
       steps.push({
-        type: 'merge-compare',
+        type: 'buffer-compare',
         leftIndex: i,
         rightIndex: j,
       })
 
       if (left[i] <= right[j]) {
         steps.push({
-          type: 'merge-write',
-          index: k,
+          type: 'buffer-write',
           value: left[i],
+          writeIndex: k,
           from: 'left',
         })
         a[k++] = left[i++]
       } else {
         steps.push({
-          type: 'merge-write',
-          index: k,
+          type: 'buffer-write',
           value: right[j],
+          writeIndex: k,
           from: 'right',
         })
         a[k++] = right[j++]
@@ -63,9 +58,9 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
 
     while (i < left.length) {
       steps.push({
-        type: 'merge-write',
-        index: k,
+        type: 'buffer-write',
         value: left[i],
+        writeIndex: k,
         from: 'left',
       })
       a[k++] = left[i++]
@@ -73,13 +68,16 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
 
     while (j < right.length) {
       steps.push({
-        type: 'merge-write',
-        index: k,
+        type: 'buffer-write',
         value: right[j],
+        writeIndex: k,
         from: 'right',
       })
       a[k++] = right[j++]
     }
+
+    // 👇 explicit merge completion
+    steps.push({ type: 'merge-done', l, r })
   }
 
   mergeSort(0, a.length - 1)

@@ -18,47 +18,46 @@ export function describeStep(
 
     case 'mark': {
       if (context?.algorithm === 'quick') {
-        return `Element at index ${step.index} is identified as belonging to the left side of the pivot.`
+        return `Marking index ${step.index} relative to pivot.`
       }
 
       if (context?.algorithm === 'selection') {
-        return `Marking index ${step.index} as the current minimum.`
+        return `Marking index ${step.index} as current minimum.`
       }
 
       return `Marking index ${step.index}.`
     }
 
     case 'split':
-      return `Splitting array range [${step.l}, ${step.r}] with mid at ${step.mid}.`
+      return `Splitting array range [${step.l}, ${step.r}] into [${step.l}, ${
+        step.mid
+      }] and [${step.mid + 1}, ${step.r}].`
 
     case 'base':
-      if (step.l > step.r) {
-        return `Base case reached: empty subarray (no elements to sort).`
-      }
-
-      if (step.l === step.r) {
-        return `Base case reached: single element at index ${step.l}.`
-      }
-
-      return `Base case reached for range [${step.l}, ${step.r}].`
+      return `Base case reached at index ${step.index} (cannot be split further).`
 
     case 'buffer-init':
-      return `Creating left and right buffers for merge.`
+      return `Preparing merge buffers. Writing back starting at index ${step.writeIndex}.`
 
-    case 'merge-compare':
-      return `Comparing elements from left and right buffers.`
+    case 'buffer-compare':
+      return `Comparing next elements from left and right buffers.`
 
-    case 'merge-write':
-      return `Writing value ${step.value} from ${step.from} buffer into index ${step.index}.`
+    case 'buffer-write':
+      return `Writing value ${step.value} from ${step.from} buffer into index ${step.writeIndex}.`
 
+    case 'merge-done':
+      return `Successfully merged range [${step.l}, ${step.r}].`
     case 'pivot':
       return `Choosing pivot at index ${step.pivotIndex} for range [${step.l}, ${step.r}].`
 
-    case 'quick-compare':
-      return `Comparing element at index ${step.j} with pivot at index ${step.pivotIndex}.`
+    case 'quick-boundary':
+      return `Boundary moved to index ${step.index}. Elements left of it are ≤ pivot.`
 
     case 'pivot-final':
-      return `Placing pivot into its final position at index ${step.pivotIndex}.`
+      return `Pivot placed into its final position at index ${step.pivotIndex}.`
+
+    case 'reset':
+      return '' // IMPORTANT: render nothing
 
     case 'done':
       return `Sorting completed.`
@@ -80,9 +79,6 @@ export function describeStep(
       return `Target is not present in the array.`
 
     /* ===================== GRAPH ===================== */
-
-    case 'reset':
-      return ''
 
     case 'enqueue':
       return `Add node ${step.node} to the queue.`

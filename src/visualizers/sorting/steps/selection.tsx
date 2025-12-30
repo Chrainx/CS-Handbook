@@ -1,30 +1,28 @@
-import { SortingStep } from '../../steps/types'
+import { SortingStep } from '@/visualizers/steps/types'
 
 export function selectionSortSteps(arr: number[]): SortingStep[] {
-  const steps: SortingStep[] = []
   const a = [...arr]
-  const n = a.length
+  const steps: SortingStep[] = []
 
-  for (let i = 0; i < n - 1; i++) {
-    let minIndex = i
+  for (let i = 0; i < a.length; i++) {
+    let min = i
+    steps.push({ type: 'mark', index: min })
 
-    // Mark initial minimum
-    steps.push({ type: 'mark', index: minIndex })
+    for (let j = i + 1; j < a.length; j++) {
+      steps.push({ type: 'compare', i: j, j: min })
 
-    for (let j = i + 1; j < n; j++) {
-      steps.push({ type: 'compare', i: minIndex, j })
-
-      if (a[j] < a[minIndex]) {
-        minIndex = j
-        steps.push({ type: 'mark', index: minIndex }) // 👈 new minimum
+      if (a[j] < a[min]) {
+        min = j
+        steps.push({ type: 'mark', index: min })
       }
     }
 
-    if (minIndex !== i) {
-      steps.push({ type: 'swap', i, j: minIndex })
-      ;[a[i], a[minIndex]] = [a[minIndex], a[i]]
+    if (min !== i) {
+      steps.push({ type: 'swap', i, j: min })
+      ;[a[i], a[min]] = [a[min], a[i]]
     }
   }
+
   steps.push({ type: 'done' })
   return steps
 }

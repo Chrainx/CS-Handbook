@@ -1,79 +1,50 @@
-import { SortingStep } from '../../steps/types'
+import { SortingStep } from '@/visualizers/steps/types'
 
 export function quickSortSteps(arr: number[]): SortingStep[] {
-  const steps: SortingStep[] = []
   const a = [...arr]
+  const steps: SortingStep[] = []
 
-  function quickSort(l: number, r: number) {
-    if (l >= r) {
-      steps.push({ type: 'base', l, r })
-      return
-    }
-
+  function partition(l: number, r: number): number {
     const pivotIndex = r
-    const pivotValue = a[pivotIndex]
+    const pivot = a[pivotIndex]
 
-    // 1) choose pivot
-    steps.push({
-      type: 'pivot',
-      pivotIndex,
-      l,
-      r,
-    })
+    steps.push({ type: 'pivot', l, r, pivotIndex })
 
-    let i = l // boundary (next left-group slot)
+    let i = l // boundary index
 
-    // 2–9) compare and partition
     for (let j = l; j < r; j++) {
-      steps.push({
-        type: 'quick-compare',
-        i,
-        j,
-        pivotIndex,
-      })
+      // 1️⃣ compare j with pivot
+      steps.push({ type: 'compare', i: j, j: pivotIndex })
 
-      if (a[j] < pivotValue) {
-        // 5 / 8) decision indicator
-        steps.push({
-          type: 'mark',
-          index: j,
-        })
-
-        // 6 / 9) swap into boundary
+      if (a[j] <= pivot) {
+        // 2️⃣ commit element to left side
         if (i !== j) {
-          steps.push({
-            type: 'swap',
-            i,
-            j,
-          })
+          steps.push({ type: 'swap', i, j })
+          ;[a[i], a[j]] = [a[j], a[i]]
         }
 
-        ;[a[i], a[j]] = [a[j], a[i]]
-        i++ // boundary moves
+        i++
+
+        // 🔑 emit NEW boundary (after increment)
+        steps.push({ type: 'quick-boundary', index: i })
       }
     }
 
-    // 10) REQUIRED STEP: state that this is the pivot placement moment
-    steps.push({
-      type: 'pivot-final',
-      pivotIndex: pivotIndex,
-    })
-
-    // 11) place pivot
+    // 3️⃣ final pivot swap
     if (i !== pivotIndex) {
-      steps.push({
-        type: 'swap',
-        i,
-        j: pivotIndex,
-        isPivotSwap: true,
-      })
+      steps.push({ type: 'swap', i, j: pivotIndex })
+      ;[a[i], a[pivotIndex]] = [a[pivotIndex], a[i]]
     }
 
-    ;[a[i], a[pivotIndex]] = [a[pivotIndex], a[i]]
+    steps.push({ type: 'pivot-final', pivotIndex: i })
+    return i
+  }
 
-    // recurse
-    quickSort(l, i - 1)
-    quickSort(i + 1, r)
+  function quickSort(l: number, r: number) {
+    if (l >= r) return
+    const p = partition(l, r)
+    quickSort(l, p - 1)
+    quickSort(p + 1, r)
   }
 
   quickSort(0, a.length - 1)

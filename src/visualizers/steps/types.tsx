@@ -3,29 +3,37 @@
  * ========================================================================== */
 export type SortingStep =
   | { type: 'compare'; i: number; j: number }
-  | { type: 'swap'; i: number; j: number; isPivotSwap?: boolean }
+  | { type: 'swap'; i: number; j: number }
   | { type: 'mark'; index: number }
+  | { type: 'reset'; array: number[] }
+  | { type: 'done' }
   | { type: 'split'; l: number; r: number; mid: number }
-  | { type: 'base'; l: number; r: number }
-  | { type: 'merge-compare'; leftIndex: number; rightIndex: number }
-  | {
-      type: 'merge-write'
-      index: number
-      value: number
-      from: 'left' | 'right'
-    }
+  | { type: 'base'; index: number }
   | {
       type: 'buffer-init'
       left: number[]
       right: number[]
+      writeIndex: number
+    }
+  | {
+      type: 'buffer-compare'
+      leftIndex: number
+      rightIndex: number
+    }
+  | {
+      type: 'buffer-write'
+      value: number
+      writeIndex: number
+      from: 'left' | 'right'
+    }
+  | {
+      type: 'merge-done'
       l: number
       r: number
-      mid: number
     }
-  | { type: 'pivot'; pivotIndex: number; l: number; r: number }
-  | { type: 'quick-compare'; i: number; j: number; pivotIndex: number }
+  | { type: 'pivot'; l: number; r: number; pivotIndex: number }
+  | { type: 'quick-boundary'; index: number } // boundary pointer i
   | { type: 'pivot-final'; pivotIndex: number }
-  | { type: 'done' }
 
 /* ============================================================================
  * Binary search steps

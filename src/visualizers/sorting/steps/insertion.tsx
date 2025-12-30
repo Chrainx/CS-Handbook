@@ -1,4 +1,4 @@
-import { SortingStep } from '../../steps/types'
+import { SortingStep } from '@/visualizers/steps/types'
 
 export function insertionSortSteps(arr: number[]): SortingStep[] {
   const a = [...arr]
@@ -8,16 +8,14 @@ export function insertionSortSteps(arr: number[]): SortingStep[] {
     let j = i
 
     while (j > 0) {
-      // 🔴 ALWAYS record comparison
+      // compare current element with left
       steps.push({ type: 'compare', i: j, j: j - 1 })
 
       if (a[j] < a[j - 1]) {
-        // 🟣 Only swap if needed
         steps.push({ type: 'swap', i: j, j: j - 1 })
         ;[a[j], a[j - 1]] = [a[j - 1], a[j]]
         j--
       } else {
-        // ❗ comparison happened but no swap → stop
         break
       }
     }
