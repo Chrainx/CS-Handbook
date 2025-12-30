@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import StepControls from '@/visualizers/stepControls'
 import SearchArray from '../../primitives/searchArray'
 import TargetModal from './targetModal'
@@ -10,9 +10,12 @@ import { describeStep } from '@/visualizers/describeStep'
 import { generateRandomArray } from '@/utils/random'
 import VisualizerLegend from '@/visualizers/legend/legend'
 
+import { initialBinarySearchState } from './state/types'
+import { binarySearchReducer } from './state/reducer'
+
 export default function BinarySearchVisualizer() {
   /* ============================================================================
-   * Base data (random — SAFE because SSR is disabled)
+   * Base data
    * ========================================================================== */
   const [array, setArray] = useState<number[]>(() =>
     generateRandomArray({
@@ -22,6 +25,7 @@ export default function BinarySearchVisualizer() {
       unique: true,
     }).sort((a, b) => a - b)
   )
+
   const [target, setTarget] = useState<number>(() => array[0])
   const [isTargetModalOpen, setIsTargetModalOpen] = useState(false)
 
@@ -31,85 +35,64 @@ export default function BinarySearchVisualizer() {
   const [input, setInput] = useState(() => array.join(','))
 
   /* ============================================================================
-   * Derived steps (pure, no state)
+   * Steps (pure)
    * ========================================================================== */
   const steps: BinarySearchStep[] = binarySearchSteps(array, target)
 
   /* ============================================================================
-   * Playback state
+   * Playback
    * ========================================================================== */
   const [stepIndex, setStepIndex] = useState(0)
+  const [stepText, setStepText] = useState('')
 
   /* ============================================================================
-   * Visualization state
+   * Visualization state (REDUCER)
    * ========================================================================== */
-  const [low, setLow] = useState<number | null>(null)
-  const [high, setHigh] = useState<number | null>(null)
-  const [mid, setMid] = useState<number | null>(null)
-  const [foundIndex, setFoundIndex] = useState<number | null>(null)
-  const [stepText, setStepText] = useState('')
+  const [state, dispatch] = useReducer(
+    binarySearchReducer,
+    initialBinarySearchState(array)
+  )
 
   /* ============================================================================
    * Helpers
    * ========================================================================== */
-  function clearVisualState() {
-    setLow(null)
-    setHigh(null)
-    setMid(null)
-    setFoundIndex(null)
-    setStepText('')
+  function replayStepsUpTo(targetIndex: number) {
+    dispatch({ type: 'reset', array })
+
+    for (let i = 0; i < targetIndex; i++) {
+      dispatch(steps[i])
+    }
+
+    setStepIndex(targetIndex)
+    setStepText(
+      targetIndex > 0 ? describeStep(steps[targetIndex - 1], { target }) : ''
+    )
   }
 
   function reset() {
-    clearVisualState()
+    dispatch({ type: 'reset', array })
     setStepIndex(0)
+    setStepText('')
   }
 
   /* ============================================================================
-   * Step application
+   * Step controls
    * ========================================================================== */
-  function applyStep(step: BinarySearchStep) {
-    setStepText(describeStep(step, { target }))
-
-    switch (step.type) {
-      case 'bs-range':
-        setLow(step.low)
-        setHigh(step.high)
-        setMid(step.mid)
-        break
-
-      case 'bs-compare':
-        setMid(step.index)
-        break
-
-      case 'bs-found':
-        setFoundIndex(step.index)
-        break
-
-      case 'bs-not-found':
-        setMid(null)
-        break
-    }
-  }
-
   function stepForward() {
     if (stepIndex >= steps.length) return
-    applyStep(steps[stepIndex])
+    const step = steps[stepIndex]
+    dispatch(step)
+    setStepText(describeStep(step, { target }))
     setStepIndex((i) => i + 1)
   }
 
   function stepBack() {
     if (stepIndex <= 0) return
-
-    clearVisualState()
-    for (let i = 0; i < stepIndex - 1; i++) {
-      applyStep(steps[i])
-    }
-    setStepIndex((i) => i - 1)
+    replayStepsUpTo(stepIndex - 1)
   }
 
   /* ============================================================================
-   * Load new array (explicit user action)
+   * Load new array
    * ========================================================================== */
   function loadArray() {
     const parsed = input
@@ -126,15 +109,20 @@ export default function BinarySearchVisualizer() {
     const sorted = [...parsed].sort((a, b) => a - b)
     setArray(sorted)
     setInput(sorted.join(','))
-    reset()
+    dispatch({ type: 'reset', array: sorted })
+    setStepIndex(0)
+    setStepText('')
   }
+
+  useEffect(() => {
+    setInput(array.join(','))
+  }, [array])
 
   /* ============================================================================
    * Render
    * ========================================================================== */
   return (
     <>
-      {/* Target modal */}
       <TargetModal
         open={isTargetModalOpen}
         initialValue={target}
@@ -146,17 +134,14 @@ export default function BinarySearchVisualizer() {
         }}
       />
 
-      {/* Header */}
       <div className="mb-6 rounded border bg-gray-50 px-4 py-3">
         <div className="text-sm text-gray-500">Current Algorithm</div>
         <div className="text-lg font-semibold">Binary Search</div>
         <div className="text-sm">
-          Step <strong>{Math.min(stepIndex, steps.length)}</strong> /{' '}
-          <strong>{steps.length}</strong>
+          Step <strong>{stepIndex}</strong> / <strong>{steps.length}</strong>
         </div>
       </div>
 
-      {/* Array input */}
       <div className="mb-4 flex items-center gap-2 rounded border bg-gray-50 px-4 py-3">
         <label className="text-sm text-gray-600">Sorted array</label>
         <input
@@ -172,7 +157,6 @@ export default function BinarySearchVisualizer() {
         </button>
       </div>
 
-      {/* Target controls */}
       <div className="mb-4 flex items-center gap-2 rounded border bg-gray-50 px-4 py-3">
         <div className="text-sm">
           Target:
@@ -189,23 +173,21 @@ export default function BinarySearchVisualizer() {
       </div>
 
       <SearchArray
-        values={array}
-        low={low}
-        high={high}
-        mid={mid}
-        foundIndex={foundIndex}
+        values={state.array}
+        low={state.low}
+        high={state.high}
+        mid={state.mid}
+        foundIndex={state.foundIndex}
       />
 
       <VisualizerLegend algorithm="binary-search" />
 
-      {/* Step narration */}
       {stepText && (
         <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">
           {stepText}
         </div>
       )}
 
-      {/* Playback */}
       <StepControls
         canStepBack={stepIndex > 0}
         canStepForward={stepIndex < steps.length}

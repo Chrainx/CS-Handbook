@@ -1,3 +1,5 @@
+// visualizers/binary-search/steps.ts
+
 import { BinarySearchStep } from '@/visualizers/steps/types'
 
 export function binarySearchSteps(
@@ -12,13 +14,7 @@ export function binarySearchSteps(
   while (low <= high) {
     const mid = Math.floor((low + high) / 2)
 
-    steps.push({
-      type: 'bs-range',
-      low,
-      high,
-      mid,
-    })
-
+    steps.push({ type: 'bs-range', low, high, mid })
     steps.push({
       type: 'bs-compare',
       index: mid,
@@ -27,10 +23,7 @@ export function binarySearchSteps(
     })
 
     if (arr[mid] === target) {
-      steps.push({
-        type: 'bs-found',
-        index: mid,
-      })
+      steps.push({ type: 'bs-found', index: mid })
       return steps
     }
 

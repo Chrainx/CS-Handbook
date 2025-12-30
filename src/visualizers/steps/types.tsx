@@ -41,6 +41,7 @@ export type SortingStep =
  * Binary search steps
  * ========================================================================== */
 export type BinarySearchStep =
+  | { type: 'reset'; array: number[] }
   | {
       type: 'bs-range'
       low: number
