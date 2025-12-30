@@ -15,3 +15,11 @@ export type GraphVisualState = {
 }
 
 export type GraphAlgorithmId = 'bfs' | 'dfs'
+
+export const initialGraphVisualState: GraphVisualState = {
+  nodes: {},
+  edges: {},
+  activeNode: null,
+  queue: [],
+  stack: [],
+}

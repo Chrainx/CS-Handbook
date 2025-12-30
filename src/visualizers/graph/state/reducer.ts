@@ -1,17 +1,5 @@
 import { GraphStep } from '@/visualizers/steps/types'
-import { GraphVisualState } from './types'
-
-/* ============================================================================
- * Initial empty visual state
- * ========================================================================== */
-
-export const initialGraphVisualState: GraphVisualState = {
-  nodes: {},
-  edges: {},
-  activeNode: null,
-  queue: [],
-  stack: [],
-}
+import { GraphVisualState, initialGraphVisualState } from './types'
 
 /* ============================================================================
  * Reducer
