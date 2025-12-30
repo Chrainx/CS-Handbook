@@ -5,6 +5,7 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
   const a = [...arr]
 
   function mergeSort(l: number, r: number) {
+    steps.push({ type: 'range-enter', l, r })
     if (l === r) {
       steps.push({ type: 'base', index: l })
       return
@@ -15,6 +16,8 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
 
     mergeSort(l, mid)
     mergeSort(mid + 1, r)
+
+    steps.push({ type: 'merge-start', l, r })
 
     const left = a.slice(l, mid + 1)
     const right = a.slice(mid + 1, r + 1)
@@ -76,7 +79,6 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
       a[k++] = right[j++]
     }
 
-    // 👇 explicit merge completion
     steps.push({ type: 'merge-done', l, r })
   }
 

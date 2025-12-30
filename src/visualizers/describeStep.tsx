@@ -36,6 +36,12 @@ export function describeStep(
     case 'base':
       return `Base case reached at index ${step.index} (cannot be split further).`
 
+    case 'merge-start':
+      return `Merging range [${step.l}, ${step.r}].`
+
+    case 'range-enter':
+      return `Processing range [${step.l}, ${step.r}].`
+
     case 'buffer-init':
       return `Preparing merge buffers. Writing back starting at index ${step.writeIndex}.`
 

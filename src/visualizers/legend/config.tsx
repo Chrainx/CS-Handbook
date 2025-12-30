@@ -5,6 +5,8 @@ export type LegendItem = {
 }
 
 export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
+  /* ================= INSERTION SORT ================= */
+
   insertion: [
     {
       colorClass: 'bg-blue-500',
@@ -22,6 +24,8 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Elements being swapped',
     },
   ],
+
+  /* ================= SELECTION SORT ================= */
 
   selection: [
     {
@@ -46,6 +50,8 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
     },
   ],
 
+  /* ================= MERGE SORT ================= */
+
   merge: [
     {
       colorClass: 'bg-blue-500',
@@ -53,38 +59,76 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Element not involved in the current merge step',
     },
     {
-      colorClass: 'bg-gray-500',
-      label: 'Base Case',
-      description: 'Single-element subarray (already sorted)',
+      colorClass: 'bg-cyan-500',
+      label: 'Active Range',
+      description: 'Subarray currently being processed by the algorihm',
     },
     {
-      colorClass: 'bg-purple-600',
-      label: 'Active Range',
-      description: 'Subarray currently being processed by merge sort',
+      colorClass: 'bg-gray-400',
+      label: 'Base Case',
+      description: 'Single-element subarray (cannot be split further)',
     },
     {
       colorClass: 'bg-red-500',
       label: 'Compare',
-      description: 'Elements being compared from the left and right buffers',
+      description: 'Elements currently being compared',
+    },
+    {
+      colorClass: 'bg-purple-500',
+      label: 'Write Position',
+      description: 'Index where the next merged value will be written',
     },
     {
       colorClass: 'bg-green-500',
-      label: 'Overwrite',
-      description:
-        'Position in the array where the next merged value is written',
-    },
-    {
-      colorClass: 'bg-gray-200',
-      label: 'Buffer',
-      description: 'Temporary left and right arrays used during merging',
-    },
-    {
-      colorClass: 'bg-gray-200 line-through opacity-60',
-      label: 'Buffer Consumed',
-      description: 'Buffer elements already written back to the main array',
+      label: 'Just Written',
+      description: 'Most recently written element during merge',
     },
   ],
+
+  /* ================= QUICK SORT ================= */
+
+  quick: [
+    {
+      colorClass: 'bg-blue-500',
+      label: 'Normal',
+      description: 'Element not involved in the current step',
+    },
+    {
+      colorClass: 'bg-cyan-500',
+      label: 'Active Range',
+      description: 'Subarray currently being partitioned',
+    },
+    {
+      colorClass: 'bg-purple-500',
+      label: 'Pivot',
+      description: 'Pivot element used to partition the array',
+    },
+    {
+      colorClass: 'bg-red-500',
+      label: 'Compare',
+      description: 'Element currently being compared with the pivot',
+    },
+    {
+      colorClass: 'bg-orange-500',
+      label: '≤ Pivot (Committed)',
+      description:
+        'Elements confirmed to be less than or equal to the pivot (left of boundary)',
+    },
+    {
+      colorClass: 'bg-green-500',
+      label: 'Swap',
+      description: 'Elements being swapped',
+    },
+  ],
+
+  /* ================= BINARY SEARCH ================= */
+
   'binary-search': [
+    {
+      colorClass: 'bg-blue-500',
+      label: 'Active Range',
+      description: 'Current portion of the array being searched',
+    },
     {
       colorClass: 'bg-red-500',
       label: 'Mid (M)',
@@ -96,16 +140,14 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Target value has been found',
     },
     {
-      colorClass: 'bg-blue-500',
-      label: 'Active Range',
-      description: 'Current portion of the array being searched',
-    },
-    {
       colorClass: 'bg-gray-300',
       label: 'Eliminated',
       description: 'Elements excluded from further search',
     },
   ],
+
+  /* ================= GRAPH ================= */
+
   graph: [
     {
       colorClass: 'fill-blue-500',
@@ -115,7 +157,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
     {
       colorClass: 'fill-yellow-400',
       label: 'Visiting',
-      description: 'Node is discovered and in the frontier (queue / stack)',
+      description: 'Node is discovered and in the frontier',
     },
     {
       colorClass: 'fill-green-500',
@@ -130,12 +172,12 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
     {
       colorClass: 'stroke-purple-500',
       label: 'Relaxed Edge',
-      description: 'Edge used to update a distance (shortest path)',
+      description: 'Edge used to update a distance',
     },
     {
       colorClass: 'stroke-green-600',
       label: 'Chosen Edge',
-      description: 'Edge selected as part of final result (MST / path)',
+      description: 'Edge selected as part of final result',
     },
   ],
 }

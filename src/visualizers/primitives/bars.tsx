@@ -5,7 +5,6 @@ import { SortingVisualState } from '@/visualizers/sorting/state/types'
 const CANVAS_HEIGHT = 220
 const BAR_WIDTH = 36
 const LABEL_PADDING = 6
-const GAP_HALF = 6 // gap-3 = 12px → half = 6px
 const SEP_WIDTH = 2
 
 export default function Bars({ state }: { state: SortingVisualState }) {
@@ -26,9 +25,7 @@ export default function Bars({ state }: { state: SortingVisualState }) {
         {/* ================= SPLIT SEPARATORS (ROW LEVEL) ================= */}
         {state.splitStack.map((range, depth) => {
           const left =
-            (range.mid + 1) * BAR_WIDTH +
-            range.mid * 12 + // gap-3 = 12px
-            GAP_HALF // center of gap
+            range.mid * (BAR_WIDTH + 12) + BAR_WIDTH + 12 / 2 - SEP_WIDTH / 2
 
           return (
             <div
@@ -61,6 +58,13 @@ export default function Bars({ state }: { state: SortingVisualState }) {
             const isMarked = state.markedIndex === i
             const isBase = state.baseIndex === i
             const isWrite = state.writeIndex === i
+            const lastWrittenIndex =
+              state.leftBuffer && state.writeIndex !== null
+                ? state.writeIndex - 1
+                : null
+
+            const isLastWritten =
+              lastWrittenIndex === i && lastWrittenIndex >= 0
 
             const inActiveRange =
               state.activeRange &&
@@ -81,23 +85,24 @@ export default function Bars({ state }: { state: SortingVisualState }) {
               i >= state.activeRange.l &&
               i < state.boundaryIndex
 
-            const barColor = isSwap
-              ? 'bg-green-500'
-              : isBase
-              ? 'bg-gray-400'
-              : isWrite
-              ? 'bg-purple-500'
-              : isMarked
-              ? 'bg-yellow-500'
-              : isPivot
-              ? 'bg-purple-600'
-              : isCompare
-              ? 'bg-red-500'
-              : inBoundaryLeft
-              ? 'bg-orange-500'
-              : inActiveRange
-              ? 'bg-blue-400'
-              : 'bg-blue-500'
+            const barColor =
+              isSwap || isLastWritten
+                ? 'bg-green-500'
+                : isBase
+                ? 'bg-gray-400'
+                : isWrite
+                ? 'bg-purple-500'
+                : isMarked
+                ? 'bg-yellow-500'
+                : isPivot
+                ? 'bg-purple-500'
+                : isCompare
+                ? 'bg-red-500'
+                : inBoundaryLeft
+                ? 'bg-orange-500'
+                : inActiveRange
+                ? 'bg-cyan-500'
+                : 'bg-blue-500'
 
             return (
               <div

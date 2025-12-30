@@ -5,6 +5,7 @@ export function quickSortSteps(arr: number[]): SortingStep[] {
   const steps: SortingStep[] = []
 
   function partition(l: number, r: number): number {
+    steps.push({ type: 'range-enter', l, r })
     const pivotIndex = r
     const pivot = a[pivotIndex]
 

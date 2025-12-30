@@ -9,6 +9,8 @@ export type SortingStep =
   | { type: 'done' }
   | { type: 'split'; l: number; r: number; mid: number }
   | { type: 'base'; index: number }
+  | { type: 'range-enter'; l: number; r: number }
+  | { type: 'merge-start'; l: number; r: number }
   | {
       type: 'buffer-init'
       left: number[]

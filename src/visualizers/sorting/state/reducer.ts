@@ -56,6 +56,32 @@ export function sortingReducer(
         activeRange: null,
       }
 
+    case 'range-enter':
+      return {
+        ...state,
+        activeRange: {
+          l: step.l,
+          r: step.r,
+          mid: Math.floor((step.l + step.r) / 2),
+        },
+        pivotIndex: null, // ✅ clear old pivot
+        boundaryIndex: null, // ✅ clear old boundary
+        compare: null,
+        swap: null,
+      }
+
+    case 'merge-start': {
+      return {
+        ...state,
+        activeRange: {
+          l: step.l,
+          r: step.r,
+          mid: Math.floor((step.l + step.r) / 2),
+        },
+        baseIndex: null,
+      }
+    }
+
     case 'buffer-init':
       return {
         ...state,
@@ -86,7 +112,8 @@ export function sortingReducer(
       return {
         ...state,
         array,
-        writeIndex: step.writeIndex,
+        // 🔑 MOVE write pointer immediately to NEXT index
+        writeIndex: step.writeIndex + 1,
         leftPtr: step.from === 'left' ? state.leftPtr + 1 : state.leftPtr,
         rightPtr: step.from === 'right' ? state.rightPtr + 1 : state.rightPtr,
       }
@@ -97,10 +124,11 @@ export function sortingReducer(
         ...state,
         // pop one split when a merge finishes
         splitStack: state.splitStack.slice(0, -1),
-        activeRange:
-          state.splitStack.length > 1
-            ? state.splitStack[state.splitStack.length - 2]
-            : null,
+        activeRange: {
+          l: step.l,
+          r: step.r,
+          mid: Math.floor((step.l + step.r) / 2),
+        },
         baseIndex: null,
         writeIndex: null,
       }
@@ -125,6 +153,8 @@ export function sortingReducer(
       return {
         ...state,
         boundaryIndex: step.index,
+        compare: null, // ✅ clear compare
+        swap: null,
       }
     }
 
