@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useState } from 'react'
 import StepControls from '@/visualizers/stepControls'
-import SearchArray from '../../primitives/searchArray'
+import ArrayView from '../../primitives/arrayView/arrayView'
 import TargetModal from './targetModal'
 import { BinarySearchStep } from '@/visualizers/steps/types'
 import { binarySearchSteps } from './steps/binarySearch'
@@ -172,7 +172,7 @@ export default function BinarySearchVisualizer() {
         </button>
       </div>
 
-      <SearchArray
+      <ArrayView
         values={state.array}
         low={state.low}
         high={state.high}

@@ -1,6 +1,6 @@
 'use client'
 
-import { BarState } from './types'
+import { BarVisualProps } from './types'
 
 const CANVAS_HEIGHT = 220
 const BAR_WIDTH = 36
@@ -13,7 +13,7 @@ export default function Bars({
   splitStack = [],
   activeRange,
   markers,
-}: BarState) {
+}: BarVisualProps) {
   const min = Math.min(...values)
   const offset = min <= 0 ? 1 - min : 0
   const normalized = values.map((v) => v + offset)

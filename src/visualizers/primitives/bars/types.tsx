@@ -9,7 +9,7 @@ export type BarMarker = {
   label: string
 }
 
-export type BarState = {
+export type BarVisualProps = {
   values: number[]
 
   // coloring
