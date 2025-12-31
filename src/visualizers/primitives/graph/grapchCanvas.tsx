@@ -29,7 +29,7 @@ export default function GraphCanvas({ graph, state }: Props) {
   return (
     <svg
       viewBox={`${minX - PADDING} ${minY - PADDING} ${viewWidth} ${viewHeight}`}
-      className="w-full max-h-[320px] border rounded bg-white"
+      className="w-full max-h-80 border rounded bg-white"
       preserveAspectRatio="xMidYMid meet"
     >
       {/* Edges */}

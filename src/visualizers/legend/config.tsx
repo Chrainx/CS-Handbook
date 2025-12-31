@@ -64,7 +64,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Subarray currently being processed by the algorihm',
     },
     {
-      colorClass: 'bg-gray-400',
+      colorClass: 'bg-gray-500',
       label: 'Base Case',
       description: 'Single-element subarray (cannot be split further)',
     },
@@ -155,7 +155,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node has not been discovered yet',
     },
     {
-      colorClass: 'fill-yellow-400',
+      colorClass: 'fill-yellow-500',
       label: 'Visiting',
       description: 'Node is discovered and in the frontier',
     },

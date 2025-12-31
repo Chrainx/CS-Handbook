@@ -4,7 +4,7 @@ import { useEffect, useReducer, useState } from 'react'
 import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModal'
 import StepControls from '@/visualizers/stepControls'
 import VisualizerLegend from '@/visualizers/legend/legend'
-import Bars from '@/visualizers/primitives/bars'
+import Bars from '@/visualizers/primitives/bars/bars'
 import MergeBuffer from '../buffer'
 
 import { SortingAlgorithmId } from './state/types'
@@ -20,6 +20,8 @@ import { insertionSortSteps } from './steps/insertion'
 import { selectionSortSteps } from './steps/selection'
 import { mergeSortSteps } from './steps/merge'
 import { quickSortSteps } from './steps/quick'
+
+import { sortingStateToBars } from './adapters/sortingToBar'
 
 export const SORTING_ALGORITHMS: {
   id: SortingAlgorithmId
@@ -234,7 +236,7 @@ export default function SortingVisualizer() {
             </div>
           )}
 
-          <Bars state={state} />
+          <Bars {...sortingStateToBars(state)} />
 
           <VisualizerLegend algorithm={algorithm} />
 

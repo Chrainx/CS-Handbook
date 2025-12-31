@@ -1,4 +1,3 @@
-// visualizers/sorting/state/types.ts
 export type SortingVisualState = {
   array: number[]
   compare: { i: number; j: number } | null
