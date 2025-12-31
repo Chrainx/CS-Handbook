@@ -1,7 +1,7 @@
 import { SortingVisualState } from '../state/types'
-import { BarState } from '@/visualizers/primitives/bars/types'
+import { BarVisualProps } from '@/visualizers/primitives/bars/types'
 
-export function sortingStateToBars(state: SortingVisualState): BarState {
+export function sortingStateToBars(state: SortingVisualState): BarVisualProps {
   const inMerge = !!state.leftBuffer // merge is active when buffers exist
   const lastWrittenIndex =
     inMerge &&

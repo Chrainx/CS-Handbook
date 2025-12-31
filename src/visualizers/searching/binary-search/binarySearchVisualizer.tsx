@@ -13,6 +13,8 @@ import VisualizerLegend from '@/visualizers/legend/legend'
 import { initialBinarySearchState } from './state/types'
 import { binarySearchReducer } from './state/reducer'
 
+import { binarySearchStateToArray } from './adapter/binarySearchToArray'
+
 export default function BinarySearchVisualizer() {
   /* ============================================================================
    * Base data
@@ -172,13 +174,7 @@ export default function BinarySearchVisualizer() {
         </button>
       </div>
 
-      <ArrayView
-        values={state.array}
-        low={state.low}
-        high={state.high}
-        mid={state.mid}
-        foundIndex={state.foundIndex}
-      />
+      <ArrayView {...binarySearchStateToArray(state)} />
 
       <VisualizerLegend algorithm="binary-search" />
 
