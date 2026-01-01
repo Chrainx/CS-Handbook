@@ -1,22 +1,18 @@
 'use client'
-
-import { GraphData } from './types'
-import { GraphVisualState } from '@/visualizers/graph/state/types'
 import Node from './node'
 import Edge from './edge'
 
-type Props = {
-  graph: GraphData
-  state: GraphVisualState
-}
+import { GraphCanvasProps } from './types'
 
-export default function GraphCanvas({ graph, state }: Props) {
-  const nodeMap = new Map(graph.nodes.map((n) => [n.id, n]))
+type Props = GraphCanvasProps
+
+export default function GraphCanvas({ nodes, edges }: Props) {
+  const nodeMap = new Map(nodes.map((n) => [n.id, n]))
 
   const PADDING = 60
 
-  const xs = graph.nodes.map((n) => n.x)
-  const ys = graph.nodes.map((n) => n.y)
+  const xs = nodes.map((n) => n.x)
+  const ys = nodes.map((n) => n.y)
 
   const minX = Math.min(...xs)
   const maxX = Math.max(...xs)
@@ -33,7 +29,7 @@ export default function GraphCanvas({ graph, state }: Props) {
       preserveAspectRatio="xMidYMid meet"
     >
       {/* Edges */}
-      {graph.edges.map((edge) => {
+      {edges.map((edge) => {
         const fromNode = nodeMap.get(edge.from)
         const toNode = nodeMap.get(edge.to)
         if (!fromNode || !toNode) return null
@@ -46,21 +42,14 @@ export default function GraphCanvas({ graph, state }: Props) {
             edge={edge}
             fromNode={fromNode}
             toNode={toNode}
-            state={state.edges?.[key] ?? 'default'}
+            state={edge.state}
           />
         )
       })}
 
       {/* Nodes */}
-      {graph.nodes.map((node) => (
-        <Node
-          key={node.id}
-          node={node}
-          state={
-            state.nodes?.[node.id] ??
-            (state.activeNode === node.id ? 'active' : 'default')
-          }
-        />
+      {nodes.map((node) => (
+        <Node key={node.id} node={node} state={node.state} />
       ))}
     </svg>
   )

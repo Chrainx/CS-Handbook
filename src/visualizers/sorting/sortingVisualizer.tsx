@@ -171,6 +171,8 @@ export default function SortingVisualizer() {
           setAlgorithm(id)
           setOpen(false)
           generateSteps(id)
+          replayStepsUpTo(0)
+          setStepText('')
         }}
         onClose={() => setOpen(false)}
       />

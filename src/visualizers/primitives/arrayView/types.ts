@@ -6,10 +6,8 @@ export type ArrayCellMarker = {
 export type ArrayVisualProps = {
   values: number[]
 
-  /** color resolver per index */
   colorByIndex: (index: number) => string
 
-  /** optional markers */
   markers?: {
     top?: ArrayCellMarker[]
     bottom?: ArrayCellMarker[]

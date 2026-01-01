@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect, useReducer, useState } from 'react'
+import { useReducer, useState } from 'react'
 import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModal'
 import StepControls from '../stepControls'
-import { describeStep } from '../describeStep'
 import VisualizerLegend from '../legend/legend'
 
 import { GraphAlgorithmId } from './state/types'
@@ -11,21 +10,26 @@ import { GraphAlgorithmId } from './state/types'
 import QueueView from './components/queueView'
 import StackView from './components/stackView'
 
-import GraphCanvas from '../primitives/graph/grapchCanvas'
-import { GraphData } from '@/visualizers/primitives/graph/types'
+import GraphCanvas from '../primitives/graph/graphCanvas'
+import { GraphData } from '../primitives/graph/data'
 import { GraphStep } from '@/visualizers/steps/types'
+import { describeStep } from '../describeStep'
+
 import { graphReducer } from './state/reducer'
-import { initialGraphVisualState } from './state/types'
+import { initialGraphState } from './state/types'
 
 import { bfsSteps } from './steps/bfs'
 import { dfsSteps } from './steps/dfs'
 
+import { graphStateToCanvas } from './adapter/graphToCanvas'
+
 export const GRAPH_ALGORITHMS: {
   id: GraphAlgorithmId
   name: string
+  description: string
 }[] = [
-  { id: 'bfs', name: 'Breadth-First Search' },
-  { id: 'dfs', name: 'Depth-First Search' },
+  { id: 'bfs', name: 'Breadth-First Search', description: 'desc' },
+  { id: 'dfs', name: 'Depth-First Search', description: 'desc' },
 ]
 
 export const GRAPH_ALGO_META: Record<
@@ -34,6 +38,18 @@ export const GRAPH_ALGO_META: Record<
 > = {
   bfs: { structure: 'queue' },
   dfs: { structure: 'stack' },
+  dijkstra: {
+    structure: 'queue',
+  },
+  topological: {
+    structure: 'queue',
+  },
+  prim: {
+    structure: 'queue',
+  },
+  kruskal: {
+    structure: 'queue',
+  },
 }
 
 const GRAPH_STEP_GENERATORS: Record<
@@ -78,7 +94,7 @@ export default function GraphVisualizer() {
 
   const [stepText, setStepText] = useState('')
 
-  const [state, dispatch] = useReducer(graphReducer, initialGraphVisualState)
+  const [state, dispatch] = useReducer(graphReducer, initialGraphState)
 
   function generateSteps(algo: string) {
     const generator = GRAPH_STEP_GENERATORS[algo]
@@ -149,6 +165,21 @@ export default function GraphVisualizer() {
             </div>
           </div>
 
+          {/* Controls */}
+          <div className="mb-4 flex gap-4">
+            <button
+              onClick={() => {
+                setSteps([])
+                setStepIndex(0)
+                setStepText('')
+                setOpen(true)
+              }}
+              className="rounded border px-3 py-1 text-sm"
+            >
+              Change Algorithm
+            </button>
+          </div>
+
           {/* Graph */}
           {GRAPH_ALGO_META[algorithm]?.structure === 'queue' && (
             <QueueView queue={state.queue ?? []} />
@@ -157,7 +188,7 @@ export default function GraphVisualizer() {
           {GRAPH_ALGO_META[algorithm]?.structure === 'stack' && (
             <StackView stack={state.stack ?? []} />
           )}
-          <GraphCanvas graph={graph} state={state} />
+          <GraphCanvas {...graphStateToCanvas(graph, state)} />
 
           <VisualizerLegend algorithm="graph" />
 

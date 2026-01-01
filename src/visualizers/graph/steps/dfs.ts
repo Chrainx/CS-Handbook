@@ -1,4 +1,4 @@
-import { GraphData } from '@/visualizers/primitives/graph/types'
+import { GraphData } from '@/visualizers/primitives/graph/data'
 import { GraphStep } from '@/visualizers/steps/types'
 
 export function dfsSteps(graph: GraphData, start: string): GraphStep[] {

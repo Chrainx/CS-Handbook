@@ -1,24 +1,12 @@
 import { GraphStep } from '@/visualizers/steps/types'
-import { GraphVisualState, initialGraphVisualState } from './types'
+import { GraphState, initialGraphState } from './types'
 
-/* ============================================================================
- * Reducer
- * ==========================================================================
- * IMPORTANT:
- * - Must be PURE
- * - Must NOT mutate previous state
- * - Must be replay-safe
- * ========================================================================== */
-
-export function graphReducer(
-  state: GraphVisualState = initialGraphVisualState,
-  step: GraphStep
-): GraphVisualState {
+export function graphReducer(state: GraphState, step: GraphStep): GraphState {
   switch (step.type) {
     case 'reset':
-      return initialGraphVisualState
+      return initialGraphState
 
-    case 'visit-node': {
+    case 'visit-node':
       return {
         ...state,
         nodes: {
@@ -27,9 +15,8 @@ export function graphReducer(
         },
         activeNode: step.node,
       }
-    }
 
-    case 'mark-visited': {
+    case 'mark-visited':
       return {
         ...state,
         nodes: {
@@ -38,7 +25,6 @@ export function graphReducer(
         },
         activeNode: null,
       }
-    }
 
     case 'activate-edge': {
       const key = `${step.from}->${step.to}`
@@ -51,33 +37,29 @@ export function graphReducer(
       }
     }
 
-    case 'enqueue': {
+    case 'enqueue':
       return {
         ...state,
         queue: [...state.queue, step.node],
       }
-    }
 
-    case 'dequeue': {
+    case 'dequeue':
       return {
         ...state,
         queue: state.queue.slice(1),
       }
-    }
 
-    case 'push-stack': {
+    case 'push-stack':
       return {
         ...state,
         stack: [...state.stack, step.node],
       }
-    }
 
-    case 'pop-stack': {
+    case 'pop-stack':
       return {
         ...state,
         stack: state.stack.slice(0, -1),
       }
-    }
 
     case 'relax-edge': {
       const key = `${step.from}->${step.to}`
@@ -101,19 +83,17 @@ export function graphReducer(
       }
     }
 
-    case 'set-active-node': {
+    case 'set-active-node':
       return {
         ...state,
         activeNode: step.node,
       }
-    }
 
-    case 'done': {
+    case 'done':
       return {
         ...state,
         activeNode: null,
       }
-    }
 
     default:
       return state
