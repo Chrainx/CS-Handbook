@@ -37,6 +37,37 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
       }
     }
 
+    case 'relax-edge': {
+      const key = `${step.from}->${step.to}`
+      return {
+        ...state,
+        edges: {
+          ...state.edges,
+          [key]: 'relaxed',
+        },
+      }
+    }
+
+    case 'choose-edge': {
+      const key = `${step.from}->${step.to}`
+      return {
+        ...state,
+        edges: {
+          ...state.edges,
+          [key]: 'chosen',
+        },
+      }
+    }
+
+    case 'set-distance':
+      return {
+        ...state,
+        distances: {
+          ...state.distances,
+          [step.node]: step.distance,
+        },
+      }
+
     case 'enqueue':
       return {
         ...state,
@@ -61,25 +92,31 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
         stack: state.stack.slice(0, -1),
       }
 
-    case 'relax-edge': {
-      const key = `${step.from}->${step.to}`
+    case 'pq-init': {
       return {
         ...state,
-        edges: {
-          ...state.edges,
-          [key]: 'relaxed',
-        },
+        pq: [],
       }
     }
 
-    case 'choose-edge': {
-      const key = `${step.from}->${step.to}`
+    case 'pq-push': {
       return {
         ...state,
-        edges: {
-          ...state.edges,
-          [key]: 'chosen',
-        },
+        pq: [...state.pq!, step.item],
+      }
+    }
+
+    case 'pq-pop': {
+      if (!state.pq || state.pq.length === 0) return state
+
+      const idx = state.pq.findIndex(
+        (x) => x.node === step.node && x.priority === step.priority
+      )
+      if (idx === -1) return state
+
+      return {
+        ...state,
+        pq: [...state.pq.slice(0, idx), ...state.pq.slice(idx + 1)],
       }
     }
 

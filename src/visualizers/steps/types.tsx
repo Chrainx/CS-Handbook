@@ -68,37 +68,36 @@ export type BinarySearchStep =
  * ========================================================================== */
 
 export type GraphStep =
-  // A node is discovered / focused (frontier)
+  | { type: 'reset' }
   | {
       type: 'visit-node'
       node: string
     }
-
-  // A node is fully processed
   | {
       type: 'mark-visited'
       node: string
     }
-
-  // An edge becomes active (currently being explored)
   | {
       type: 'activate-edge'
       from: string
       to: string
     }
-
-  // An edge relaxation attempt (Dijkstra / Bellman-Ford)
   | {
       type: 'relax-edge'
       from: string
       to: string
+      newDist: number
     }
-
-  // An edge is chosen as part of final structure (MST, shortest path tree)
   | {
       type: 'choose-edge'
       from: string
       to: string
+    }
+  | {
+      type: 'set-distance'
+      node: string
+      distance: number
+      from: string | null
     }
   | { type: 'enqueue'; node: string }
   | { type: 'dequeue'; node: string }
@@ -109,15 +108,21 @@ export type GraphStep =
   | {
       type: 'pop-stack'
     }
-
-  // Optional: highlight the current node (DFS stack / BFS queue head)
+  | { type: 'pq-init' }
+  | {
+      type: 'pq-push'
+      item: { node: string; priority: number }
+    }
+  | {
+      type: 'pq-pop'
+      node: string
+      priority: number
+    }
+  | { type: 'pq-skip-stale'; node: string; priority: number }
   | {
       type: 'set-active-node'
       node: string | null
     }
-  | { type: 'reset' }
-
-  // Algorithm finished
   | { type: 'done' }
 
 /* ============================================================================

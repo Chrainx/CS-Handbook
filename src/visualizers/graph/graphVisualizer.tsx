@@ -9,6 +9,7 @@ import { GraphAlgorithmId } from './state/types'
 
 import QueueView from './components/queueView'
 import StackView from './components/stackView'
+import PriorityQueueView from '../primitives/priorityQueue/priorityQueueView'
 
 import GraphCanvas from '../primitives/graph/graphCanvas'
 import { GraphData } from '../primitives/graph/data'
@@ -20,8 +21,12 @@ import { initialGraphState } from './state/types'
 
 import { bfsSteps } from './steps/bfs'
 import { dfsSteps } from './steps/dfs'
+import { dijkstraSteps } from './steps/dijkstra'
 
 import { graphStateToCanvas } from './adapter/graphToCanvas'
+import { graphStateToPriorityQueue } from './adapter/graphToPriorityQueue'
+
+import { GRAPH_PRESETS } from './preset'
 
 export const GRAPH_ALGORITHMS: {
   id: GraphAlgorithmId
@@ -30,16 +35,17 @@ export const GRAPH_ALGORITHMS: {
 }[] = [
   { id: 'bfs', name: 'Breadth-First Search', description: 'desc' },
   { id: 'dfs', name: 'Depth-First Search', description: 'desc' },
+  { id: 'dijkstra', name: 'Dijkstra Algortihm', description: 'desc' },
 ]
 
 export const GRAPH_ALGO_META: Record<
   GraphAlgorithmId,
-  { structure: 'queue' | 'stack' }
+  { structure: 'queue' | 'stack' | 'pq' }
 > = {
   bfs: { structure: 'queue' },
   dfs: { structure: 'stack' },
   dijkstra: {
-    structure: 'queue',
+    structure: 'pq',
   },
   topological: {
     structure: 'queue',
@@ -58,37 +64,28 @@ const GRAPH_STEP_GENERATORS: Record<
 > = {
   bfs: bfsSteps,
   dfs: dfsSteps,
+  dijkstra: dijkstraSteps,
 }
 
-const DEFAULT_GRAPH: GraphData = {
-  nodes: [
-    { id: 'A', x: 300, y: 60 }, // root
+const GRAPH_PRESET_BY_ALGO: Record<
+  GraphAlgorithmId,
+  keyof typeof GRAPH_PRESETS
+> = {
+  bfs: 'tree',
+  dfs: 'tree',
+  topological: 'tree',
 
-    { id: 'B', x: 150, y: 160 },
-    { id: 'C', x: 450, y: 160 },
-
-    { id: 'D', x: 80, y: 280 },
-    { id: 'E', x: 220, y: 280 },
-    { id: 'F', x: 380, y: 280 },
-    { id: 'G', x: 520, y: 280 },
-  ],
-  edges: [
-    { from: 'A', to: 'B' },
-    { from: 'A', to: 'C' },
-
-    { from: 'B', to: 'D' },
-    { from: 'B', to: 'E' },
-
-    { from: 'C', to: 'F' },
-    { from: 'C', to: 'G' },
-  ],
+  dijkstra: 'weighted',
+  prim: 'weighted',
+  kruskal: 'weighted',
 }
 
 export default function GraphVisualizer() {
   const [algorithm, setAlgorithm] = useState<GraphAlgorithmId | null>(null)
   const [open, setOpen] = useState(true)
 
-  const [graph] = useState<GraphData>(DEFAULT_GRAPH)
+  const [graph, setGraph] = useState<GraphData>(GRAPH_PRESETS.tree)
+
   const [steps, setSteps] = useState<GraphStep[]>([])
   const [stepIndex, setStepIndex] = useState(0)
 
@@ -96,7 +93,7 @@ export default function GraphVisualizer() {
 
   const [state, dispatch] = useReducer(graphReducer, initialGraphState)
 
-  function generateSteps(algo: string) {
+  function generateSteps(algo: string, graph: GraphData) {
     const generator = GRAPH_STEP_GENERATORS[algo]
     if (!generator) return
 
@@ -142,9 +139,12 @@ export default function GraphVisualizer() {
         currentAlgorithm={algorithm}
         onSelect={(id) => {
           const algo = id as GraphAlgorithmId
+          const presetKey = GRAPH_PRESET_BY_ALGO[algo]
+          const presetGraph = GRAPH_PRESETS[presetKey]
+          setGraph(presetGraph)
           setAlgorithm(algo)
           setOpen(false)
-          generateSteps(id)
+          generateSteps(id, presetGraph)
           replayStepsUpTo(0)
           setStepText('')
         }}
@@ -187,6 +187,10 @@ export default function GraphVisualizer() {
 
           {GRAPH_ALGO_META[algorithm]?.structure === 'stack' && (
             <StackView stack={state.stack ?? []} />
+          )}
+
+          {GRAPH_ALGO_META[algorithm]?.structure === 'pq' && (
+            <PriorityQueueView {...graphStateToPriorityQueue(state)} />
           )}
           <GraphCanvas {...graphStateToCanvas(graph, state)} />
 

@@ -98,6 +98,23 @@ export function describeStep(
     case 'pop-stack':
       return `Pop node from the stack.`
 
+    case 'pq-init':
+      return 'Initialize priority queue.'
+
+    case 'pq-push':
+      return `Insert node ${step.item.node} with priority ${step.item.priority} into the priority queue.`
+
+    case 'pq-pop':
+      return `Remove node ${step.node} with the smallest distance from the priority queue.`
+
+    case 'pq-skip-stale':
+      return `Discard outdated entry for node ${step.node} (distance ${step.priority}), a shorter path already exists.`
+
+    case 'set-distance':
+      return step.from
+        ? `Update distance of node ${step.node} to ${step.distance} via ${step.from}.`
+        : `Set initial distance of node ${step.node} to ${step.distance}.`
+
     case 'visit-node':
       return `Visiting node ${step.node}.`
 

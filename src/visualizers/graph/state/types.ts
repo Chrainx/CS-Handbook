@@ -19,14 +19,22 @@ export type GraphState = {
   /** Per-edge visual state (key: "A->B") */
   edges: Record<string, EdgeState>
 
+  /** Currently focused node */
+  activeNode: string | null
+
   /** BFS queue */
   queue: string[]
 
   /** DFS stack */
   stack: string[]
 
-  /** Currently focused node */
-  activeNode: string | null
+  pq?: {
+    node: string
+    priority: number
+  }[]
+
+  distances: Record<string, number>
+  previous: Record<string, string | null>
 }
 
 /* ============================================================================
@@ -44,7 +52,13 @@ export type EdgeState = 'default' | 'active' | 'relaxed' | 'chosen'
 export const initialGraphState: GraphState = {
   nodes: {},
   edges: {},
+
+  activeNode: null,
+
   queue: [],
   stack: [],
-  activeNode: null,
+  pq: [],
+
+  distances: {},
+  previous: {},
 }

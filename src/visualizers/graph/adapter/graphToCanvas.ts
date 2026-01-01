@@ -10,6 +10,10 @@ export function graphStateToCanvas(
     nodes: graph.nodes.map((n) => ({
       ...n,
       state: state.nodes[n.id] ?? 'default',
+      label:
+        state.distances[n.id] !== undefined
+          ? `${n.id} (${state.distances[n.id]})`
+          : n.id,
     })),
 
     edges: graph.edges.map((e) => {
