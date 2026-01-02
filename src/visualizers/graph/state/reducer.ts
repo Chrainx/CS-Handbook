@@ -92,13 +92,6 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
         stack: state.stack.slice(0, -1),
       }
 
-    case 'pq-init': {
-      return {
-        ...state,
-        pq: [],
-      }
-    }
-
     case 'pq-push': {
       return {
         ...state,

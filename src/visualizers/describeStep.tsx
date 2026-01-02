@@ -98,9 +98,6 @@ export function describeStep(
     case 'pop-stack':
       return `Pop node from the stack.`
 
-    case 'pq-init':
-      return 'Initialize priority queue.'
-
     case 'pq-push':
       return `Insert node ${step.item.node} with priority ${step.item.priority} into the priority queue.`
 
@@ -128,7 +125,7 @@ export function describeStep(
       return `Relaxing edge ${step.from} → ${step.to}.`
 
     case 'choose-edge':
-      return `Edge ${step.from} → ${step.to} chosen as part of result.`
+      return `Edge ${step.from} → ${step.to} processed.`
 
     case 'set-active-node':
       return step.node

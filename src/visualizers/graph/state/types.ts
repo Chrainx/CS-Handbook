@@ -62,3 +62,8 @@ export const initialGraphState: GraphState = {
   distances: {},
   previous: {},
 }
+
+export type GraphOutput =
+  | { type: 'none' }
+  | { type: 'order'; nodes: string[] }
+  | { type: 'distances'; values: Record<string, number> }

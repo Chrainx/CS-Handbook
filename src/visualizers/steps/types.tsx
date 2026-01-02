@@ -108,7 +108,6 @@ export type GraphStep =
   | {
       type: 'pop-stack'
     }
-  | { type: 'pq-init' }
   | {
       type: 'pq-push'
       item: { node: string; priority: number }

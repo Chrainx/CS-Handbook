@@ -1,6 +1,7 @@
 'use client'
 
-import { GraphNode, NodeState } from './types'
+import { GraphNode } from './data'
+import { NodeState } from '@/visualizers/graph/state/types'
 
 type Props = {
   node: GraphNode

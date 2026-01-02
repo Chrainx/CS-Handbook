@@ -27,7 +27,7 @@ export const GRAPH_PRESETS: Record<string, GraphData> = {
       { id: 'B', x: 150, y: 140 },
       { id: 'C', x: 450, y: 140 },
       { id: 'D', x: 80, y: 280 },
-      { id: 'E', x: 300, y: 280 },
+      { id: 'E', x: 300, y: 210 },
       { id: 'F', x: 520, y: 280 },
     ],
     edges: [

@@ -15,9 +15,6 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
 
   const pq: PQItem[] = []
 
-  // ---------- INIT ----------
-  steps.push({ type: 'pq-init' })
-
   for (const node of graph.nodes) {
     dist[node.id] = Infinity
     prev[node.id] = null
@@ -43,8 +40,6 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
     // ✅ stale / already processed entry → skip
     if (visited.has(u)) continue
     if (du > dist[u]) continue
-
-    visited.add(u)
 
     steps.push({ type: 'visit-node', node: u })
 
@@ -79,6 +74,13 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
         prev[v] = u
 
         steps.push({
+          type: 'relax-edge',
+          from: u,
+          to: v,
+          newDist: alt,
+        } as GraphStep)
+
+        steps.push({
           type: 'set-distance',
           node: v,
           distance: alt,
@@ -91,21 +93,10 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
           type: 'pq-push',
           item: { node: v, priority: alt },
         })
-
-        // ✅ keep this payload matching YOUR GraphStep type:
-        // If your GraphStep.relax-edge includes newDist:
-        steps.push({
-          type: 'relax-edge',
-          from: u,
-          to: v,
-          newDist: alt,
-        } as GraphStep)
-
-        // If your GraphStep.relax-edge does NOT include newDist, use this instead:
-        // steps.push({ type: 'relax-edge', from: u, to: v })
       }
     }
 
+    visited.add(u)
     steps.push({ type: 'mark-visited', node: u })
   }
 

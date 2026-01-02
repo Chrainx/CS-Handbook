@@ -5,7 +5,7 @@ import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModa
 import StepControls from '../stepControls'
 import VisualizerLegend from '../legend/legend'
 
-import { GraphAlgorithmId } from './state/types'
+import { GraphAlgorithmId, GraphOutput } from './state/types'
 
 import QueueView from './components/queueView'
 import StackView from './components/stackView'
@@ -22,6 +22,7 @@ import { initialGraphState } from './state/types'
 import { bfsSteps } from './steps/bfs'
 import { dfsSteps } from './steps/dfs'
 import { dijkstraSteps } from './steps/dijkstra'
+import { topologicalSortSteps } from './steps/topological'
 
 import { graphStateToCanvas } from './adapter/graphToCanvas'
 import { graphStateToPriorityQueue } from './adapter/graphToPriorityQueue'
@@ -36,6 +37,7 @@ export const GRAPH_ALGORITHMS: {
   { id: 'bfs', name: 'Breadth-First Search', description: 'desc' },
   { id: 'dfs', name: 'Depth-First Search', description: 'desc' },
   { id: 'dijkstra', name: 'Dijkstra Algortihm', description: 'desc' },
+  { id: 'topological', name: 'Topological Sort', description: 'desc' },
 ]
 
 export const GRAPH_ALGO_META: Record<
@@ -65,6 +67,7 @@ const GRAPH_STEP_GENERATORS: Record<
   bfs: bfsSteps,
   dfs: dfsSteps,
   dijkstra: dijkstraSteps,
+  topological: topologicalSortSteps,
 }
 
 const GRAPH_PRESET_BY_ALGO: Record<
@@ -93,6 +96,8 @@ export default function GraphVisualizer() {
 
   const [state, dispatch] = useReducer(graphReducer, initialGraphState)
 
+  const [output, setOutput] = useState<GraphOutput>({ type: 'none' })
+
   function generateSteps(algo: string, graph: GraphData) {
     const generator = GRAPH_STEP_GENERATORS[algo]
     if (!generator) return
@@ -118,6 +123,28 @@ export default function GraphVisualizer() {
 
     const step = steps[stepIndex]
     dispatch(step)
+
+    if (algorithm === 'topological') {
+      if (step.type === 'mark-visited') {
+        setOutput((prev) =>
+          prev.type === 'order'
+            ? { type: 'order', nodes: [...prev.nodes, step.node] }
+            : { type: 'order', nodes: [step.node] }
+        )
+      }
+    }
+
+    if (algorithm === 'bfs' || algorithm === 'dijkstra') {
+      if (step.type === 'set-distance') {
+        setOutput((prev) => ({
+          type: 'distances',
+          values: {
+            ...(prev.type === 'distances' ? prev.values : {}),
+            [step.node]: step.distance,
+          },
+        }))
+      }
+    }
     setStepText(describeStep(step))
     setStepIndex((i) => i + 1)
   }
@@ -129,6 +156,7 @@ export default function GraphVisualizer() {
 
   function reset() {
     replayStepsUpTo(0)
+    setOutput({ type: 'none' })
   }
 
   return (
@@ -147,6 +175,7 @@ export default function GraphVisualizer() {
           generateSteps(id, presetGraph)
           replayStepsUpTo(0)
           setStepText('')
+          setOutput({ type: 'none' })
         }}
         onClose={() => setOpen(false)}
       />
@@ -199,6 +228,40 @@ export default function GraphVisualizer() {
           {stepText && (
             <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">
               {stepText}
+            </div>
+          )}
+
+          {/* OUTPUT PANEL */}
+          {output.type === 'order' && (
+            <div className="my-4 rounded border border-green-500 bg-green-50 px-4 py-3 text-sm">
+              <div className="mb-2 font-semibold text-green-700">
+                Topological Order
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {output.nodes.map((n, i) => (
+                  <span
+                    key={i}
+                    className="rounded bg-green-500 px-2 py-1 font-mono text-white"
+                  >
+                    {n}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {output.type === 'distances' && (
+            <div className="my-4 rounded border border-green-500 bg-green-50 px-4 py-3 text-sm">
+              <div className="mb-2 font-semibold text-green-700">Distances</div>
+
+              <ul className="font-mono text-green-800">
+                {Object.entries(output.values).map(([node, dist]) => (
+                  <li key={node}>
+                    {node}: {dist}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 

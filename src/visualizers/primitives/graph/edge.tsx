@@ -1,6 +1,7 @@
 'use client'
 
-import { GraphEdge, EdgeState, GraphNode } from './types'
+import { GraphEdge, GraphNode } from './data'
+import { EdgeState } from '@/visualizers/graph/state/types'
 
 type Props = {
   edge: GraphEdge
@@ -16,7 +17,7 @@ function getEdgeStyle(state: EdgeState | undefined) {
     case 'chosen':
       return { stroke: '#22c55e', strokeWidth: 3 } // green
     case 'relaxed':
-      return { stroke: '#3b82f6', strokeWidth: 3 } // blue
+      return { stroke: '#a855f7', strokeWidth: 3 } // purple
     case 'default':
     default:
       return { stroke: '#64748b', strokeWidth: 2 } // slate
