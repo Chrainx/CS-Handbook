@@ -1,10 +1,28 @@
 import { GraphStep } from '@/visualizers/steps/types'
-import { GraphState, initialGraphState } from './types'
+import {
+  GraphState,
+  initialGraphState,
+  GRAPH_ALGO_CATEGORY,
+  GraphAlgorithmId,
+} from './types'
 
-export function graphReducer(state: GraphState, step: GraphStep): GraphState {
+/**
+ * Reducer is CATEGORY-AWARE.
+ * Visual noise is filtered here, not in step generators.
+ */
+export function graphReducer(
+  state: GraphState,
+  step: GraphStep & { algorithm?: GraphAlgorithmId }
+): GraphState {
+  const category = step.algorithm ? GRAPH_ALGO_CATEGORY[step.algorithm] : null
+
   switch (step.type) {
+    /* ================= RESET ================= */
+
     case 'reset':
       return initialGraphState
+
+    /* ================= NODE STATES ================= */
 
     case 'visit-node':
       return {
@@ -13,7 +31,6 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
           ...state.nodes,
           [step.node]: 'visiting',
         },
-        activeNode: step.node,
       }
 
     case 'mark-visited':
@@ -23,8 +40,9 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
           ...state.nodes,
           [step.node]: 'visited',
         },
-        activeNode: null,
       }
+
+    /* ================= EDGE STATES ================= */
 
     case 'activate-edge': {
       const key = `${step.from}->${step.to}`
@@ -59,6 +77,8 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
       }
     }
 
+    /* ================= DISTANCES ================= */
+
     case 'set-distance':
       return {
         ...state,
@@ -67,6 +87,8 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
           [step.node]: step.distance,
         },
       }
+
+    /* ================= QUEUE / STACK ================= */
 
     case 'enqueue':
       return {
@@ -92,15 +114,18 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
         stack: state.stack.slice(0, -1),
       }
 
-    case 'pq-push': {
+    /* ================= PRIORITY QUEUE ================= */
+
+    case 'pq-push':
+      if (category !== 'shortest-path') return state
+
       return {
         ...state,
-        pq: [...state.pq!, step.item],
+        pq: [...(state.pq ?? []), step.item],
       }
-    }
 
-    case 'pq-pop': {
-      if (!state.pq || state.pq.length === 0) return state
+    case 'pq-pop':
+      if (category !== 'shortest-path' || !state.pq) return state
 
       const idx = state.pq.findIndex(
         (x) => x.node === step.node && x.priority === step.priority
@@ -111,18 +136,12 @@ export function graphReducer(state: GraphState, step: GraphStep): GraphState {
         ...state,
         pq: [...state.pq.slice(0, idx), ...state.pq.slice(idx + 1)],
       }
-    }
 
-    case 'set-active-node':
-      return {
-        ...state,
-        activeNode: step.node,
-      }
+    /* ================= DONE ================= */
 
     case 'done':
       return {
         ...state,
-        activeNode: null,
       }
 
     default:

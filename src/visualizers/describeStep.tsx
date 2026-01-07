@@ -127,11 +127,6 @@ export function describeStep(
     case 'choose-edge':
       return `Edge ${step.from} → ${step.to} processed.`
 
-    case 'set-active-node':
-      return step.node
-        ? `Current active node is ${step.node}.`
-        : `No active node.`
-
     /* ===================== SAFETY ===================== */
 
     default: {

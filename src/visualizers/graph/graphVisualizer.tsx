@@ -5,7 +5,11 @@ import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModa
 import StepControls from '../stepControls'
 import VisualizerLegend from '../legend/legend'
 
-import { GraphAlgorithmId, GraphOutput } from './state/types'
+import {
+  GraphAlgorithmId,
+  GraphOutput,
+  GRAPH_ALGO_CATEGORY,
+} from './state/types'
 
 import QueueView from './components/queueView'
 import StackView from './components/stackView'
@@ -23,6 +27,7 @@ import { bfsSteps } from './steps/bfs'
 import { dfsSteps } from './steps/dfs'
 import { dijkstraSteps } from './steps/dijkstra'
 import { topologicalSortSteps } from './steps/topological'
+import { bellmanFordSteps } from './steps/bellmanFord'
 
 import { graphStateToCanvas } from './adapter/graphToCanvas'
 import { graphStateToPriorityQueue } from './adapter/graphToPriorityQueue'
@@ -38,11 +43,12 @@ export const GRAPH_ALGORITHMS: {
   { id: 'dfs', name: 'Depth-First Search', description: 'desc' },
   { id: 'dijkstra', name: 'Dijkstra Algortihm', description: 'desc' },
   { id: 'topological', name: 'Topological Sort', description: 'desc' },
+  { id: 'bellman-ford', name: 'Bellman Ford', description: 'desc' },
 ]
 
 export const GRAPH_ALGO_META: Record<
   GraphAlgorithmId,
-  { structure: 'queue' | 'stack' | 'pq' }
+  { structure?: 'queue' | 'stack' | 'pq' }
 > = {
   bfs: { structure: 'queue' },
   dfs: { structure: 'stack' },
@@ -52,6 +58,7 @@ export const GRAPH_ALGO_META: Record<
   topological: {
     structure: 'queue',
   },
+  'bellman-ford': {},
   prim: {
     structure: 'queue',
   },
@@ -68,6 +75,7 @@ const GRAPH_STEP_GENERATORS: Record<
   dfs: dfsSteps,
   dijkstra: dijkstraSteps,
   topological: topologicalSortSteps,
+  'bellman-ford': bellmanFordSteps,
 }
 
 const GRAPH_PRESET_BY_ALGO: Record<
@@ -76,8 +84,8 @@ const GRAPH_PRESET_BY_ALGO: Record<
 > = {
   bfs: 'tree',
   dfs: 'tree',
-  topological: 'tree',
-
+  topological: 'dependency',
+  'bellman-ford': 'weighted',
   dijkstra: 'weighted',
   prim: 'weighted',
   kruskal: 'weighted',
@@ -96,7 +104,24 @@ export default function GraphVisualizer() {
 
   const [state, dispatch] = useReducer(graphReducer, initialGraphState)
 
+  const [pass, setPass] = useState<number>(0)
+
   const [output, setOutput] = useState<GraphOutput>({ type: 'none' })
+
+  const category = algorithm ? GRAPH_ALGO_CATEGORY[algorithm] : null
+
+  function deriveTopoOrder(steps: GraphStep[], upto: number): string[] {
+    const order: string[] = []
+
+    for (let i = 0; i < upto; i++) {
+      const s = steps[i]
+      if (s.type === 'mark-visited') {
+        order.push(s.node)
+      }
+    }
+
+    return order
+  }
 
   function generateSteps(algo: string, graph: GraphData) {
     const generator = GRAPH_STEP_GENERATORS[algo]
@@ -116,37 +141,43 @@ export default function GraphVisualizer() {
 
     setStepIndex(target)
     setStepText(target > 0 ? describeStep(steps[target - 1]) : '')
+
+    if (category === 'dependency') {
+      setOutput({
+        type: 'order',
+        nodes: deriveTopoOrder(steps, target),
+      })
+    } else {
+      setOutput({ type: 'none' })
+    }
   }
 
   function stepForward() {
     if (stepIndex >= steps.length) return
 
     const step = steps[stepIndex]
-    dispatch(step)
+    dispatch({ ...step, algorithm: algorithm ?? undefined })
 
-    if (algorithm === 'topological') {
-      if (step.type === 'mark-visited') {
-        setOutput((prev) =>
-          prev.type === 'order'
-            ? { type: 'order', nodes: [...prev.nodes, step.node] }
-            : { type: 'order', nodes: [step.node] }
-        )
-      }
-    }
-
-    if (algorithm === 'bfs' || algorithm === 'dijkstra') {
-      if (step.type === 'set-distance') {
-        setOutput((prev) => ({
-          type: 'distances',
-          values: {
-            ...(prev.type === 'distances' ? prev.values : {}),
-            [step.node]: step.distance,
-          },
-        }))
-      }
-    }
+    const nextIndex = stepIndex + 1
+    setStepIndex(nextIndex)
     setStepText(describeStep(step))
-    setStepIndex((i) => i + 1)
+
+    if (category === 'dependency') {
+      setOutput({
+        type: 'order',
+        nodes: deriveTopoOrder(steps, nextIndex),
+      })
+    }
+
+    if (category === 'shortest-path' && step.type === 'set-distance') {
+      setOutput((prev) => ({
+        type: 'distances',
+        values: {
+          ...(prev.type === 'distances' ? prev.values : {}),
+          [step.node]: step.distance,
+        },
+      }))
+    }
   }
 
   function stepBack() {
@@ -156,6 +187,7 @@ export default function GraphVisualizer() {
 
   function reset() {
     replayStepsUpTo(0)
+    setPass(0)
     setOutput({ type: 'none' })
   }
 
@@ -174,6 +206,7 @@ export default function GraphVisualizer() {
           setOpen(false)
           generateSteps(id, presetGraph)
           replayStepsUpTo(0)
+          setPass(0)
           setStepText('')
           setOutput({ type: 'none' })
         }}
@@ -210,17 +243,22 @@ export default function GraphVisualizer() {
           </div>
 
           {/* Graph */}
-          {GRAPH_ALGO_META[algorithm]?.structure === 'queue' && (
-            <QueueView queue={state.queue ?? []} />
-          )}
+          {(category === 'traversal' || category === 'dependency') &&
+            GRAPH_ALGO_META[algorithm]?.structure === 'queue' && (
+              <QueueView queue={state.queue ?? []} />
+            )}
 
-          {GRAPH_ALGO_META[algorithm]?.structure === 'stack' && (
-            <StackView stack={state.stack ?? []} />
-          )}
+          {category === 'traversal' &&
+            GRAPH_ALGO_META[algorithm]?.structure === 'stack' && (
+              <StackView stack={state.stack ?? []} />
+            )}
 
-          {GRAPH_ALGO_META[algorithm]?.structure === 'pq' && (
-            <PriorityQueueView {...graphStateToPriorityQueue(state)} />
-          )}
+          {category === 'shortest-path' &&
+            GRAPH_ALGO_META[algorithm]?.structure === 'pq' &&
+            state.pq && (
+              <PriorityQueueView {...graphStateToPriorityQueue(state)} />
+            )}
+
           <GraphCanvas {...graphStateToCanvas(graph, state)} />
 
           <VisualizerLegend algorithm="graph" />

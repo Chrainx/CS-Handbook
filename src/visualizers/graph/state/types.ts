@@ -2,11 +2,33 @@
  * Graph algorithm state (USED BY REDUCER ONLY)
  * ========================================================================== */
 
+export type GraphAlgorithmCategory =
+  | 'traversal'
+  | 'shortest-path'
+  | 'dependency'
+
+export const GRAPH_ALGO_CATEGORY: Record<
+  GraphAlgorithmId,
+  GraphAlgorithmCategory
+> = {
+  bfs: 'traversal',
+  dfs: 'traversal',
+
+  dijkstra: 'shortest-path',
+  'bellman-ford': 'shortest-path',
+
+  topological: 'dependency',
+
+  prim: 'shortest-path', // later
+  kruskal: 'dependency', // later
+}
+
 export type GraphAlgorithmId =
   | 'bfs'
   | 'dfs'
   | 'dijkstra'
   | 'topological'
+  | 'bellman-ford'
   | 'prim'
   | 'kruskal'
 
@@ -18,9 +40,6 @@ export type GraphState = {
 
   /** Per-edge visual state (key: "A->B") */
   edges: Record<string, EdgeState>
-
-  /** Currently focused node */
-  activeNode: string | null
 
   /** BFS queue */
   queue: string[]
@@ -52,8 +71,6 @@ export type EdgeState = 'default' | 'active' | 'relaxed' | 'chosen'
 export const initialGraphState: GraphState = {
   nodes: {},
   edges: {},
-
-  activeNode: null,
 
   queue: [],
   stack: [],

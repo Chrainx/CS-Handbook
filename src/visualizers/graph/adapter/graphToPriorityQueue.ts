@@ -5,8 +5,9 @@ export function graphStateToPriorityQueue(
   state: GraphState
 ): PriorityQueueProps {
   if (!state.pq) {
-    return { items: [], activeNode: state.activeNode ?? undefined }
+    return { items: [] }
   }
+
   const items = state.pq
     .map((item) => ({
       ...item,
@@ -14,8 +15,5 @@ export function graphStateToPriorityQueue(
     }))
     .sort((a, b) => a.priority - b.priority)
 
-  return {
-    items,
-    activeNode: undefined,
-  }
+  return { items }
 }
