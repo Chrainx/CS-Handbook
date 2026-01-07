@@ -28,11 +28,11 @@ export const GRAPH_PRESETS: Record<string, GraphData> = {
   weighted: {
     nodes: [
       { id: 'A', x: 300, y: 40 },
-      { id: 'B', x: 120, y: 140 },
-      { id: 'C', x: 480, y: 140 },
-      { id: 'D', x: 120, y: 280 },
-      { id: 'E', x: 300, y: 220 },
-      { id: 'F', x: 480, y: 280 },
+      { id: 'B', x: 150, y: 140 },
+      { id: 'C', x: 450, y: 140 },
+      { id: 'D', x: 80, y: 280 },
+      { id: 'E', x: 300, y: 210 },
+      { id: 'F', x: 520, y: 280 },
     ],
     edges: [
       { from: 'A', to: 'B', weight: 2 },
