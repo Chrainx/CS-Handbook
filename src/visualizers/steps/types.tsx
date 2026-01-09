@@ -118,6 +118,7 @@ export type GraphStep =
       priority: number
     }
   | { type: 'pq-skip-stale'; node: string; priority: number }
+  | { type: 'bf-pass'; pass: number }
   | { type: 'done' }
 
 /* ============================================================================

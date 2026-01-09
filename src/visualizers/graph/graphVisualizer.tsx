@@ -85,7 +85,7 @@ const GRAPH_PRESET_BY_ALGO: Record<
   bfs: 'tree',
   dfs: 'tree',
   topological: 'dependency',
-  'bellman-ford': 'weighted',
+  'bellman-ford': 'bellmanFord',
   dijkstra: 'weighted',
   prim: 'weighted',
   kruskal: 'weighted',
@@ -104,11 +104,14 @@ export default function GraphVisualizer() {
 
   const [state, dispatch] = useReducer(graphReducer, initialGraphState)
 
-  const [pass, setPass] = useState<number>(0)
-
   const [output, setOutput] = useState<GraphOutput>({ type: 'none' })
 
   const category = algorithm ? GRAPH_ALGO_CATEGORY[algorithm] : null
+
+  const currentBfPass =
+    algorithm === 'bellman-ford'
+      ? deriveBellmanFordPass(steps, stepIndex)
+      : null
 
   function deriveTopoOrder(steps: GraphStep[], upto: number): string[] {
     const order: string[] = []
@@ -121,6 +124,35 @@ export default function GraphVisualizer() {
     }
 
     return order
+  }
+
+  function deriveDistances(steps: GraphStep[], upto: number) {
+    const dist: Record<string, number> = {}
+
+    for (let i = 0; i < upto; i++) {
+      const s = steps[i]
+      if (s.type === 'set-distance') {
+        dist[s.node] = s.distance
+      }
+    }
+
+    return dist
+  }
+
+  function deriveBellmanFordPass(
+    steps: GraphStep[],
+    upto: number
+  ): number | null {
+    let pass: number | null = null
+
+    for (let i = 0; i < upto; i++) {
+      const s = steps[i]
+      if (s.type === 'bf-pass') {
+        pass = s.pass
+      }
+    }
+
+    return pass
   }
 
   function generateSteps(algo: string, graph: GraphData) {
@@ -147,6 +179,11 @@ export default function GraphVisualizer() {
         type: 'order',
         nodes: deriveTopoOrder(steps, target),
       })
+    } else if (category === 'shortest-path') {
+      setOutput({
+        type: 'distances',
+        values: deriveDistances(steps, target),
+      })
     } else {
       setOutput({ type: 'none' })
     }
@@ -170,13 +207,10 @@ export default function GraphVisualizer() {
     }
 
     if (category === 'shortest-path' && step.type === 'set-distance') {
-      setOutput((prev) => ({
+      setOutput({
         type: 'distances',
-        values: {
-          ...(prev.type === 'distances' ? prev.values : {}),
-          [step.node]: step.distance,
-        },
-      }))
+        values: deriveDistances(steps, nextIndex),
+      })
     }
   }
 
@@ -187,7 +221,6 @@ export default function GraphVisualizer() {
 
   function reset() {
     replayStepsUpTo(0)
-    setPass(0)
     setOutput({ type: 'none' })
   }
 
@@ -206,7 +239,6 @@ export default function GraphVisualizer() {
           setOpen(false)
           generateSteps(id, presetGraph)
           replayStepsUpTo(0)
-          setPass(0)
           setStepText('')
           setOutput({ type: 'none' })
         }}
@@ -258,6 +290,12 @@ export default function GraphVisualizer() {
             state.pq && (
               <PriorityQueueView {...graphStateToPriorityQueue(state)} />
             )}
+
+          {currentBfPass !== null && (
+            <div className="mb-2 text-sm font-semibold text-purple-600">
+              Pass {currentBfPass} of Bellman–Ford
+            </div>
+          )}
 
           <GraphCanvas {...graphStateToCanvas(graph, state)} />
 

@@ -5,11 +5,12 @@ export function bellmanFordSteps(graph: GraphData, start: string): GraphStep[] {
   const steps: GraphStep[] = []
 
   const dist: Record<string, number> = {}
+  const prev: Record<string, string | null> = {}
 
-  /* ================= INIT ================= */
-
+  // ---------- INIT ----------
   for (const node of graph.nodes) {
     dist[node.id] = Infinity
+    prev[node.id] = null
   }
 
   dist[start] = 0
@@ -23,61 +24,71 @@ export function bellmanFordSteps(graph: GraphData, start: string): GraphStep[] {
 
   const V = graph.nodes.length
 
-  /* ================= MAIN RELAXATION ================= */
-  /* Bellman–Ford runs |V| − 1 full passes over ALL edges */
+  const edgesByFrom: Record<string, typeof graph.edges> = {}
 
-  for (let pass = 1; pass <= V - 1; pass++) {
-    for (const edge of graph.edges) {
-      const u = edge.from
-      const v = edge.to
-      const w = edge.weight ?? 1
-
-      // show edge being considered
-      steps.push({
-        type: 'activate-edge',
-        from: u,
-        to: v,
-      })
-
-      // relaxation check
-      if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
-        dist[v] = dist[u] + w
-
-        // successful relaxation
-        steps.push({
-          type: 'relax-edge',
-          from: u,
-          to: v,
-          newDist: dist[v],
-        } as GraphStep)
-
-        // update distance table
-        steps.push({
-          type: 'set-distance',
-          node: v,
-          distance: dist[v],
-          from: u,
-        })
-      }
-    }
+  for (const node of graph.nodes) {
+    edgesByFrom[node.id] = []
   }
 
-  /* ================= NEGATIVE CYCLE CHECK ================= */
-  /* One extra pass to detect further relaxation */
-
   for (const edge of graph.edges) {
-    const u = edge.from
-    const v = edge.to
-    const w = edge.weight ?? 1
+    edgesByFrom[edge.from].push(edge)
+  }
 
-    if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
-      // highlight problematic edge
-      steps.push({
-        type: 'activate-edge',
-        from: u,
-        to: v,
-      })
-      // (optional later: negative-cycle step)
+  for (const u in edgesByFrom) {
+    edgesByFrom[u].sort((a, b) => a.to.localeCompare(b.to))
+  }
+
+  // ---------- RELAX EDGES (V - 1 PASSES) ----------
+  for (let pass = 1; pass <= V - 1; pass++) {
+    steps.push({ type: 'bf-pass', pass })
+    for (const u of graph.nodes.map((n) => n.id)) {
+      for (const edge of edgesByFrom[u]) {
+        const v = edge.to
+        const w = edge.weight ?? 1
+        const directed = edge.directed === true
+
+        steps.push({ type: 'activate-edge', from: u, to: v })
+
+        if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
+          dist[v] = dist[u] + w
+
+          steps.push({
+            type: 'relax-edge',
+            from: u,
+            to: v,
+            newDist: dist[v],
+          })
+
+          steps.push({
+            type: 'set-distance',
+            node: v,
+            distance: dist[v],
+            from: u,
+          })
+        }
+
+        if (!directed) {
+          steps.push({ type: 'activate-edge', from: v, to: u })
+
+          if (dist[v] !== Infinity && dist[v] + w < dist[u]) {
+            dist[u] = dist[v] + w
+
+            steps.push({
+              type: 'relax-edge',
+              from: v,
+              to: u,
+              newDist: dist[u],
+            })
+
+            steps.push({
+              type: 'set-distance',
+              node: u,
+              distance: dist[u],
+              from: v,
+            })
+          }
+        }
+      }
     }
   }
 

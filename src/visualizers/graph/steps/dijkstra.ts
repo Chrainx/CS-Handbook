@@ -12,9 +12,9 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
   const dist: Record<string, number> = {}
   const prev: Record<string, string | null> = {}
   const visited = new Set<string>()
-
   const pq: PQItem[] = []
 
+  // ---------- INIT ----------
   for (const node of graph.nodes) {
     dist[node.id] = Infinity
     prev[node.id] = null
@@ -30,20 +30,13 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
 
   // ---------- MAIN LOOP ----------
   while (pq.length > 0) {
-    // extract min
     pq.sort((a, b) => a.priority - b.priority)
-    const { node: u, priority: du } = pq.shift()! // ✅ FIX: du exists now
+    const { node: u, priority: du } = pq.shift()!
 
-    // ✅ ALWAYS POP (so UI + narration matches)
     steps.push({ type: 'pq-pop', node: u, priority: du })
 
-    // ✅ stale / already processed entry → skip
-    if (visited.has(u)) continue
-    if (du > dist[u]) continue
-
-    steps.push({ type: 'visit-node', node: u })
-
-    if (du > dist[u]) {
+    // ---- STALE / SKIP ----
+    if (visited.has(u) || du > dist[u]) {
       steps.push({
         type: 'pq-skip-stale',
         node: u,
@@ -52,13 +45,14 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
       continue
     }
 
-    // relax outgoing edges
+    // ---- PROCESS NODE ----
+    steps.push({ type: 'visit-node', node: u })
+
     for (const edge of graph.edges) {
       if (edge.from !== u) continue
 
       const v = edge.to
       const w = edge.weight ?? 1
-
       if (visited.has(v)) continue
 
       steps.push({

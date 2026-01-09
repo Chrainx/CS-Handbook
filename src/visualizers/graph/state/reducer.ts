@@ -139,6 +139,9 @@ export function graphReducer(
 
     /* ================= DONE ================= */
 
+    case 'bf-pass':
+      return state
+
     case 'done':
       return {
         ...state,

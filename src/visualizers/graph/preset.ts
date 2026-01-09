@@ -24,7 +24,7 @@ export const GRAPH_PRESETS: Record<string, GraphData> = {
   },
 
   /* ================= SHORTEST PATH ================= */
-  /* Dijkstra / Bellman–Ford */
+  /* Dijkstra */
   weighted: {
     nodes: [
       { id: 'A', x: 300, y: 40 },
@@ -43,6 +43,32 @@ export const GRAPH_PRESETS: Record<string, GraphData> = {
       { from: 'E', to: 'D', weight: 1 }, // alternative to D
       { from: 'E', to: 'F', weight: 3 },
       { from: 'D', to: 'F', weight: 6 }, // dominated path
+    ],
+  },
+
+  bellmanFord: {
+    nodes: [
+      { id: 'A', x: 300, y: 40 },
+
+      { id: 'B', x: 240, y: 140 },
+      { id: 'C', x: 450, y: 140 },
+
+      { id: 'D', x: 80, y: 280 },
+      { id: 'E', x: 520, y: 280 },
+
+      { id: 'F', x: 20, y: 140 },
+    ],
+    edges: [
+      { from: 'A', to: 'C', weight: 50 },
+      { from: 'A', to: 'F', weight: 80 },
+
+      { from: 'A', to: 'B', weight: 10 },
+      { from: 'B', to: 'C', weight: 5 },
+      { from: 'C', to: 'E', weight: 5 },
+      { from: 'E', to: 'D', weight: 2 },
+      { from: 'D', to: 'F', weight: 1 },
+
+      { from: 'B', to: 'D', weight: 20 },
     ],
   },
 

@@ -127,6 +127,9 @@ export function describeStep(
     case 'choose-edge':
       return `Edge ${step.from} → ${step.to} processed.`
 
+    case 'bf-pass':
+      return `Bellman–Ford: starting relaxation pass ${step.pass}.`
+
     /* ===================== SAFETY ===================== */
 
     default: {
