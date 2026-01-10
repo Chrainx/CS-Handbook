@@ -117,15 +117,13 @@ export function graphReducer(
     /* ================= PRIORITY QUEUE ================= */
 
     case 'pq-push':
-      if (category !== 'shortest-path') return state
-
       return {
         ...state,
         pq: [...(state.pq ?? []), step.item],
       }
 
     case 'pq-pop':
-      if (category !== 'shortest-path' || !state.pq) return state
+      if (!state.pq) return state
 
       const idx = state.pq.findIndex(
         (x) => x.node === step.node && x.priority === step.priority

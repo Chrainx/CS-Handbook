@@ -6,6 +6,7 @@ export type GraphAlgorithmCategory =
   | 'traversal'
   | 'shortest-path'
   | 'dependency'
+  | 'mst'
 
 export const GRAPH_ALGO_CATEGORY: Record<
   GraphAlgorithmId,
@@ -19,8 +20,8 @@ export const GRAPH_ALGO_CATEGORY: Record<
 
   topological: 'dependency',
 
-  prim: 'shortest-path', // later
-  kruskal: 'dependency', // later
+  prim: 'mst', // later
+  kruskal: 'mst', // later
 }
 
 export type GraphAlgorithmId =

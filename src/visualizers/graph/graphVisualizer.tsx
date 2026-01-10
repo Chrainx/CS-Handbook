@@ -28,6 +28,7 @@ import { dfsSteps } from './steps/dfs'
 import { dijkstraSteps } from './steps/dijkstra'
 import { topologicalSortSteps } from './steps/topological'
 import { bellmanFordSteps } from './steps/bellmanFord'
+import { primSteps } from './steps/prim'
 
 import { graphStateToCanvas } from './adapter/graphToCanvas'
 import { graphStateToPriorityQueue } from './adapter/graphToPriorityQueue'
@@ -44,6 +45,7 @@ export const GRAPH_ALGORITHMS: {
   { id: 'dijkstra', name: 'Dijkstra Algortihm', description: 'desc' },
   { id: 'topological', name: 'Topological Sort', description: 'desc' },
   { id: 'bellman-ford', name: 'Bellman Ford', description: 'desc' },
+  { id: 'prim', name: 'Prim Algorithm', description: 'desc' },
 ]
 
 export const GRAPH_ALGO_META: Record<
@@ -60,7 +62,7 @@ export const GRAPH_ALGO_META: Record<
   },
   'bellman-ford': {},
   prim: {
-    structure: 'queue',
+    structure: 'pq',
   },
   kruskal: {
     structure: 'queue',
@@ -76,6 +78,7 @@ const GRAPH_STEP_GENERATORS: Record<
   dijkstra: dijkstraSteps,
   topological: topologicalSortSteps,
   'bellman-ford': bellmanFordSteps,
+  prim: primSteps,
 }
 
 const GRAPH_PRESET_BY_ALGO: Record<
@@ -168,7 +171,7 @@ export default function GraphVisualizer() {
     dispatch({ type: 'reset' })
 
     for (let i = 0; i < target; i++) {
-      dispatch(steps[i])
+      dispatch({ ...steps[i], algorithm: algorithm ?? undefined })
     }
 
     setStepIndex(target)
@@ -180,10 +183,16 @@ export default function GraphVisualizer() {
         nodes: deriveTopoOrder(steps, target),
       })
     } else if (category === 'shortest-path') {
-      setOutput({
-        type: 'distances',
-        values: deriveDistances(steps, target),
-      })
+      const values = deriveDistances(steps, target)
+
+      if (Object.keys(values).length === 0) {
+        setOutput({ type: 'none' })
+      } else {
+        setOutput({
+          type: 'distances',
+          values,
+        })
+      }
     } else {
       setOutput({ type: 'none' })
     }
@@ -275,21 +284,18 @@ export default function GraphVisualizer() {
           </div>
 
           {/* Graph */}
-          {(category === 'traversal' || category === 'dependency') &&
-            GRAPH_ALGO_META[algorithm]?.structure === 'queue' && (
-              <QueueView queue={state.queue ?? []} />
-            )}
+          {/* Data structure visualization */}
+          {GRAPH_ALGO_META[algorithm]?.structure === 'queue' && (
+            <QueueView queue={state.queue ?? []} />
+          )}
 
-          {category === 'traversal' &&
-            GRAPH_ALGO_META[algorithm]?.structure === 'stack' && (
-              <StackView stack={state.stack ?? []} />
-            )}
+          {GRAPH_ALGO_META[algorithm]?.structure === 'stack' && (
+            <StackView stack={state.stack ?? []} />
+          )}
 
-          {category === 'shortest-path' &&
-            GRAPH_ALGO_META[algorithm]?.structure === 'pq' &&
-            state.pq && (
-              <PriorityQueueView {...graphStateToPriorityQueue(state)} />
-            )}
+          {GRAPH_ALGO_META[algorithm]?.structure === 'pq' && state.pq && (
+            <PriorityQueueView {...graphStateToPriorityQueue(state)} />
+          )}
 
           {currentBfPass !== null && (
             <div className="mb-2 text-sm font-semibold text-purple-600">
