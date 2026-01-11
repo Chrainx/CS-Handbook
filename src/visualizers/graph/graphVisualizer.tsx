@@ -13,6 +13,7 @@ import {
 
 import QueueView from './components/queueView'
 import StackView from './components/stackView'
+import SortedEdgesView from './components/sortedEdgeView'
 import PriorityQueueView from '../primitives/priorityQueue/priorityQueueView'
 
 import GraphCanvas from '../primitives/graph/graphCanvas'
@@ -29,6 +30,7 @@ import { dijkstraSteps } from './steps/dijkstra'
 import { topologicalSortSteps } from './steps/topological'
 import { bellmanFordSteps } from './steps/bellmanFord'
 import { primSteps } from './steps/prim'
+import { kruskalSteps } from './steps/kruskal'
 
 import { graphStateToCanvas } from './adapter/graphToCanvas'
 import { graphStateToPriorityQueue } from './adapter/graphToPriorityQueue'
@@ -46,11 +48,12 @@ export const GRAPH_ALGORITHMS: {
   { id: 'topological', name: 'Topological Sort', description: 'desc' },
   { id: 'bellman-ford', name: 'Bellman Ford', description: 'desc' },
   { id: 'prim', name: 'Prim Algorithm', description: 'desc' },
+  { id: 'kruskal', name: 'Kruskal Algorithm', description: 'desc' },
 ]
 
 export const GRAPH_ALGO_META: Record<
   GraphAlgorithmId,
-  { structure?: 'queue' | 'stack' | 'pq' }
+  { structure?: 'queue' | 'stack' | 'pq' | 'sortedEdge' }
 > = {
   bfs: { structure: 'queue' },
   dfs: { structure: 'stack' },
@@ -65,7 +68,7 @@ export const GRAPH_ALGO_META: Record<
     structure: 'pq',
   },
   kruskal: {
-    structure: 'queue',
+    structure: 'sortedEdge',
   },
 }
 
@@ -79,6 +82,7 @@ const GRAPH_STEP_GENERATORS: Record<
   topological: topologicalSortSteps,
   'bellman-ford': bellmanFordSteps,
   prim: primSteps,
+  kruskal: kruskalSteps,
 }
 
 const GRAPH_PRESET_BY_ALGO: Record<
@@ -156,6 +160,28 @@ export default function GraphVisualizer() {
     }
 
     return pass
+  }
+
+  function isKruskalEdgeStep(
+    step: GraphStep
+  ): step is Extract<GraphStep, { type: 'kruskal-edge' }> {
+    return step.type === 'kruskal-edge'
+  }
+
+  function deriveKruskalEdges(steps: GraphStep[]) {
+    return steps.filter(isKruskalEdgeStep).map((s) => ({
+      from: s.from,
+      to: s.to,
+      weight: s.weight,
+    }))
+  }
+
+  function deriveKruskalIndex(steps: GraphStep[], upto: number): number | null {
+    for (let i = upto - 1; i >= 0; i--) {
+      const s = steps[i]
+      if (s.type === 'kruskal-edge') return s.index
+    }
+    return null
   }
 
   function generateSteps(algo: string, graph: GraphData) {
@@ -295,6 +321,13 @@ export default function GraphVisualizer() {
 
           {GRAPH_ALGO_META[algorithm]?.structure === 'pq' && state.pq && (
             <PriorityQueueView {...graphStateToPriorityQueue(state)} />
+          )}
+
+          {GRAPH_ALGO_META[algorithm]?.structure === 'sortedEdge' && (
+            <SortedEdgesView
+              edges={deriveKruskalEdges(steps)}
+              activeIndex={deriveKruskalIndex(steps, stepIndex)}
+            />
           )}
 
           {currentBfPass !== null && (

@@ -119,6 +119,13 @@ export type GraphStep =
     }
   | { type: 'pq-skip-stale'; node: string; priority: number }
   | { type: 'bf-pass'; pass: number }
+  | {
+      type: 'kruskal-edge'
+      index: number
+      from: string
+      to: string
+      weight: number
+    }
   | { type: 'done' }
 
 /* ============================================================================

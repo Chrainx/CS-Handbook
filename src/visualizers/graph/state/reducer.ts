@@ -1,10 +1,5 @@
 import { GraphStep } from '@/visualizers/steps/types'
-import {
-  GraphState,
-  initialGraphState,
-  GRAPH_ALGO_CATEGORY,
-  GraphAlgorithmId,
-} from './types'
+import { GraphState, initialGraphState, GraphAlgorithmId } from './types'
 
 /**
  * Reducer is CATEGORY-AWARE.
@@ -14,8 +9,6 @@ export function graphReducer(
   state: GraphState,
   step: GraphStep & { algorithm?: GraphAlgorithmId }
 ): GraphState {
-  const category = step.algorithm ? GRAPH_ALGO_CATEGORY[step.algorithm] : null
-
   switch (step.type) {
     /* ================= RESET ================= */
 

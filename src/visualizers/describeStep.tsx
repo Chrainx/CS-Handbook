@@ -130,6 +130,9 @@ export function describeStep(
     case 'bf-pass':
       return `Bellman–Ford: starting relaxation pass ${step.pass}.`
 
+    case 'kruskal-edge':
+      return `Considering edge ${step.from} → ${step.to} (weight ${step.weight})`
+
     /* ===================== SAFETY ===================== */
 
     default: {
