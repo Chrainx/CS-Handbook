@@ -38,7 +38,7 @@ export function kruskalSteps(graph: GraphData): GraphStep[] {
   /* ================= MAIN LOOP ================= */
 
   edges.forEach((e, i) => {
-    // 🔹 drive SortedEdgesView
+    // sorted-edge pointer
     steps.push({
       type: 'kruskal-edge',
       index: i,
@@ -47,31 +47,21 @@ export function kruskalSteps(graph: GraphData): GraphStep[] {
       weight: e.weight,
     })
 
-    // 🔹 highlight edge being considered
+    // edge under consideration
     steps.push({
       type: 'activate-edge',
       from: e.from,
       to: e.to,
     })
 
-    // 🔹 cycle check
+    // accept if no cycle
     if (union(e.from, e.to)) {
-      // ✅ accepted into MST
       steps.push({
         type: 'choose-edge',
         from: e.from,
         to: e.to,
       })
-
-      // optional (for consistency with Prim)
-      steps.push({
-        type: 'relax-edge',
-        from: e.from,
-        to: e.to,
-        newDist: e.weight,
-      })
     }
-    // ❌ rejected edges simply do nothing
   })
 
   steps.push({ type: 'done' })
