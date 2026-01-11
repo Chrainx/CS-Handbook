@@ -201,7 +201,9 @@ export default function GraphVisualizer() {
     }
 
     setStepIndex(target)
-    setStepText(target > 0 ? describeStep(steps[target - 1]) : '')
+    setStepText(
+      target > 0 ? describeStep(steps[target - 1], { algorithm }) : ''
+    )
 
     if (category === 'dependency') {
       setOutput({
@@ -232,7 +234,7 @@ export default function GraphVisualizer() {
 
     const nextIndex = stepIndex + 1
     setStepIndex(nextIndex)
-    setStepText(describeStep(step))
+    setStepText(describeStep(step, { algorithm }))
 
     if (category === 'dependency') {
       setOutput({
