@@ -338,7 +338,7 @@ export default function GraphVisualizer() {
 
           <GraphCanvas {...graphStateToCanvas(graph, state)} />
 
-          <VisualizerLegend algorithm="graph" />
+          <VisualizerLegend algorithm={algorithm} />
 
           {stepText && (
             <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">

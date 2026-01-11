@@ -148,7 +148,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
 
   /* ================= GRAPH ================= */
 
-  graph: [
+  bfs: [
     {
       colorClass: 'fill-blue-500',
       label: 'Unvisited',
@@ -156,28 +156,152 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
     },
     {
       colorClass: 'fill-yellow-500',
-      label: 'Visiting',
-      description: 'Node is discovered and in the frontier',
+      label: 'In Queue',
+      description: 'Node waiting in the BFS queue',
     },
     {
       colorClass: 'fill-green-500',
       label: 'Visited',
-      description: 'Node has been fully processed',
+      description: 'Node dequeued and processed',
     },
     {
       colorClass: 'stroke-red-500',
       label: 'Active Edge',
       description: 'Edge currently being explored',
     },
+  ],
+
+  dfs: [
+    {
+      colorClass: 'fill-blue-500',
+      label: 'Unvisited',
+      description: 'Node has not been discovered yet',
+    },
+    {
+      colorClass: 'fill-yellow-500',
+      label: 'In Stack',
+      description: 'Node waiting on the DFS stack',
+    },
+    {
+      colorClass: 'fill-green-500',
+      label: 'Visited',
+      description: 'Node popped and processed',
+    },
+    {
+      colorClass: 'stroke-red-500',
+      label: 'Active Edge',
+      description: 'Edge currently being explored',
+    },
+  ],
+
+  topological: [
+    {
+      colorClass: 'fill-blue-500',
+      label: 'Unvisited',
+      description: 'Node has not been processed yet',
+    },
+    {
+      colorClass: 'fill-yellow-500',
+      label: 'Ready',
+      description: 'Node has zero in-degree and is ready to be output',
+    },
+    {
+      colorClass: 'fill-green-500',
+      label: 'Output',
+      description: 'Node already placed in the topological order',
+    },
+    {
+      colorClass: 'stroke-red-500',
+      label: 'Active Edge',
+      description: 'Edge being considered when reducing in-degrees',
+    },
+  ],
+
+  dijkstra: [
+    {
+      colorClass: 'fill-blue-500',
+      label: 'Unvisited',
+      description: 'Node not finalized yet',
+    },
+    {
+      colorClass: 'fill-yellow-500',
+      label: 'Processing',
+      description: 'Node popped from priority queue',
+    },
+    {
+      colorClass: 'fill-green-500',
+      label: 'Visited',
+      description: 'Shortest distance finalized',
+    },
+    {
+      colorClass: 'stroke-red-500',
+      label: 'Active Edge',
+      description: 'Edge being examined',
+    },
     {
       colorClass: 'stroke-purple-500',
       label: 'Relaxed Edge',
-      description: 'Edge used to update a distance',
+      description: 'Edge that improved a distance',
+    },
+  ],
+
+  'bellman-ford': [
+    {
+      colorClass: 'stroke-red-500',
+      label: 'Active Edge',
+      description: 'Edge currently being checked during this pass',
+    },
+    {
+      colorClass: 'stroke-purple-500',
+      label: 'Relaxed Edge',
+      description: 'Edge that improved a shortest distance',
+    },
+  ],
+
+  prim: [
+    {
+      colorClass: 'fill-blue-500',
+      label: 'Not in MST',
+      description: 'Node not yet included in the MST',
+    },
+    {
+      colorClass: 'fill-yellow-500',
+      label: 'Processing',
+      description: 'Node popped from PQ',
+    },
+    {
+      colorClass: 'fill-green-500',
+      label: 'In MST',
+      description: 'Node included in MST',
+    },
+    {
+      colorClass: 'stroke-red-500',
+      label: 'Active Edge',
+      description: 'Edge being considered',
+    },
+    {
+      colorClass: 'stroke-purple-500',
+      label: 'Relaxed Edge',
+      description:
+        'Edge currently giving a node its lowest known connection cost to the MST',
     },
     {
       colorClass: 'stroke-green-600',
       label: 'Chosen Edge',
-      description: 'Edge selected as part of final result',
+      description: 'Edge selected into the MST',
+    },
+  ],
+
+  kruskal: [
+    {
+      colorClass: 'stroke-red-500',
+      label: 'Active Edge',
+      description: 'Current edge in sorted order',
+    },
+    {
+      colorClass: 'stroke-green-600',
+      label: 'Chosen Edge',
+      description: 'Edge accepted into the MST',
     },
   ],
 }
