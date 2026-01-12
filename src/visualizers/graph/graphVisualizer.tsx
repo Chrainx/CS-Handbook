@@ -5,11 +5,7 @@ import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModa
 import StepControls from '../stepControls'
 import VisualizerLegend from '../legend/legend'
 
-import {
-  GraphAlgorithmId,
-  GraphOutput,
-  GRAPH_ALGO_CATEGORY,
-} from './state/types'
+import { GraphAlgorithmId } from './state/types'
 
 import QueueView from './components/queueView'
 import StackView from './components/stackView'
@@ -20,6 +16,8 @@ import GraphCanvas from '../primitives/graph/graphCanvas'
 import { GraphData } from '../primitives/graph/data'
 import { GraphStep } from '@/visualizers/steps/types'
 import { describeStep } from '../describeStep'
+
+import { useGraphDerivedState } from './hooks/useGraphDerivedState'
 
 import { graphReducer } from './state/reducer'
 import { initialGraphState } from './state/types'
@@ -124,96 +122,12 @@ export default function GraphVisualizer() {
 
   const safeIndex = Math.min(player.index, steps.length)
 
-  const category = algorithm ? GRAPH_ALGO_CATEGORY[algorithm] : null
-
-  const output: GraphOutput = (() => {
-    if (!algorithm) return { type: 'none' }
-
-    if (category === 'dependency') {
-      return {
-        type: 'order',
-        nodes: deriveTopoOrder(steps, safeIndex),
-      }
-    }
-
-    if (category === 'shortest-path') {
-      const values = deriveDistances(steps, safeIndex)
-      return Object.keys(values).length === 0
-        ? { type: 'none' }
-        : { type: 'distances', values }
-    }
-
-    return { type: 'none' }
-  })()
-
-  const currentBfPass =
-    algorithm === 'bellman-ford'
-      ? deriveBellmanFordPass(steps, safeIndex)
-      : null
-
-  function deriveTopoOrder(steps: GraphStep[], upto: number): string[] {
-    const order: string[] = []
-
-    for (let i = 0; i < upto; i++) {
-      const s = steps[i]
-      if (s.type === 'mark-visited') {
-        order.push(s.node)
-      }
-    }
-
-    return order
-  }
-
-  function deriveDistances(steps: GraphStep[], upto: number) {
-    const dist: Record<string, number> = {}
-
-    for (let i = 0; i < upto; i++) {
-      const s = steps[i]
-      if (s.type === 'set-distance') {
-        dist[s.node] = s.distance
-      }
-    }
-
-    return dist
-  }
-
-  function deriveBellmanFordPass(
-    steps: GraphStep[],
-    upto: number
-  ): number | null {
-    let pass: number | null = null
-
-    for (let i = 0; i < upto; i++) {
-      const s = steps[i]
-      if (s.type === 'bf-pass') {
-        pass = s.pass
-      }
-    }
-
-    return pass
-  }
-
-  function isKruskalEdgeStep(
-    step: GraphStep
-  ): step is Extract<GraphStep, { type: 'kruskal-edge' }> {
-    return step.type === 'kruskal-edge'
-  }
-
-  function deriveKruskalEdges(steps: GraphStep[]) {
-    return steps.filter(isKruskalEdgeStep).map((s) => ({
-      from: s.from,
-      to: s.to,
-      weight: s.weight,
-    }))
-  }
-
-  function deriveKruskalIndex(steps: GraphStep[], upto: number): number | null {
-    for (let i = upto - 1; i >= 0; i--) {
-      const s = steps[i]
-      if (s.type === 'kruskal-edge') return s.index
-    }
-    return null
-  }
+  const { output, currentBfPass, kruskalEdges, kruskalActiveIndex } =
+    useGraphDerivedState({
+      steps,
+      index: safeIndex,
+      algorithm,
+    })
 
   function generateSteps(algo: string, graph: GraphData) {
     const generator = GRAPH_STEP_GENERATORS[algo]
@@ -284,8 +198,8 @@ export default function GraphVisualizer() {
 
           {GRAPH_ALGO_META[algorithm]?.structure === 'sortedEdge' && (
             <SortedEdgesView
-              edges={deriveKruskalEdges(steps)}
-              activeIndex={deriveKruskalIndex(steps, safeIndex)}
+              edges={kruskalEdges}
+              activeIndex={kruskalActiveIndex}
             />
           )}
 
