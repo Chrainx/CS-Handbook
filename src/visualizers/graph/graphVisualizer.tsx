@@ -153,7 +153,11 @@ export default function GraphVisualizer() {
           setOpen(false)
           generateSteps(id, presetGraph)
         }}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          if (algorithm !== null) {
+            setOpen(false)
+          }
+        }}
       />
 
       {algorithm && (

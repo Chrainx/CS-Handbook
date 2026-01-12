@@ -145,7 +145,12 @@ export default function SortingVisualizer() {
           setOpen(false)
           generateSteps(id)
         }}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          // ❗ Prevent closing if no algorithm is selected
+          if (algorithm !== null) {
+            setOpen(false)
+          }
+        }}
       />
 
       {algorithm && (
