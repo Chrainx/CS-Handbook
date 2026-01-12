@@ -22,6 +22,7 @@ import { mergeSortSteps } from './steps/merge'
 import { quickSortSteps } from './steps/quick'
 
 import { sortingStateToBars } from './adapters/sortingToBar'
+import { useStepPlayer } from '../shared/useStepPlayer'
 
 export const SORTING_ALGORITHMS: {
   id: SortingAlgorithmId
@@ -70,8 +71,6 @@ export default function SortingVisualizer() {
   )
 
   const [steps, setSteps] = useState<SortingStep[]>([])
-  const [stepIndex, setStepIndex] = useState(0)
-  const [stepText, setStepText] = useState('')
 
   const [state, dispatch] = useReducer(
     sortingReducer,
@@ -87,44 +86,18 @@ export default function SortingVisualizer() {
     const generator = STEP_GENERATORS[algo]
     if (!generator) return
 
+    player.reset()
     const generated = generator(baseArray)
     setSteps(generated)
-    setStepIndex(0)
-
-    dispatch({ type: 'reset', array: baseArray })
   }
 
-  /* ---------------------------------- */
-  /* Step controls                      */
-  /* ---------------------------------- */
-  function stepForward() {
-    if (stepIndex >= steps.length) return
-
-    const step = steps[stepIndex]
-    dispatch(step)
-    setStepText(describeStep(step))
-    setStepIndex((i) => i + 1)
-  }
-
-  function replayStepsUpTo(target: number) {
-    dispatch({ type: 'reset', array: baseArray })
-
-    for (let i = 0; i < target; i++) {
-      dispatch(steps[i])
-    }
-
-    setStepIndex(target)
-    setStepText(target > 0 ? describeStep(steps[target - 1]) : '')
-  }
-
-  function stepBack() {
-    if (stepIndex <= 0) return
-    replayStepsUpTo(stepIndex - 1)
-  }
-
-  function reset() {
-    replayStepsUpTo(0)
-  }
+  const player = useStepPlayer<SortingStep, SortingStep, undefined>({
+    steps,
+    dispatch,
+    describeStep,
+    describeContext: undefined,
+    resetAction: { type: 'reset', array: baseArray },
+  })
 
   function loadInput() {
     const parsed = input
@@ -148,10 +121,10 @@ export default function SortingVisualizer() {
       const generator = STEP_GENERATORS[algorithm]
       if (generator) {
         setSteps(generator(parsed))
-        setStepIndex(0)
-        setStepText('')
       }
     }
+
+    player.reset()
   }
 
   useEffect(() => {
@@ -171,8 +144,6 @@ export default function SortingVisualizer() {
           setAlgorithm(id)
           setOpen(false)
           generateSteps(id)
-          replayStepsUpTo(0)
-          setStepText('')
         }}
         onClose={() => setOpen(false)}
       />
@@ -185,8 +156,8 @@ export default function SortingVisualizer() {
               {SORTING_ALGORITHMS.find((a) => a.id === algorithm)?.name}
             </div>
             <div className="text-sm">
-              Step <strong>{stepIndex}</strong> /{' '}
-              <strong>{steps.length}</strong>
+              Step <strong>{player.index}</strong> /{' '}
+              <strong>{player.length}</strong>
             </div>
           </div>
 
@@ -194,9 +165,6 @@ export default function SortingVisualizer() {
           <div className="mb-4 flex gap-4">
             <button
               onClick={() => {
-                setSteps([])
-                setStepIndex(0)
-                setStepText('')
                 setOpen(true)
               }}
               className="rounded border px-3 py-1 text-sm"
@@ -242,18 +210,18 @@ export default function SortingVisualizer() {
 
           <VisualizerLegend algorithm={algorithm} />
 
-          {stepText && (
+          {player.text && (
             <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">
-              {stepText}
+              {player.text}
             </div>
           )}
 
           <StepControls
-            canStepBack={stepIndex > 0}
-            canStepForward={stepIndex < steps.length}
-            onStepBack={stepBack}
-            onStepForward={stepForward}
-            onReset={reset}
+            canStepBack={player.index > 0}
+            canStepForward={player.index < player.length}
+            onStepBack={player.back}
+            onStepForward={player.forward}
+            onReset={player.reset}
           />
         </>
       )}

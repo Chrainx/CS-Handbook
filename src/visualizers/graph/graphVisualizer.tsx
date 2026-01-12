@@ -37,6 +37,8 @@ import { graphStateToPriorityQueue } from './adapter/graphToPriorityQueue'
 
 import { GRAPH_PRESETS } from './preset'
 
+import { useStepPlayer } from '../shared/useStepPlayer'
+
 export const GRAPH_ALGORITHMS: {
   id: GraphAlgorithmId
   name: string
@@ -105,19 +107,48 @@ export default function GraphVisualizer() {
   const [graph, setGraph] = useState<GraphData>(GRAPH_PRESETS.tree)
 
   const [steps, setSteps] = useState<GraphStep[]>([])
-  const [stepIndex, setStepIndex] = useState(0)
-
-  const [stepText, setStepText] = useState('')
 
   const [state, dispatch] = useReducer(graphReducer, initialGraphState)
 
-  const [output, setOutput] = useState<GraphOutput>({ type: 'none' })
+  const player = useStepPlayer<
+    GraphStep,
+    GraphStep & { algorithm?: GraphAlgorithmId },
+    { algorithm: GraphAlgorithmId | null }
+  >({
+    steps,
+    dispatch,
+    describeStep,
+    describeContext: { algorithm },
+    resetAction: { type: 'reset' },
+  })
+
+  const safeIndex = Math.min(player.index, steps.length)
 
   const category = algorithm ? GRAPH_ALGO_CATEGORY[algorithm] : null
 
+  const output: GraphOutput = (() => {
+    if (!algorithm) return { type: 'none' }
+
+    if (category === 'dependency') {
+      return {
+        type: 'order',
+        nodes: deriveTopoOrder(steps, safeIndex),
+      }
+    }
+
+    if (category === 'shortest-path') {
+      const values = deriveDistances(steps, safeIndex)
+      return Object.keys(values).length === 0
+        ? { type: 'none' }
+        : { type: 'distances', values }
+    }
+
+    return { type: 'none' }
+  })()
+
   const currentBfPass =
     algorithm === 'bellman-ford'
-      ? deriveBellmanFordPass(steps, stepIndex)
+      ? deriveBellmanFordPass(steps, safeIndex)
       : null
 
   function deriveTopoOrder(steps: GraphStep[], upto: number): string[] {
@@ -188,77 +219,9 @@ export default function GraphVisualizer() {
     const generator = GRAPH_STEP_GENERATORS[algo]
     if (!generator) return
 
+    player.reset()
     const generated = generator(graph, 'A') // start node hardcoded for now
     setSteps(generated)
-    setStepIndex(0)
-  }
-
-  function replayStepsUpTo(target: number) {
-    dispatch({ type: 'reset' })
-
-    for (let i = 0; i < target; i++) {
-      dispatch({ ...steps[i], algorithm: algorithm ?? undefined })
-    }
-
-    setStepIndex(target)
-    setStepText(
-      target > 0 ? describeStep(steps[target - 1], { algorithm }) : ''
-    )
-
-    if (category === 'dependency') {
-      setOutput({
-        type: 'order',
-        nodes: deriveTopoOrder(steps, target),
-      })
-    } else if (category === 'shortest-path') {
-      const values = deriveDistances(steps, target)
-
-      if (Object.keys(values).length === 0) {
-        setOutput({ type: 'none' })
-      } else {
-        setOutput({
-          type: 'distances',
-          values,
-        })
-      }
-    } else {
-      setOutput({ type: 'none' })
-    }
-  }
-
-  function stepForward() {
-    if (stepIndex >= steps.length) return
-
-    const step = steps[stepIndex]
-    dispatch({ ...step, algorithm: algorithm ?? undefined })
-
-    const nextIndex = stepIndex + 1
-    setStepIndex(nextIndex)
-    setStepText(describeStep(step, { algorithm }))
-
-    if (category === 'dependency') {
-      setOutput({
-        type: 'order',
-        nodes: deriveTopoOrder(steps, nextIndex),
-      })
-    }
-
-    if (category === 'shortest-path' && step.type === 'set-distance') {
-      setOutput({
-        type: 'distances',
-        values: deriveDistances(steps, nextIndex),
-      })
-    }
-  }
-
-  function stepBack() {
-    if (stepIndex <= 0) return
-    replayStepsUpTo(stepIndex - 1)
-  }
-
-  function reset() {
-    replayStepsUpTo(0)
-    setOutput({ type: 'none' })
   }
 
   return (
@@ -275,9 +238,6 @@ export default function GraphVisualizer() {
           setAlgorithm(algo)
           setOpen(false)
           generateSteps(id, presetGraph)
-          replayStepsUpTo(0)
-          setStepText('')
-          setOutput({ type: 'none' })
         }}
         onClose={() => setOpen(false)}
       />
@@ -291,8 +251,8 @@ export default function GraphVisualizer() {
               {GRAPH_ALGORITHMS.find((a) => a.id === algorithm)?.name}
             </div>
             <div className="text-sm">
-              Step <strong>{stepIndex}</strong> /{' '}
-              <strong>{steps.length}</strong>
+              Step <strong>{safeIndex}</strong> /{' '}
+              <strong>{player.length}</strong>
             </div>
           </div>
 
@@ -300,9 +260,6 @@ export default function GraphVisualizer() {
           <div className="mb-4 flex gap-4">
             <button
               onClick={() => {
-                setSteps([])
-                setStepIndex(0)
-                setStepText('')
                 setOpen(true)
               }}
               className="rounded border px-3 py-1 text-sm"
@@ -328,7 +285,7 @@ export default function GraphVisualizer() {
           {GRAPH_ALGO_META[algorithm]?.structure === 'sortedEdge' && (
             <SortedEdgesView
               edges={deriveKruskalEdges(steps)}
-              activeIndex={deriveKruskalIndex(steps, stepIndex)}
+              activeIndex={deriveKruskalIndex(steps, safeIndex)}
             />
           )}
 
@@ -342,9 +299,9 @@ export default function GraphVisualizer() {
 
           <VisualizerLegend algorithm={algorithm} />
 
-          {stepText && (
+          {player.text && (
             <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">
-              {stepText}
+              {player.text}
             </div>
           )}
 
@@ -384,11 +341,11 @@ export default function GraphVisualizer() {
 
           {/* Controls */}
           <StepControls
-            canStepBack={stepIndex > 0}
-            canStepForward={stepIndex < steps.length}
-            onStepBack={stepBack}
-            onStepForward={stepForward}
-            onReset={reset}
+            canStepBack={safeIndex > 0}
+            canStepForward={safeIndex < player.length}
+            onStepBack={player.back}
+            onStepForward={player.forward}
+            onReset={player.reset}
           />
         </>
       )}

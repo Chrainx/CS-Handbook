@@ -14,6 +14,7 @@ import { initialBinarySearchState } from './state/types'
 import { binarySearchReducer } from './state/reducer'
 
 import { binarySearchStateToArray } from './adapter/binarySearchToArray'
+import { useStepPlayer } from '@/visualizers/shared/useStepPlayer'
 
 export default function BinarySearchVisualizer() {
   /* ============================================================================
@@ -42,12 +43,6 @@ export default function BinarySearchVisualizer() {
   const steps: BinarySearchStep[] = binarySearchSteps(array, target)
 
   /* ============================================================================
-   * Playback
-   * ========================================================================== */
-  const [stepIndex, setStepIndex] = useState(0)
-  const [stepText, setStepText] = useState('')
-
-  /* ============================================================================
    * Visualization state (REDUCER)
    * ========================================================================== */
   const [state, dispatch] = useReducer(
@@ -55,43 +50,17 @@ export default function BinarySearchVisualizer() {
     initialBinarySearchState(array)
   )
 
-  /* ============================================================================
-   * Helpers
-   * ========================================================================== */
-  function replayStepsUpTo(targetIndex: number) {
-    dispatch({ type: 'reset', array })
-
-    for (let i = 0; i < targetIndex; i++) {
-      dispatch(steps[i])
-    }
-
-    setStepIndex(targetIndex)
-    setStepText(
-      targetIndex > 0 ? describeStep(steps[targetIndex - 1], { target }) : ''
-    )
-  }
-
-  function reset() {
-    dispatch({ type: 'reset', array })
-    setStepIndex(0)
-    setStepText('')
-  }
-
-  /* ============================================================================
-   * Step controls
-   * ========================================================================== */
-  function stepForward() {
-    if (stepIndex >= steps.length) return
-    const step = steps[stepIndex]
-    dispatch(step)
-    setStepText(describeStep(step, { target }))
-    setStepIndex((i) => i + 1)
-  }
-
-  function stepBack() {
-    if (stepIndex <= 0) return
-    replayStepsUpTo(stepIndex - 1)
-  }
+  const player = useStepPlayer<
+    BinarySearchStep,
+    BinarySearchStep,
+    { target: number }
+  >({
+    steps,
+    dispatch,
+    describeStep,
+    describeContext: { target },
+    resetAction: { type: 'reset', array },
+  })
 
   /* ============================================================================
    * Load new array
@@ -112,8 +81,7 @@ export default function BinarySearchVisualizer() {
     setArray(sorted)
     setInput(sorted.join(','))
     dispatch({ type: 'reset', array: sorted })
-    setStepIndex(0)
-    setStepText('')
+    player.reset()
   }
 
   useEffect(() => {
@@ -131,7 +99,7 @@ export default function BinarySearchVisualizer() {
         onClose={() => setIsTargetModalOpen(false)}
         onApply={(value) => {
           setTarget(value)
-          reset()
+          player.reset()
           setIsTargetModalOpen(false)
         }}
       />
@@ -140,7 +108,8 @@ export default function BinarySearchVisualizer() {
         <div className="text-sm text-gray-500">Current Algorithm</div>
         <div className="text-lg font-semibold">Binary Search</div>
         <div className="text-sm">
-          Step <strong>{stepIndex}</strong> / <strong>{steps.length}</strong>
+          Step <strong>{player.index}</strong> /{' '}
+          <strong>{player.length}</strong>
         </div>
       </div>
 
@@ -178,18 +147,18 @@ export default function BinarySearchVisualizer() {
 
       <VisualizerLegend algorithm="binary-search" />
 
-      {stepText && (
+      {player.text && (
         <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">
-          {stepText}
+          {player.text}
         </div>
       )}
 
       <StepControls
-        canStepBack={stepIndex > 0}
-        canStepForward={stepIndex < steps.length}
-        onStepBack={stepBack}
-        onStepForward={stepForward}
-        onReset={reset}
+        canStepBack={player.index > 0}
+        canStepForward={player.index < player.length}
+        onStepBack={player.back}
+        onStepForward={player.forward}
+        onReset={player.reset}
       />
     </>
   )
