@@ -71,6 +71,22 @@ export default function BFSPage() {
         <li>Detecting connected components</li>
       </ul>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Explore how Breadth-First Search traverses a graph step by step using
+        the interactive graph visualizer.
+      </p>
+
+      <a
+        href="/algorithms/graph/visualizer?algo=bfs"
+        className="inline-block text-blue-600 underline"
+      >
+        Open Graph Visualizer →
+      </a>
+
       <NextPrev />
     </div>
   )

@@ -71,6 +71,22 @@ export default function BellmanFordPage() {
         <li>As a reference algorithm for shortest paths</li>
       </ul>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Explore how Bellman–Ford repeatedly relaxes all edges and detects
+        negative weight cycles using the interactive graph visualizer.
+      </p>
+
+      <a
+        href="/algorithms/graph/visualizer?algo=bellman-ford"
+        className="inline-block text-blue-600 underline"
+      >
+        Open Graph Visualizer →
+      </a>
+
       <NextPrev />
     </div>
   )

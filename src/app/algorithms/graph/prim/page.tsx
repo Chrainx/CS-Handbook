@@ -25,7 +25,9 @@ export default function PrimPage() {
         The algorithm starts from an arbitrary vertex and expands the spanning
         tree one vertex at a time. At each step, it selects the smallest edge
         that connects the current tree to a new vertex, ensuring the tree
-        remains connected and acyclic.
+        remains connected and acyclic. This algorithm assumes the graph is
+        connected; otherwise, it produces a minimum spanning forest instead of a
+        single tree.
       </p>
 
       {/* 4. Pseudocode */}
@@ -76,6 +78,23 @@ export default function PrimPage() {
         <li>When a starting vertex is fixed</li>
         <li>Network design and infrastructure planning</li>
       </ul>
+
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Explore how Prim&apos;s Algorithm incrementally builds a minimum
+        spanning tree by selecting the smallest connecting edge using the
+        interactive graph visualizer.
+      </p>
+
+      <a
+        href="/algorithms/graph/visualizer?algo=prim"
+        className="inline-block text-blue-600 underline"
+      >
+        Open Graph Visualizer →
+      </a>
 
       <NextPrev />
     </div>

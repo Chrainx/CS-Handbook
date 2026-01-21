@@ -24,7 +24,9 @@ export default function KruskalPage() {
       <p className="mb-4 text-(--text-secondary)">
         The algorithm sorts all edges by weight and then repeatedly selects the
         smallest edge that connects two different components. A disjoint-set
-        (union–find) data structure is used to efficiently detect cycles.
+        (union–find) data structure is used to efficiently detect cycles. If the
+        graph is disconnected, the algorithm produces a minimum spanning forest
+        rather than a single tree.
       </p>
 
       {/* 4. Pseudocode */}
@@ -68,6 +70,23 @@ export default function KruskalPage() {
         <li>Sparse graphs</li>
         <li>When union–find is available</li>
       </ul>
+
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Explore how Kruskal&apos;s Algorithm builds a minimum spanning tree by
+        selecting edges in increasing order of weight and avoiding cycles using
+        the interactive graph visualizer.
+      </p>
+
+      <a
+        href="/algorithms/graph/visualizer?algo=kruskal"
+        className="inline-block text-blue-600 underline"
+      >
+        Open Graph Visualizer →
+      </a>
 
       <NextPrev />
     </div>

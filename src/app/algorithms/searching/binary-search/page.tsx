@@ -39,11 +39,29 @@ export default function BinarySearchPage() {
 `}
       </pre>
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">Complexity</h2>
+      <h2 className="text-xl font-semibold mt-6 mb-2">Complexity Analysis</h2>
+
       <ul className="list-disc list-inside">
-        <li>Time: O(log n)</li>
-        <li>Space: O(1)</li>
+        <li>Best case: O(1)</li>
+        <li>Average case: O(log n)</li>
+        <li>Worst case: O(log n)</li>
+        <li>Space complexity: O(1)</li>
       </ul>
+
+      <h2 className="text-xl font-semibold mt-6 mb-2">Visualization</h2>
+
+      <p className="mb-4">
+        Explore how Binary Search narrows down the search range step by step
+        using the interactive searching visualizer.
+      </p>
+
+      <a
+        href="/algorithms/searching/visualizer"
+        className="inline-block text-blue-600 underline"
+      >
+        Open Searching Visualizer →
+      </a>
+
       <NextPrev />
     </div>
   )

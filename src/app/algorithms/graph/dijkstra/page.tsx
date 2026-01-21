@@ -24,7 +24,9 @@ export default function DijkstraPage() {
         The algorithm maintains a set of vertices whose shortest distance from
         the source is already known. At each step, it selects the unvisited
         vertex with the smallest tentative distance, then relaxes its outgoing
-        edges to update the distances of neighboring vertices.
+        edges to update the distances of neighboring vertices. This algorithm
+        assumes all edge weights are non-negative; otherwise, the computed
+        distances may be incorrect.
       </p>
 
       {/* 4. Pseudocode */}
@@ -71,6 +73,23 @@ export default function DijkstraPage() {
         <li>Routing and navigation problems</li>
         <li>Network latency optimization</li>
       </ul>
+
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Explore how Dijkstra&apos;s Algorithm progressively relaxes edges and
+        updates shortest distances using a priority queue in the interactive
+        graph visualizer.
+      </p>
+
+      <a
+        href="/algorithms/graph/visualizer?algo=dijkstra"
+        className="inline-block text-blue-600 underline"
+      >
+        Open Graph Visualizer →
+      </a>
 
       <NextPrev />
     </div>

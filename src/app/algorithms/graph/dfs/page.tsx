@@ -25,7 +25,8 @@ export default function DFSPage() {
         DFS prioritizes depth over breadth. From each vertex, it immediately
         visits an unvisited neighbor and continues this process recursively (or
         using a stack) until it reaches a dead end, after which it backtracks to
-        explore other branches.
+        explore other branches. This traversal does not guarantee shortest
+        paths.
       </p>
 
       {/* 4. Pseudocode */}
@@ -65,6 +66,22 @@ export default function DFSPage() {
         <li>Topological sorting</li>
         <li>Finding connected components</li>
       </ul>
+
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Explore how Depth-First Search traverses the graph step by step using
+        the interactive graph visualizer.
+      </p>
+
+      <a
+        href="/algorithms/graph/visualizer?algo=dfs"
+        className="inline-block text-blue-600 underline"
+      >
+        Open Graph Visualizer →
+      </a>
 
       <NextPrev />
     </div>

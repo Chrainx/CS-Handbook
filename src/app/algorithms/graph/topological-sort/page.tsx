@@ -23,8 +23,9 @@ export default function TopologicalSortPage() {
       <p className="mb-4 text-(--text-secondary)">
         The core idea is to order vertices based on dependencies. A vertex can
         be placed in the ordering only after all vertices that point to it have
-        already been placed. This ensures all dependency constraints are
-        respected.
+        already been placed. This page uses <strong>Kahn’s algorithm</strong>,
+        which repeatedly selects vertices with zero incoming edges and removes
+        them from the graph.
       </p>
 
       {/* 4. Pseudocode */}
@@ -72,6 +73,22 @@ export default function TopologicalSortPage() {
         <li>Build systems and compilation order</li>
         <li>Dependency resolution problems</li>
       </ul>
+
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Explore how Topological Sort processes vertices with zero incoming edges
+        step by step using the interactive graph visualizer.
+      </p>
+
+      <a
+        href="/algorithms/graph/visualizer?algo=topological"
+        className="inline-block text-blue-600 underline"
+      >
+        Open Graph Visualizer →
+      </a>
 
       <NextPrev />
     </div>

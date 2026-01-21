@@ -52,9 +52,7 @@ export default function GraphOverviewPage() {
 
       <ul className="list-disc list-inside text-(--text-secondary)">
         <li>Traversal algorithms (BFS, DFS)</li>
-        <li>
-          Shortest path algorithms (Dijkstra, Bellman-Ford, Floyd-Warshall)
-        </li>
+        <li>Shortest path algorithms (Dijkstra, Bellman-Ford)</li>
         <li>Minimum spanning tree algorithms (Kruskal, Prim)</li>
         <li>Topological sorting for DAGs</li>
       </ul>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import AlgorithmSelectModal from '@/components/visualizer-ui/algorithmSelectModal'
 import StepControls from '../stepControls'
 import VisualizerLegend from '../legend/legend'
@@ -36,6 +36,8 @@ import { graphStateToPriorityQueue } from './adapter/graphToPriorityQueue'
 import { GRAPH_PRESETS } from './preset'
 
 import { useStepPlayer } from '../shared/useStepPlayer'
+
+import { useSearchParams } from 'next/navigation'
 
 export const GRAPH_ALGORITHMS: {
   id: GraphAlgorithmId
@@ -99,6 +101,9 @@ const GRAPH_PRESET_BY_ALGO: Record<
 }
 
 export default function GraphVisualizer() {
+  const searchParams = useSearchParams()
+  const algoFromUrl = searchParams.get('algo') as GraphAlgorithmId | null
+
   const [algorithm, setAlgorithm] = useState<GraphAlgorithmId | null>(null)
   const [open, setOpen] = useState(true)
 
@@ -138,6 +143,26 @@ export default function GraphVisualizer() {
     setSteps(generated)
   }
 
+  useEffect(() => {
+    if (!algoFromUrl) return
+    if (!GRAPH_STEP_GENERATORS[algoFromUrl]) return
+
+    const presetKey = GRAPH_PRESET_BY_ALGO[algoFromUrl]
+    const presetGraph = GRAPH_PRESETS[presetKey]
+
+    setGraph(presetGraph)
+    setAlgorithm(algoFromUrl)
+    setOpen(false)
+
+    const generated = GRAPH_STEP_GENERATORS[algoFromUrl](presetGraph, 'A')
+    setSteps(generated)
+
+    dispatch({ type: 'reset' })
+    player.reset()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <>
       <AlgorithmSelectModal
@@ -152,6 +177,10 @@ export default function GraphVisualizer() {
           setAlgorithm(algo)
           setOpen(false)
           generateSteps(id, presetGraph)
+
+          const params = new URLSearchParams(window.location.search)
+          params.set('algo', algo)
+          window.history.replaceState(null, '', `?${params.toString()}`)
         }}
         onClose={() => {
           if (algorithm !== null) {
