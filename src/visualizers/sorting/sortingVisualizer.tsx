@@ -65,7 +65,7 @@ export default function SortingVisualizer() {
   const searchParams = useSearchParams()
   const algoFromUrl = searchParams.get('algo') as SortingAlgorithmId | null
 
-  const [algorithm, setAlgorithm] = useState<string | null>(null)
+  const [algorithm, setAlgorithm] = useState<SortingAlgorithmId | null>(null)
   const [open, setOpen] = useState(true)
 
   const [input, setInput] = useState('')
@@ -136,6 +136,9 @@ export default function SortingVisualizer() {
     if (!algoFromUrl) return
     if (!STEP_GENERATORS[algoFromUrl]) return
 
+    dispatch({ type: 'reset', array: baseArray })
+    player.reset()
+
     setAlgorithm(algoFromUrl)
     setOpen(false)
     generateSteps(algoFromUrl)
@@ -153,9 +156,15 @@ export default function SortingVisualizer() {
         algorithms={SORTING_ALGORITHMS}
         currentAlgorithm={algorithm}
         onSelect={(id) => {
-          setAlgorithm(id)
+          const algo = id as SortingAlgorithmId
+
+          setAlgorithm(algo)
           setOpen(false)
-          generateSteps(id)
+          generateSteps(algo)
+
+          const params = new URLSearchParams(window.location.search)
+          params.set('algo', algo)
+          window.history.replaceState(null, '', `?${params.toString()}`)
         }}
         onClose={() => {
           // ❗ Prevent closing if no algorithm is selected
