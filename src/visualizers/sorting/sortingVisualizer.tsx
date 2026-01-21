@@ -23,6 +23,7 @@ import { quickSortSteps } from './steps/quick'
 
 import { sortingStateToBars } from './adapters/sortingToBar'
 import { useStepPlayer } from '../shared/useStepPlayer'
+import { useSearchParams } from 'next/navigation'
 
 export const SORTING_ALGORITHMS: {
   id: SortingAlgorithmId
@@ -61,6 +62,9 @@ const STEP_GENERATORS: Record<string, (arr: number[]) => SortingStep[]> = {
 }
 
 export default function SortingVisualizer() {
+  const searchParams = useSearchParams()
+  const algoFromUrl = searchParams.get('algo') as SortingAlgorithmId | null
+
   const [algorithm, setAlgorithm] = useState<string | null>(null)
   const [open, setOpen] = useState(true)
 
@@ -79,9 +83,6 @@ export default function SortingVisualizer() {
 
   const { leftBuffer, rightBuffer, leftPtr, rightPtr } = state
 
-  /* ---------------------------------- */
-  /* Step generation                    */
-  /* ---------------------------------- */
   function generateSteps(algo: string) {
     const generator = STEP_GENERATORS[algo]
     if (!generator) return
@@ -130,6 +131,17 @@ export default function SortingVisualizer() {
   useEffect(() => {
     setInput(baseArray.join(','))
   }, [baseArray])
+
+  useEffect(() => {
+    if (!algoFromUrl) return
+    if (!STEP_GENERATORS[algoFromUrl]) return
+
+    setAlgorithm(algoFromUrl)
+    setOpen(false)
+    generateSteps(algoFromUrl)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   /* ---------------------------------- */
   /* Render                             */

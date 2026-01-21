@@ -73,6 +73,22 @@ function partition(arr, low, high):
         <li>When random or median-based pivot selection is used</li>
       </ul>
 
+      <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="text-(--text-secondary)">
+        Explore how Quick Sort works step by step using the interactive sorting
+        visualizer.
+      </p>
+
+      <a
+        href="/algorithms/sorting/visualizer?algo=quick"
+        className="inline-block mt-2 text-blue-600 underline"
+      >
+        Open Sorting Visualizer →
+      </a>
+
       <NextPrev />
     </div>
   )

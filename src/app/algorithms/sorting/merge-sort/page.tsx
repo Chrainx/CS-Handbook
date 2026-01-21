@@ -6,10 +6,9 @@ export default function MergeSortPage() {
       <h1 className="text-3xl font-semibold text-(--text-main)">Merge Sort</h1>
 
       <p className="text-(--text-secondary)">
-        Merge Sort is a divide-and-conquer algorithm that divides the array into
-        halves, recursively sorts each half, and then merges the two sorted
-        halves into a fully sorted array. It is stable and guarantees O(n log n)
-        time in all cases.
+        Merge Sort is a divide-and-conquer sorting algorithm that sorts an array
+        by recursively dividing it into smaller subarrays and merging them in
+        sorted order.
       </p>
 
       <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
@@ -44,10 +43,10 @@ function merge(left, right):
     while left and right:
         if left[0] <= right[0]:
             append left[0] to result
-            left = left[1:]
+            remove left[0] from left
         else:
             append right[0] to result
-            right = right[1:]
+            remove right[0] from right
 
     append remaining items of left
     append remaining items of right
@@ -77,6 +76,22 @@ function merge(left, right):
         <li>When worst-case guarantees are important</li>
         <li>When predictable performance is needed</li>
       </ul>
+
+      <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="text-(--text-secondary)">
+        Explore how Merge Sort works step by step using the interactive sorting
+        visualizer.
+      </p>
+
+      <a
+        href="/algorithms/sorting/visualizer?algo=merge"
+        className="inline-block mt-2 text-blue-600 underline"
+      >
+        Open Sorting Visualizer →
+      </a>
 
       <NextPrev />
     </div>

@@ -4,9 +4,14 @@ export default function HomePage() {
       {/* Hero section */}
       <section className="text-center py-16">
         <h1 className="text-5xl font-bold mb-4">CS Handbook</h1>
-        <p className="text-xl text-gray-600">
-          A comprehensive collection of algorithms, data structures, systems,
-          and computer science knowledge — explained clearly by me.
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          An interactive computer science handbook covering core concepts across
+          algorithms, data structures, systems, and more, with clear
+          explanations and step-by-step visualizations.
+        </p>
+        <p className="mt-3 text-sm text-gray-500">
+          Built and expanded incrementally as a personal learning and reference
+          project.
         </p>
       </section>
 

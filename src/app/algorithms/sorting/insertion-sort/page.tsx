@@ -60,6 +60,22 @@ export default function InsertionSortPage() {
         <li>When simplicity matters</li>
       </ul>
 
+      <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="text-(--text-secondary)">
+        Explore how Insertion Sort works step by step using the interactive
+        sorting visualizer.
+      </p>
+
+      <a
+        href="/algorithms/sorting/visualizer?algo=insertion"
+        className="inline-block mt-2 text-blue-600 underline"
+      >
+        Open Sorting Visualizer →
+      </a>
+
       <NextPrev />
     </div>
   )

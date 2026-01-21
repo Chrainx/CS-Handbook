@@ -121,6 +121,11 @@ export default function SortingOverviewPage() {
         </li> */}
       </ul>
 
+      <p className="text-sm mt-6 text-(--text-secondary)">
+        Each sorting algorithm includes a step-by-step explanation and can be
+        explored interactively using the shared sorting visualizer page.
+      </p>
+
       <NextPrev />
     </div>
   )

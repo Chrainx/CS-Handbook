@@ -8,8 +8,9 @@ export default function SelectionSortPage() {
       </h1>
 
       <p className="text-(--text-secondary)">
-        Selection Sort repeatedly selects the smallest element from the unsorted
-        portion of the array and swaps it with the first unsorted element.
+        Selection Sort is a comparison-based sorting algorithm that sorts an
+        array by repeatedly selecting the smallest remaining element and placing
+        it into its correct position.
       </p>
 
       <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
@@ -46,6 +47,34 @@ export default function SelectionSortPage() {
         <li>Space complexity: O(1)</li>
         <li>Stable: No</li>
       </ul>
+
+      <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
+        When to Use Selection Sort
+      </h2>
+
+      <ul className="list-disc list-inside text-(--text-secondary)">
+        <li>
+          When simplicity and predictability are more important than performance
+        </li>
+        <li>When memory usage must be minimal</li>
+        <li>For small datasets where O(n²) time is acceptable</li>
+      </ul>
+
+      <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="text-(--text-secondary)">
+        Explore how Selection Sort works step by step using the interactive
+        sorting visualizer.
+      </p>
+
+      <a
+        href="/algorithms/sorting/visualizer?algo=selection"
+        className="inline-block mt-2 text-blue-600 underline"
+      >
+        Open Sorting Visualizer →
+      </a>
 
       <NextPrev />
     </div>
