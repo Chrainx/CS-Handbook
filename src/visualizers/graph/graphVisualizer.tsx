@@ -48,43 +48,42 @@ export const GRAPH_ALGORITHMS: {
     id: 'bfs',
     name: 'Breadth-First Search',
     description:
-      'Explores a graph level by level from a starting node. Breadth-First Search guarantees the shortest path in unweighted graphs and is commonly used for traversal, connectivity checks, and shortest path problems.',
+      'Traverses a graph level by level and finds shortest paths in unweighted graphs.',
   },
   {
     id: 'dfs',
     name: 'Depth-First Search',
     description:
-      'Traverses a graph by exploring as deep as possible along each branch before backtracking. Depth-First Search is useful for cycle detection, topological sorting, and exploring connected components.',
+      'Explores a graph by going as deep as possible before backtracking.',
   },
   {
     id: 'dijkstra',
     name: 'Dijkstra Algorithm',
     description:
-      'Computes the shortest path from a source node to all other nodes in a graph with non-negative edge weights. It greedily selects the closest unvisited node and relaxes its outgoing edges.',
+      'Finds shortest paths from a source using greedy relaxation of edges.',
   },
   {
     id: 'topological',
     name: 'Topological Sort',
     description:
-      'Produces a linear ordering of vertices in a directed acyclic graph (DAG) such that every directed edge goes from earlier to later in the ordering. Commonly used for scheduling and dependency resolution.',
+      'Orders nodes in a DAG so that all dependencies come before dependents.',
   },
   {
     id: 'bellman-ford',
     name: 'Bellman-Ford',
-    description:
-      'Finds shortest paths from a single source even when negative edge weights are present. Unlike Dijkstra’s algorithm, it can detect negative-weight cycles but runs slower.',
+    description: 'Computes shortest paths even with negative edge weights.',
   },
   {
     id: 'prim',
     name: 'Prim Algorithm',
     description:
-      'Constructs a minimum spanning tree by starting from an arbitrary node and repeatedly adding the lowest-weight edge that connects the tree to a new vertex.',
+      'Builds a minimum spanning tree by growing from a starting node.',
   },
   {
     id: 'kruskal',
     name: 'Kruskal Algorithm',
     description:
-      'Builds a minimum spanning tree by sorting all edges by weight and adding them one by one, skipping edges that would form a cycle. Often implemented using a union-find data structure.',
+      'Builds a minimum spanning tree by adding the smallest valid edges.',
   },
 ]
 
