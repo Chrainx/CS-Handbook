@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="px-6 py-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
           <span>
-            CS Handbook · <span className="font-medium">v{version}</span>
+            CS Handbook · <span className="font-medium">V-{version}</span>
           </span>
 
           <span className="text-xs">
