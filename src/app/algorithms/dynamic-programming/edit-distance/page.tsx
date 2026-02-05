@@ -27,6 +27,17 @@ export default function EditDistancePage() {
         prefixes.
       </p>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Key Insight
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Each DP state <code>dp[i][j]</code> represents the minimum number of
+        edits required to transform the prefix <code>A[0..i-1]</code> into{' '}
+        <code>B[0..j-1]</code>. Once this value is computed, it never changes
+        and can be safely reused to build solutions for larger prefixes.
+      </p>
+
       {/* Pseudocode */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Pseudocode

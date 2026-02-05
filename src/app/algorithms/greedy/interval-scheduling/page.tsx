@@ -26,6 +26,17 @@ export default function IntervalSchedulingPage() {
         remaining timeline can accommodate more intervals afterward.
       </p>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Why This Greedy Choice Works
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Choosing the interval with the earliest finishing time never reduces the
+        number of intervals that can be scheduled afterward. Any optimal
+        solution can be transformed to include this choice without decreasing
+        the total number of intervals, which makes the greedy strategy optimal.
+      </p>
+
       {/* Pseudocode */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Pseudocode
@@ -36,7 +47,7 @@ export default function IntervalSchedulingPage() {
     sort intervals by end time
 
     selected = []
-    currentEnd = -infinity
+    currentEnd = -infinity  // or the minimum possible start time
 
     for each interval in intervals:
         if interval.start >= currentEnd:

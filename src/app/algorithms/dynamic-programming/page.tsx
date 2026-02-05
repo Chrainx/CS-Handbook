@@ -68,7 +68,8 @@ export default function DynamicProgrammingOverviewPage() {
         <li>0/1 Knapsack</li>
         <li>Coin Change</li>
         <li>Longest Increasing Subsequence (LIS)</li>
-        <li>Other classic dynamic programming problems</li>
+        <li>Longest Common Subsequence (LCS)</li>
+        <li>Edit Distance</li>
       </ul>
 
       <p className="mt-6 text-(--text-secondary)">

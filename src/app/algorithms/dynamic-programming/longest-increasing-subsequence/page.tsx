@@ -31,6 +31,19 @@ export default function LISPage() {
         ensuring that the increasing order is maintained.
       </p>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Key Insight
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Any longest increasing subsequence that ends at position i must end with{' '}
+        <code>nums[i]</code>. Therefore, the best solution ending at i can be
+        formed by extending the best solutions ending at earlier positions j
+        where <code>nums[j] &lt; nums[i]</code>. Once <code>dp[i]</code>
+        is computed, it never needs to be changed, ensuring correctness through
+        optimal substructure.
+      </p>
+
       {/* 4. Pseudocode */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Pseudocode

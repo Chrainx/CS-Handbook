@@ -7,7 +7,6 @@ export default function HuffmanCodingPage() {
       <h1 className="text-3xl font-semibold mb-4 text-(--text-main)">
         Huffman Coding
       </h1>
-
       {/* Brief explanation */}
       <p className="mb-4 text-(--text-secondary)">
         Huffman Coding is a lossless data compression problem where characters
@@ -15,7 +14,6 @@ export default function HuffmanCodingPage() {
         minimize the total number of bits used while ensuring that the encoded
         data can be uniquely decoded.
       </p>
-
       {/* Core idea */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Core Idea
@@ -25,8 +23,24 @@ export default function HuffmanCodingPage() {
         codes, while less frequent characters receive longer codes. This reduces
         the total encoded size of the data.
       </p>
-
-      {/* Pseudocode */}
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Key Property
+      </h2>
+      <p className="mb-4 text-(--text-secondary)">
+        Huffman codes are <strong>prefix-free</strong>, meaning no character’s
+        code is a prefix of another. This guarantees that the encoded bitstream
+        can be decoded unambiguously from left to right without separators.
+      </p>
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Why the Greedy Choice Works
+      </h2>
+      <p className="mb-4 text-(--text-secondary)">
+        In an optimal prefix-free code, the two least frequent characters must
+        appear at the deepest level of the tree and share the same parent.
+        Huffman’s algorithm enforces this property greedily at every step,
+        leading to a globally optimal encoding.
+      </p>
+      e{/* Pseudocode */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Pseudocode
       </h2>
@@ -46,7 +60,6 @@ export default function HuffmanCodingPage() {
 
     return root of the Huffman tree`}
       </pre>
-
       {/* Complexity analysis */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Complexity Analysis
@@ -55,7 +68,6 @@ export default function HuffmanCodingPage() {
         <li>Time Complexity: O(n log n)</li>
         <li>Space Complexity: O(n)</li>
       </ul>
-
       <NextPrev />
     </div>
   )

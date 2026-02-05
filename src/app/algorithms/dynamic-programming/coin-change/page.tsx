@@ -33,6 +33,18 @@ export default function CoinChangePage() {
         amounts.
       </p>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Key Insight
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        The optimal solution for any amount depends only on optimal solutions to
+        smaller amounts. Once the minimum number of coins needed for a smaller
+        amount is known, it can be reused to construct the solution for larger
+        amounts. This ensures each subproblem is solved once and never
+        recomputed.
+      </p>
+
       {/* 4. Pseudocode */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Pseudocode

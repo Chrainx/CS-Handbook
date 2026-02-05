@@ -35,6 +35,17 @@ export default function Knapsack01Page() {
         two choices is stored and reused for future decisions.
       </p>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Key Insight
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        At any point, the decision for the current item depends only on
+        solutions to smaller subproblems: using fewer items and smaller
+        capacities. Once the optimal value for a given number of items and
+        capacity is computed, it never needs to be recomputed again.
+      </p>
+
       {/* 4. Pseudocode */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Pseudocode

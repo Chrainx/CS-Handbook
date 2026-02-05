@@ -26,6 +26,18 @@ export default function FractionalKnapsackPage() {
         best available item.
       </p>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Why This Greedy Choice Works
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Because items can be divided, taking as much as possible of the item
+        with the highest value-to-weight ratio always leads to an optimal
+        solution. Any solution that does not prioritize this ratio can be
+        improved by replacing lower-ratio weight with higher-ratio weight,
+        increasing total value without exceeding capacity.
+      </p>
+
       {/* Pseudocode */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Pseudocode

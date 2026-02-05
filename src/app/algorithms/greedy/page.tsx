@@ -13,6 +13,13 @@ export default function GreedyOverviewPage() {
         decision is made, it is not changed.
       </p>
 
+      <p className="mb-6 text-(--text-secondary)">
+        Greedy algorithms are not universally correct. They rely on specific
+        properties of the problem, such as the greedy-choice property and
+        optimal substructure. When these conditions do not hold, greedy
+        solutions may fail to produce optimal results.
+      </p>
+
       <h2 className="text-xl font-medium mb-2 text-(--text-secondary)">
         What This Section Covers
       </h2>
@@ -28,10 +35,9 @@ export default function GreedyOverviewPage() {
       </h2>
 
       <p className="mb-6 text-(--text-secondary)">
-        Each algorithm in this section demonstrates a specific greedy strategy.
-        The pages explain the decision rule used, how the solution is
-        constructed, and the conditions under which the approach works
-        correctly.
+        Each algorithm in this section highlights a specific greedy decision
+        rule. The focus is on understanding why the local choice works, what
+        invariant it maintains, and when the approach fails.
       </p>
 
       <h2 className="text-xl font-medium mb-2 text-(--text-secondary)">
@@ -39,11 +45,9 @@ export default function GreedyOverviewPage() {
       </h2>
 
       <ul className="list-disc list-inside text-(--text-secondary)">
-        <li>Activity Selection</li>
         <li>Interval Scheduling</li>
         <li>Fractional Knapsack</li>
         <li>Huffman Coding</li>
-        <li>Job Sequencing with Deadlines</li>
       </ul>
 
       <NextPrev />

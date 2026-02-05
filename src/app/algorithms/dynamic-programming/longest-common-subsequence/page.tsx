@@ -27,6 +27,18 @@ export default function LCSPage() {
         computed prefix results.
       </p>
 
+      <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
+        Key Insight
+      </h2>
+
+      <p className="mb-4 text-(--text-secondary)">
+        Each DP state <code>dp[i][j]</code> represents the length of the longest
+        common subsequence between the prefixes <code>A[0..i-1]</code> and{' '}
+        <code>B[0..j-1]</code>. Once computed, this value never changes,
+        allowing the solution to be built incrementally from smaller prefix
+        pairs.
+      </p>
+
       {/* Pseudocode */}
       <h2 className="text-xl font-medium mt-6 mb-2 text-(--text-secondary)">
         Pseudocode
