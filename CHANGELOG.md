@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/Chrainx/CS-Handbook/compare/v1.2.0...v1.3.0) (2026-02-05)
+
+
+### Features
+
+* ensure package.json version updates correctly ([a59072a](https://github.com/Chrainx/CS-Handbook/commit/a59072a7648e01caa9b6f24abb28867f8a270d67))
+
 # [1.2.0](https://github.com/Chrainx/CS-Handbook/compare/v1.1.0...v1.2.0) (2026-02-05)
 
 
