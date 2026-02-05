@@ -41,7 +41,7 @@ export default function Sidebar({ nav }: { nav: NavItem[] }) {
   return (
     <aside className="h-full overflow-y-auto bg-(--bg-sidebar) border-r border-(--border-soft) p-6">
       <div className="mb-4">
-        <h1 className="text-xl font-bold">CS Handbook</h1>
+        <h1 className="text-xl font-bold">Main Menu</h1>
       </div>
 
       <input

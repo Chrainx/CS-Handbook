@@ -51,11 +51,6 @@ export default function HomePage() {
           />
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="text-center text-gray-500 py-10 text-sm">
-        Built with Next.js & Tailwind — by Fredy
-      </footer>
     </div>
   )
 }
