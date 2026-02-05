@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Chrainx/CS-Handbook/compare/v1.3.0...v1.4.0) (2026-02-05)
+
+
+### Features
+
+* update algortihm select modal to become scrollable ([33365c6](https://github.com/Chrainx/CS-Handbook/commit/33365c6de972f6a3a48350ef31ee82c74f5ad715))
+
 # [1.3.0](https://github.com/Chrainx/CS-Handbook/compare/v1.2.0...v1.3.0) (2026-02-05)
 
 
