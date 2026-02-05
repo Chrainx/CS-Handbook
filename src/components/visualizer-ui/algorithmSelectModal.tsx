@@ -27,7 +27,7 @@ export default function AlgorithmSelectModal({
     <Modal open={open} onClose={onClose}>
       <h2 className="mb-4 text-lg font-semibold">Select Algorithm</h2>
 
-      <div className="space-y-2">
+      <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
         {algorithms.map((algo) => {
           const isCurrent = algo.id === currentAlgorithm
 
