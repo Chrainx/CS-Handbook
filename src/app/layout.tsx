@@ -6,6 +6,15 @@ import GlobalHeader from '@/components/layout/header'
 import { getNavigation } from '@/utils/getNavigation'
 import { Suspense } from 'react'
 
+export const metadata = {
+  title: {
+    default: 'CS Handbook',
+    template: '%s | CS Handbook',
+  },
+  description:
+    'Interactive computer science handbook with visual algorithm visualizers',
+}
+
 export default function RootLayout({
   children,
 }: {
