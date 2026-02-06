@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/Chrainx/CS-Handbook/compare/v1.5.0...v1.5.1) (2026-02-06)
+
+
+### Bug Fixes
+
+* replace anchor tag with Next.js Link for internal navigation ([b23a22c](https://github.com/Chrainx/CS-Handbook/commit/b23a22cb97013f709f6bc9905855fb2683e14e68))
+
 # [1.5.0](https://github.com/Chrainx/CS-Handbook/compare/v1.4.0...v1.5.0) (2026-02-06)
 
 
