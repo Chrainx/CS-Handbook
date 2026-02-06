@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/Chrainx/CS-Handbook/compare/v1.5.1...v1.5.2) (2026-02-06)
+
+
+### Bug Fixes
+
+* wrap componenet in Suspense to satisfy useSearchParams ([45ea72c](https://github.com/Chrainx/CS-Handbook/commit/45ea72ccdb0f57dfaa19525fc06909cbb49cf385))
+
 ## [1.5.1](https://github.com/Chrainx/CS-Handbook/compare/v1.5.0...v1.5.1) (2026-02-06)
 
 
