@@ -82,9 +82,7 @@ export function useGraphDerivedState({
 
     if (category === 'shortest-path') {
       const values = deriveDistances()
-      return Object.keys(values).length === 0
-        ? { type: 'none' }
-        : { type: 'distances', values }
+      return { type: 'distances', values }
     }
 
     return { type: 'none' }
