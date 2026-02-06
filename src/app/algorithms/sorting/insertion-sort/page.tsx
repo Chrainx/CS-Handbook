@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function InsertionSortPage() {
   return (
@@ -69,12 +70,12 @@ export default function InsertionSortPage() {
         sorting visualizer.
       </p>
 
-      <a
+      <Link
         href="/algorithms/sorting/visualizer?algo=insertion"
         className="inline-block mt-2 text-blue-600 underline"
       >
         Open Sorting Visualizer →
-      </a>
+      </Link>
 
       <NextPrev />
     </div>

@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function QuickSortPage() {
   return (
@@ -82,12 +83,12 @@ function partition(arr, low, high):
         visualizer.
       </p>
 
-      <a
+      <Link
         href="/algorithms/sorting/visualizer?algo=quick"
         className="inline-block mt-2 text-blue-600 underline"
       >
         Open Sorting Visualizer →
-      </a>
+      </Link>
 
       <NextPrev />
     </div>

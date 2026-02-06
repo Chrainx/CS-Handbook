@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function BFSPage() {
   return (
@@ -80,12 +81,12 @@ export default function BFSPage() {
         the interactive graph visualizer.
       </p>
 
-      <a
+      <Link
         href="/algorithms/graph/visualizer?algo=bfs"
         className="inline-block text-blue-600 underline"
       >
         Open Graph Visualizer →
-      </a>
+      </Link>
 
       <NextPrev />
     </div>

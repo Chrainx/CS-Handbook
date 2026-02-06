@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function DFSPage() {
   return (
@@ -76,12 +77,12 @@ export default function DFSPage() {
         the interactive graph visualizer.
       </p>
 
-      <a
+      <Link
         href="/algorithms/graph/visualizer?algo=dfs"
         className="inline-block text-blue-600 underline"
       >
         Open Graph Visualizer →
-      </a>
+      </Link>
 
       <NextPrev />
     </div>

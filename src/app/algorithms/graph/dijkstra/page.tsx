@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function DijkstraPage() {
   return (
@@ -84,12 +85,12 @@ export default function DijkstraPage() {
         graph visualizer.
       </p>
 
-      <a
+      <Link
         href="/algorithms/graph/visualizer?algo=dijkstra"
         className="inline-block text-blue-600 underline"
       >
         Open Graph Visualizer →
-      </a>
+      </Link>
 
       <NextPrev />
     </div>

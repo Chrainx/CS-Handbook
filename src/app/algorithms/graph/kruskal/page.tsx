@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function KruskalPage() {
   return (
@@ -81,12 +82,12 @@ export default function KruskalPage() {
         the interactive graph visualizer.
       </p>
 
-      <a
+      <Link
         href="/algorithms/graph/visualizer?algo=kruskal"
         className="inline-block text-blue-600 underline"
       >
         Open Graph Visualizer →
-      </a>
+      </Link>
 
       <NextPrev />
     </div>

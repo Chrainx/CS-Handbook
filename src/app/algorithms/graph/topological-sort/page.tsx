@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function TopologicalSortPage() {
   return (
@@ -83,12 +84,12 @@ export default function TopologicalSortPage() {
         step by step using the interactive graph visualizer.
       </p>
 
-      <a
+      <Link
         href="/algorithms/graph/visualizer?algo=topological"
         className="inline-block text-blue-600 underline"
       >
         Open Graph Visualizer →
-      </a>
+      </Link>
 
       <NextPrev />
     </div>

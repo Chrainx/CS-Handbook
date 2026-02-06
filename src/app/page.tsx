@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function HomePage() {
   return (
     <div className="space-y-12">
@@ -69,13 +71,13 @@ function CategoryCard({
   href: string
 }) {
   return (
-    <a
+    <Link
       href={href}
       className="block p-6 border border-(--border-soft) rounded-xl hover:shadow-md transition bg-(--bg)"
     >
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-gray-600">{description}</p>
-    </a>
+    </Link>
   )
 }
 

@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function BinarySearchPage() {
   return (
@@ -55,12 +56,12 @@ export default function BinarySearchPage() {
         using the interactive searching visualizer.
       </p>
 
-      <a
+      <Link
         href="/algorithms/searching/visualizer"
         className="inline-block text-blue-600 underline"
       >
         Open Searching Visualizer →
-      </a>
+      </Link>
 
       <NextPrev />
     </div>
