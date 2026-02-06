@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/Chrainx/CS-Handbook/compare/v1.4.0...v1.5.0) (2026-02-06)
+
+
+### Features
+
+* always expose shortest-path output even when empty ([47d1174](https://github.com/Chrainx/CS-Handbook/commit/47d1174513161de419a3e9b273b45efa816176a1))
+
 # [1.4.0](https://github.com/Chrainx/CS-Handbook/compare/v1.3.0...v1.4.0) (2026-02-05)
 
 
