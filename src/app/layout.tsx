@@ -4,6 +4,7 @@ import Banner from '@/components/banner'
 import Footer from '@/components/layout/footer'
 import GlobalHeader from '@/components/layout/header'
 import { getNavigation } from '@/utils/getNavigation'
+import { Suspense } from 'react'
 
 export default function RootLayout({
   children,
@@ -27,7 +28,9 @@ export default function RootLayout({
 
           {/* Main content */}
           <main className="flex-1 h-full overflow-y-auto flex flex-col p-8">
-            <Banner />
+            <Suspense fallback={null}>
+              <Banner />
+            </Suspense>
 
             <div className="flex-1">{children}</div>
 

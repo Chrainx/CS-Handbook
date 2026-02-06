@@ -11,7 +11,7 @@ export default function GlobalHeader() {
           className="flex items-center font-semibold text-lg hover:opacity-80 transition"
         >
           <Image
-            src="/logo.png"
+            src="/Logo.png"
             alt="CS Handbook logo"
             width={84}
             height={84}
