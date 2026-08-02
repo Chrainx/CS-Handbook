@@ -131,6 +131,10 @@ export function sortingReducer(
         },
         baseIndex: null,
         writeIndex: null,
+        leftBuffer: null,
+        rightBuffer: null,
+        leftPtr: 0,
+        rightPtr: 0,
       }
 
     case 'pivot': {
