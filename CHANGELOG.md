@@ -1,3 +1,13 @@
+## [1.5.3](https://github.com/Chrainx/CS-Handbook/compare/v1.5.2...v1.5.3) (2026-08-02)
+
+
+### Bug Fixes
+
+* clear merge sort buffers when a merge completes ([#11](https://github.com/Chrainx/CS-Handbook/issues/11)) ([9b16b35](https://github.com/Chrainx/CS-Handbook/commit/9b16b3562720eacc965c16cc438c4eecc45fa0d0)), closes [#2](https://github.com/Chrainx/CS-Handbook/issues/2)
+* emit set-distance step in Prim's algorithm ([#12](https://github.com/Chrainx/CS-Handbook/issues/12)) ([62da454](https://github.com/Chrainx/CS-Handbook/commit/62da45412f03534f53da79f06bc2b298057fc20d)), closes [#3](https://github.com/Chrainx/CS-Handbook/issues/3)
+* prevent stale array from overwriting reset on data reload ([#10](https://github.com/Chrainx/CS-Handbook/issues/10)) ([1b157ac](https://github.com/Chrainx/CS-Handbook/commit/1b157ac8bce1317b6a73fab080f565f8fa95bffb)), closes [#1](https://github.com/Chrainx/CS-Handbook/issues/1)
+* resync TargetModal input when reopened ([#13](https://github.com/Chrainx/CS-Handbook/issues/13)) ([c5ea3d0](https://github.com/Chrainx/CS-Handbook/commit/c5ea3d09910ab7e20ec3a041eccaa3a741ae7930)), closes [#4](https://github.com/Chrainx/CS-Handbook/issues/4)
+
 ## [1.5.2](https://github.com/Chrainx/CS-Handbook/compare/v1.5.1...v1.5.2) (2026-02-06)
 
 
