@@ -115,7 +115,7 @@ export default function SortingVisualizer() {
     setBaseArray(parsed)
 
     // Reset reducer state
-    dispatch({ type: 'reset', array: parsed })
+    player.hardReset({ type: 'reset', array: parsed })
 
     // Regenerate steps if algorithm already chosen
     if (algorithm) {
@@ -124,8 +124,6 @@ export default function SortingVisualizer() {
         setSteps(generator(parsed))
       }
     }
-
-    player.reset()
   }
 
   useEffect(() => {

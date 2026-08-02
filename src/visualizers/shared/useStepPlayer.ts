@@ -49,6 +49,12 @@ export function useStepPlayer<TStep, TAction, TContext = undefined>({
     replay(0)
   }
 
+  function hardReset(action: TAction) {
+    dispatch(action)
+    setIndex(0)
+    setText('')
+  }
+
   return {
     index,
     text,
@@ -57,5 +63,6 @@ export function useStepPlayer<TStep, TAction, TContext = undefined>({
     back,
     reset,
     replay,
+    hardReset,
   }
 }
