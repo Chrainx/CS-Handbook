@@ -1,5 +1,5 @@
 import { GraphData } from '@/visualizers/primitives/graph/data'
-import { GraphStep } from '@/visualizers/steps/types'
+import { GraphStep } from './types'
 
 export function bfsSteps(graph: GraphData, start: string): GraphStep[] {
   const steps: GraphStep[] = []

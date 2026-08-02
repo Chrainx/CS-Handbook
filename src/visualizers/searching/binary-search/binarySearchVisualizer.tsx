@@ -4,9 +4,9 @@ import { useEffect, useReducer, useState } from 'react'
 import StepControls from '@/visualizers/stepControls'
 import ArrayView from '../../primitives/arrayView/arrayView'
 import TargetModal from './targetModal'
-import { BinarySearchStep } from '@/visualizers/steps/types'
+import { BinarySearchStep } from './steps/types'
 import { binarySearchSteps } from './steps/binarySearch'
-import { describeStep } from '@/visualizers/describeStep'
+import { describeBinarySearchStep } from './describeStep'
 import { generateRandomArray } from '@/utils/random'
 import VisualizerLegend from '@/visualizers/legend/legend'
 
@@ -60,7 +60,7 @@ export default function BinarySearchVisualizer() {
   >({
     steps,
     dispatch,
-    describeStep,
+    describeStep: describeBinarySearchStep,
     describeContext: { target },
     resetAction: { type: 'reset', array },
   })

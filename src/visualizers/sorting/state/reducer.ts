@@ -1,5 +1,5 @@
 // visualizers/sorting/state/reducer.ts
-import { SortingStep } from '@/visualizers/steps/types'
+import { SortingStep } from '@/visualizers/sorting/steps/types'
 import { SortingVisualState, initialSortingVisualState } from './types'
 
 export function sortingReducer(
