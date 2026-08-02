@@ -80,8 +80,7 @@ export default function BinarySearchVisualizer() {
     const sorted = [...parsed].sort((a, b) => a - b)
     setArray(sorted)
     setInput(sorted.join(','))
-    dispatch({ type: 'reset', array: sorted })
-    player.reset()
+    player.hardReset({ type: 'reset', array: sorted })
   }
 
   useEffect(() => {
