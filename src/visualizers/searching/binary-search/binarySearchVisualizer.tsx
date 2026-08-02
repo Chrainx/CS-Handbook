@@ -36,6 +36,7 @@ export default function BinarySearchVisualizer() {
    * Input mirror
    * ========================================================================== */
   const [input, setInput] = useState(() => array.join(','))
+  const [inputError, setInputError] = useState<string | null>(null)
 
   /* ============================================================================
    * Steps (pure)
@@ -73,10 +74,11 @@ export default function BinarySearchVisualizer() {
       .map(Number)
 
     if (parsed.length === 0 || parsed.some(Number.isNaN)) {
-      alert('Please enter valid numbers separated by commas.')
+      setInputError('Please enter valid numbers separated by commas.')
       return
     }
 
+    setInputError(null)
     const sorted = [...parsed].sort((a, b) => a - b)
     setArray(sorted)
     setInput(sorted.join(','))
@@ -114,19 +116,33 @@ export default function BinarySearchVisualizer() {
         </div>
       </div>
 
-      <div className="mb-4 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
-        <label className="text-sm text-muted-foreground">Sorted array</label>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="w-64 rounded-lg border border-border bg-background px-4 py-2 text-sm text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft transition"
-        />
-        <button
-          onClick={loadArray}
-          className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
-        >
-          Load Array
-        </button>
+      <div className="mb-4 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-muted-foreground">Sorted array</label>
+          <input
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value)
+              setInputError(null)
+            }}
+            aria-invalid={inputError ? true : undefined}
+            className={`w-64 rounded-lg border bg-background px-4 py-2 text-sm text-foreground outline-none transition focus:ring-2 focus:ring-accent-soft ${
+              inputError
+                ? 'border-red-500 focus:border-red-500'
+                : 'border-border focus:border-accent'
+            }`}
+          />
+          <button
+            onClick={loadArray}
+            className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+          >
+            Load Array
+          </button>
+        </div>
+
+        {inputError && (
+          <p className="mt-1.5 text-xs text-red-500">{inputError}</p>
+        )}
       </div>
 
       <div className="mb-4 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
