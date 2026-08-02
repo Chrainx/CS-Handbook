@@ -39,24 +39,29 @@ export default function Sidebar({ nav }: { nav: NavItem[] }) {
   const pathname = usePathname()
 
   return (
-    <aside className="h-full overflow-y-auto bg-(--bg-sidebar) border-r border-(--border-soft) p-6">
-      <div className="mb-4">
-        <h1 className="text-xl font-bold">Main Menu</h1>
+    <aside className="h-full overflow-y-auto bg-sidebar border-r border-border px-4 py-6">
+      <div className="mb-4 px-2">
+        <h1 className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
+          Handbook
+        </h1>
       </div>
 
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search..."
-        className="w-full mb-4 px-3 py-2 text-sm rounded border border-(--border-soft) bg-white"
+        className="w-full mb-4 px-3 py-2 text-sm rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft transition"
       />
 
-      <nav className="space-y-2">
-        <Link href="/" className="block text-sm font-medium hover:underline">
-          🏠 Home
+      <nav className="space-y-1">
+        <Link
+          href="/"
+          className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-foreground hover:bg-accent-soft hover:text-accent transition-colors"
+        >
+          Home
         </Link>
 
-        <div className="pt-2 space-y-2">
+        <div className="pt-2 space-y-0.5">
           {filtered.map((item, i) => (
             <TreeNode key={i} node={item} depth={0} pathname={pathname} />
           ))}
@@ -82,33 +87,36 @@ function TreeNode({
   const [open, setOpen] = useState(isActive || isDescendantActive)
   const hasChildren = node.children.length > 0
 
-  // 🔧 STYLE TUNING
   const indent = depth === 0 ? 'ml-0' : 'ml-3'
-  const textSize = depth === 0 ? 'text-base font-semibold' : 'text-sm'
+  const textSize = depth === 0 ? 'text-sm font-semibold' : 'text-sm'
 
   const baseColor = isActive
-    ? 'text-blue-600 font-semibold'
-    : 'text-(--text-secondary)'
+    ? 'text-accent font-semibold'
+    : 'text-sidebar-foreground'
 
   return (
     <div className={indent}>
-      <div className="flex items-center gap-2 py-0.5">
+      <div
+        className={`flex items-center gap-1.5 rounded-md py-1 pr-2 ${
+          isActive ? 'bg-accent-soft' : 'hover:bg-accent-soft/60'
+        } transition-colors`}
+      >
         {hasChildren ? (
           <button
             onClick={() => setOpen(!open)}
-            className="w-4 text-xs opacity-60 hover:opacity-100"
+            className="w-4 shrink-0 text-[10px] text-muted-foreground hover:text-foreground"
             type="button"
           >
             {open ? '▾' : '▸'}
           </button>
         ) : (
-          <span className="w-4" />
+          <span className="w-4 shrink-0" />
         )}
 
         {node.path ? (
           <Link
             href={node.path}
-            className={`${textSize} ${baseColor} hover:underline`}
+            className={`${textSize} ${baseColor} hover:text-accent transition-colors`}
           >
             {node.displayName ?? node.name}
           </Link>
@@ -120,13 +128,13 @@ function TreeNode({
       </div>
 
       {open && hasChildren && (
-        <div className="space-y-0.5">
+        <div className="mt-0.5 space-y-0.5">
           {node.path && (
             <Link
               href={node.path}
-              className={`ml-6 block text-xs ${
-                isActive ? 'text-blue-600 font-semibold' : 'text-blue-600'
-              } hover:underline`}
+              className={`ml-6 block rounded-md px-2 py-1 text-xs hover:bg-accent-soft/60 ${
+                isActive ? 'text-accent font-semibold' : 'text-accent'
+              }`}
             >
               Overview
             </Link>

@@ -7,8 +7,8 @@ export default function VisualizerLegend({ algorithm }: { algorithm: string }) {
   if (!legend) return null
 
   return (
-    <div className="mb-4 rounded border bg-gray-50 px-4 py-3">
-      <div className="mb-2 text-sm font-medium text-gray-700">Legend</div>
+    <div className="mb-4 rounded-xl border border-border bg-muted px-4 py-3">
+      <div className="mb-2 text-sm font-medium text-foreground">Legend</div>
 
       <div className="flex flex-wrap gap-4 text-sm">
         {legend.map((item) => {
@@ -43,8 +43,10 @@ export default function VisualizerLegend({ algorithm }: { algorithm: string }) {
                 />
               )}
 
-              <span className="font-medium">{item.label}</span>
-              <span className="text-gray-500">– {item.description}</span>
+              <span className="font-medium text-foreground">{item.label}</span>
+              <span className="text-muted-foreground">
+                – {item.description}
+              </span>
             </div>
           )
         })}

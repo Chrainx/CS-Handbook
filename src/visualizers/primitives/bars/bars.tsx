@@ -23,7 +23,7 @@ export default function Bars({
   const globalMaxHeight = Math.max(...barHeights)
 
   return (
-    <div className="border rounded p-4">
+    <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
       <div className="relative">
         {/* ================= SPLIT SEPARATORS ================= */}
         {splitStack.map((range, depth) => {
@@ -31,22 +31,23 @@ export default function Bars({
 
           const left =
             range.mid * (BAR_WIDTH + 12) + BAR_WIDTH + 12 / 2 - SEP_WIDTH / 2
+          const isActive =
+            activeRange &&
+            range.l === activeRange.l &&
+            range.r === activeRange.r
 
           return (
             <div
               key={depth}
-              className="absolute"
+              className={`absolute rounded-full ${
+                isActive ? 'bg-accent' : 'bg-border-strong'
+              }`}
               style={{
                 left,
                 bottom: 0,
                 height: globalMaxHeight,
                 width: SEP_WIDTH,
-                backgroundColor:
-                  activeRange &&
-                  range.l === activeRange.l &&
-                  range.r === activeRange.r
-                    ? 'rgba(0,0,0,0.9)'
-                    : `rgba(0,0,0,${0.25 + depth * 0.15})`,
+                opacity: isActive ? 0.9 : 0.4 + depth * 0.1,
               }}
             />
           )
@@ -69,19 +70,24 @@ export default function Bars({
                 {/* ===== TOP MARKER (write, etc.) ===== */}
                 <div className="h-10 flex items-center justify-center">
                   {topMarker && (
-                    <span className="text-xs font-bold">{topMarker.label}</span>
+                    <span className="rounded bg-accent-soft px-1.5 py-0.5 text-xs font-bold text-accent">
+                      {topMarker.label}
+                    </span>
                   )}
                 </div>
 
                 {/* ===== BAR ===== */}
                 <div
-                  className={`w-full rounded-sm transition-all duration-200 ${barColor}`}
+                  className={`relative w-full overflow-hidden rounded-t-md shadow-sm transition-all duration-300 ease-out ${barColor}`}
                   style={{ height: barHeight }}
-                />
+                >
+                  {/* glossy depth overlay, works over any bar color */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/0 to-black/10" />
+                </div>
 
                 {/* ===== VALUE ===== */}
                 <span
-                  className="absolute w-full text-center text-xs font-medium text-white"
+                  className="absolute w-full text-center text-xs font-semibold text-white drop-shadow-sm"
                   style={{ bottom: Math.max(barHeight - 14, LABEL_PADDING) }}
                 >
                   {v}
@@ -90,6 +96,9 @@ export default function Bars({
             )
           })}
         </div>
+
+        {/* baseline */}
+        <div className="mt-1 h-px w-full bg-border" />
       </div>
     </div>
   )

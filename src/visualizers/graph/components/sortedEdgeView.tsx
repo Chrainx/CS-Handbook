@@ -16,8 +16,10 @@ export default function SortedEdgesView({
   activeIndex,
 }: SortedEdgesViewProps) {
   return (
-    <div className="mb-4 rounded border bg-gray-50 px-4 py-3">
-      <div className="mb-2 text-sm font-semibold">Sorted Edges (by weight)</div>
+    <div className="mb-4 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
+      <div className="mb-2 text-sm font-semibold text-foreground">
+        Sorted Edges (by weight)
+      </div>
 
       <div className="space-y-1 text-sm font-mono">
         {edges.map((e, i) => {
@@ -28,8 +30,12 @@ export default function SortedEdgesView({
             <div
               key={`${e.from}-${e.to}-${i}`}
               className={`
-                flex justify-between rounded px-2 py-1
-                ${isActive ? 'bg-purple-200 font-semibold' : ''}
+                flex justify-between rounded-md px-2 py-1 text-foreground transition-colors
+                ${
+                  isActive
+                    ? 'bg-accent-soft font-semibold text-accent border-l-2 border-accent'
+                    : 'bg-muted'
+                }
                 ${isPast ? 'opacity-50' : ''}
               `}
             >

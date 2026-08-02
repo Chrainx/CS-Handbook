@@ -5,13 +5,15 @@ export default function HomePage() {
     <div className="space-y-12">
       {/* Hero section */}
       <section className="text-center py-16">
-        <h1 className="text-5xl font-bold mb-4">CS Handbook</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-5xl font-bold mb-4 tracking-tight text-foreground">
+          CS Handbook
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           An interactive computer science handbook covering core concepts across
           algorithms, data structures, systems, and more, with clear
           explanations and step-by-step visualizations.
         </p>
-        <p className="mt-3 text-sm text-gray-500">
+        <p className="mt-3 text-sm text-muted-foreground">
           Built and expanded incrementally as a personal learning and reference
           project.
         </p>
@@ -19,7 +21,9 @@ export default function HomePage() {
 
       {/* Category grid */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">Categories</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-foreground">
+          Categories
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Active categories */}
@@ -73,10 +77,10 @@ function CategoryCard({
   return (
     <Link
       href={href}
-      className="block p-6 border border-(--border-soft) rounded-xl hover:shadow-md transition bg-(--bg)"
+      className="block p-6 rounded-xl border border-border bg-card shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md"
     >
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="text-xl font-semibold mb-2 text-foreground">{title}</h3>
+      <p className="text-muted-foreground">{description}</p>
     </Link>
   )
 }
@@ -89,14 +93,14 @@ function ComingSoonCard({
   description: string
 }) {
   return (
-    <div className="p-6 border border-dashed border-(--border-soft) rounded-xl bg-(--bg) opacity-70 cursor-not-allowed">
-      <h3 className="text-xl font-semibold mb-2">
+    <div className="p-6 rounded-xl border border-dashed border-border bg-muted opacity-70 cursor-not-allowed">
+      <h3 className="text-xl font-semibold mb-2 text-foreground">
         {title}{' '}
-        <span className="ml-2 text-xs text-gray-400 align-middle">
+        <span className="ml-2 text-xs text-muted-foreground align-middle">
           (Coming soon)
         </span>
       </h3>
-      <p className="text-gray-600">{description}</p>
+      <p className="text-muted-foreground">{description}</p>
     </div>
   )
 }

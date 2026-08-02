@@ -27,12 +27,12 @@ export default function TargetModal({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <h2 className="mb-4 text-lg font-semibold text-center">
+      <h2 className="mb-4 text-lg font-semibold text-center text-foreground">
         Change Target Value
       </h2>
 
       <div className="mb-6 flex flex-col items-center gap-2">
-        <label className="text-sm text-gray-600 text-center">
+        <label className="text-sm text-muted-foreground text-center">
           Enter the value to search for
         </label>
 
@@ -40,7 +40,7 @@ export default function TargetModal({
           type="number"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className="w-32 rounded border px-3 py-2 text-center"
+          className="w-32 rounded-lg border border-border bg-background px-3 py-2 text-center text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft transition"
           autoFocus
         />
       </div>
@@ -48,14 +48,14 @@ export default function TargetModal({
       <div className="flex justify-end gap-2">
         <button
           onClick={onClose}
-          className="rounded border px-4 py-2 text-sm hover:bg-gray-100"
+          className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
         >
           Cancel
         </button>
 
         <button
           onClick={handleApply}
-          className="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+          className="rounded-lg bg-accent px-4 py-2 text-sm text-accent-foreground hover:opacity-90 transition-colors"
         >
           Apply
         </button>

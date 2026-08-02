@@ -1,39 +1,110 @@
 @import 'tailwindcss';
 
 :root {
-  --bg: #f8f9fb; /* softer white */
-  --bg-sidebar: #f2f3f5; /* soft gray */
-  --text-main: #2d2d2d; /* soft dark */
-  --text-secondary: #4a4a4a;
-  --border-soft: #e2e5e8;
-  --code-bg: #eef0f3;
+  --background: #ffffff;
+  --foreground: #18181b;
+
+  --card: #ffffff;
+  --card-foreground: #18181b;
+
+  --sidebar: #fafafa;
+  --sidebar-foreground: #3f3f46;
+
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+
+  --accent: #4f46e5;
+  --accent-foreground: #ffffff;
+  --accent-soft: #eef2ff;
+
+  --code-bg: #f4f4f5;
+
+  --radius: 0.75rem;
+  --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.04);
+  --shadow-md: 0 4px 12px rgba(24, 24, 27, 0.06);
+
+  /* legacy aliases used throughout content pages */
+  --bg: var(--background);
+  --bg-sidebar: var(--sidebar);
+  --text-main: var(--foreground);
+  --text-secondary: var(--muted-foreground);
+  --border-soft: var(--border);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0b;
+    --foreground: #f4f4f5;
+
+    --card: #18181b;
+    --card-foreground: #f4f4f5;
+
+    --sidebar: #111113;
+    --sidebar-foreground: #d4d4d8;
+
+    --border: #27272a;
+    --border-strong: #3f3f46;
+
+    --muted: #1f1f23;
+    --muted-foreground: #a1a1aa;
+
+    --accent: #818cf8;
+    --accent-foreground: #0a0a0b;
+    --accent-soft: rgba(129, 140, 248, 0.14);
+
+    --code-bg: #1f1f23;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-code-bg: var(--code-bg);
+
+  --radius-DEFAULT: var(--radius);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-/* ⭐ REQUIRED FOR SCROLL FIX */
 html,
 body {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* stop whole-page scrolling */
+  overflow: hidden; /* stop whole-page scrolling; each panel scrolls internally */
 }
 
 body {
-  background: var(--bg);
-  color: var(--text-main);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent);
 }

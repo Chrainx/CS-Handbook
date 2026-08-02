@@ -24,24 +24,26 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="h-screen w-screen overflow-hidden flex flex-col">
+      <body className="h-screen w-screen overflow-hidden flex flex-col bg-background text-foreground antialiased">
         {/* Global header */}
         <GlobalHeader />
 
         {/* Main row */}
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar */}
-          <aside className="w-64 h-full shrink-0 border-r border-border">
+          <div className="w-64 h-full shrink-0">
             <Sidebar nav={nav} />
-          </aside>
+          </div>
 
           {/* Main content */}
-          <main className="flex-1 h-full overflow-y-auto flex flex-col p-8">
+          <main className="flex-1 h-full overflow-y-auto flex flex-col">
             <Suspense fallback={null}>
               <Banner />
             </Suspense>
 
-            <div className="flex-1">{children}</div>
+            <div className="flex-1 px-8 py-8 max-w-4xl w-full mx-auto">
+              {children}
+            </div>
 
             <Footer />
           </main>
