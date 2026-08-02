@@ -104,6 +104,7 @@ function TreeNode({
         {hasChildren ? (
           <button
             onClick={() => setOpen(!open)}
+            aria-expanded={open}
             className="w-4 shrink-0 text-[10px] text-muted-foreground hover:text-foreground"
             type="button"
           >
@@ -116,6 +117,7 @@ function TreeNode({
         {node.path ? (
           <Link
             href={node.path}
+            aria-current={isActive ? 'page' : undefined}
             className={`${textSize} ${baseColor} hover:text-accent transition-colors`}
           >
             {node.displayName ?? node.name}
@@ -132,6 +134,7 @@ function TreeNode({
           {node.path && (
             <Link
               href={node.path}
+              aria-current={isActive ? 'page' : undefined}
               className={`ml-6 block rounded-md px-2 py-1 text-xs hover:bg-accent-soft/60 ${
                 isActive ? 'text-accent font-semibold' : 'text-accent'
               }`}
