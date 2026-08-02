@@ -40,4 +40,9 @@ export const initialSortingVisualState = (
   boundaryIndex: null,
 })
 
-export type SortingAlgorithmId = 'insertion' | 'selection' | 'merge' | 'quick'
+export type SortingAlgorithmId =
+  | 'insertion'
+  | 'selection'
+  | 'merge'
+  | 'quick'
+  | 'heap'

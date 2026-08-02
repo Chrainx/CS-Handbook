@@ -15,7 +15,7 @@ export const sections: Record<string, SectionConfig> = {
         'selection-sort',
         'merge-sort',
         'quick-sort',
-        //'heap-sort',
+        'heap-sort',
         'visualizer',
       ],
       searching: ['binary-search'],
@@ -37,9 +37,6 @@ export const sections: Record<string, SectionConfig> = {
         'edit-distance',
       ],
       greedy: ['interval-scheduling', 'fractional-knapsack', 'huffman-coding'],
-    },
-    hiddenSubOrder: {
-      sorting: ['heap-sort'],
     },
   },
 
