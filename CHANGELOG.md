@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/Chrainx/CS-Handbook/compare/v1.5.3...v1.5.4) (2026-08-02)
+
+
+### Bug Fixes
+
+* add Escape key, focus trap, and dialog semantics to Modal ([#32](https://github.com/Chrainx/CS-Handbook/issues/32)) ([7b2718d](https://github.com/Chrainx/CS-Handbook/commit/7b2718dd2f3cb0526bc98df3ec934a2913493d9e)), closes [#17](https://github.com/Chrainx/CS-Handbook/issues/17)
+
 ## [1.5.3](https://github.com/Chrainx/CS-Handbook/compare/v1.5.2...v1.5.3) (2026-08-02)
 
 
