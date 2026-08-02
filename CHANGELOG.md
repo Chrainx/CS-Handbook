@@ -1,3 +1,10 @@
+## [1.5.7](https://github.com/Chrainx/CS-Handbook/compare/v1.5.6...v1.5.7) (2026-08-02)
+
+
+### Bug Fixes
+
+* guard against empty target input silently applying as 0 ([#36](https://github.com/Chrainx/CS-Handbook/issues/36)) ([5594eeb](https://github.com/Chrainx/CS-Handbook/commit/5594eebd38c5ed52b0825df46ec5dbfae1d1a017)), closes [#22](https://github.com/Chrainx/CS-Handbook/issues/22)
+
 ## [1.5.6](https://github.com/Chrainx/CS-Handbook/compare/v1.5.5...v1.5.6) (2026-08-02)
 
 
