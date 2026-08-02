@@ -80,6 +80,13 @@ export function primSteps(graph: GraphData, start: string): GraphStep[] {
           newDist: w,
         })
 
+        steps.push({
+          type: 'set-distance',
+          node: v,
+          distance: w,
+          from: u,
+        })
+
         pq.push({ node: v, priority: w })
         steps.push({
           type: 'pq-push',
