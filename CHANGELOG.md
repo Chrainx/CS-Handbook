@@ -1,3 +1,10 @@
+## [1.5.10](https://github.com/Chrainx/CS-Handbook/compare/v1.5.9...v1.5.10) (2026-08-02)
+
+
+### Bug Fixes
+
+* move useStepPlayer's out-of-range guard into an effect ([#38](https://github.com/Chrainx/CS-Handbook/issues/38)) ([f81a63f](https://github.com/Chrainx/CS-Handbook/commit/f81a63f7a0a4f52d9f0ce16637d88b9273b18ede)), closes [#20](https://github.com/Chrainx/CS-Handbook/issues/20)
+
 ## [1.5.9](https://github.com/Chrainx/CS-Handbook/compare/v1.5.8...v1.5.9) (2026-08-02)
 
 
