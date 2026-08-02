@@ -22,9 +22,12 @@ export default function TargetModal({
     if (open) setValue(String(initialValue))
   }, [open, initialValue])
 
+  const trimmed = value.trim()
+  const parsed = Number(trimmed)
+  const isValid = trimmed !== '' && !Number.isNaN(parsed)
+
   function handleApply() {
-    const parsed = Number(value)
-    if (Number.isNaN(parsed)) return
+    if (!isValid) return
     onApply(parsed)
   }
 
@@ -58,7 +61,8 @@ export default function TargetModal({
 
         <button
           onClick={handleApply}
-          className="rounded-lg bg-accent px-4 py-2 text-sm text-accent-foreground hover:opacity-90 transition-colors"
+          disabled={!isValid}
+          className="rounded-lg bg-accent px-4 py-2 text-sm text-accent-foreground transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Apply
         </button>
