@@ -1,3 +1,10 @@
+## [1.5.8](https://github.com/Chrainx/CS-Handbook/compare/v1.5.7...v1.5.8) (2026-08-02)
+
+
+### Bug Fixes
+
+* auto-expand sidebar categories while searching ([#39](https://github.com/Chrainx/CS-Handbook/issues/39)) ([c76e91e](https://github.com/Chrainx/CS-Handbook/commit/c76e91e69f3fb1d9e25ceef332f1c6230f64a882)), closes [#15](https://github.com/Chrainx/CS-Handbook/issues/15)
+
 ## [1.5.7](https://github.com/Chrainx/CS-Handbook/compare/v1.5.6...v1.5.7) (2026-08-02)
 
 
