@@ -1,3 +1,10 @@
+## [1.5.11](https://github.com/Chrainx/CS-Handbook/compare/v1.5.10...v1.5.11) (2026-08-02)
+
+
+### Bug Fixes
+
+* cap user-entered array size to prevent huge step counts ([#37](https://github.com/Chrainx/CS-Handbook/issues/37)) ([a9660cb](https://github.com/Chrainx/CS-Handbook/commit/a9660cb9fff90b032c7ab04c837e1d6a77cc782a)), closes [#23](https://github.com/Chrainx/CS-Handbook/issues/23)
+
 ## [1.5.10](https://github.com/Chrainx/CS-Handbook/compare/v1.5.9...v1.5.10) (2026-08-02)
 
 
