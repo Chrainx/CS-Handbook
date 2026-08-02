@@ -54,6 +54,8 @@ export const SORTING_ALGORITHMS: {
   },
 ]
 
+const MAX_ARRAY_SIZE = 50
+
 const STEP_GENERATORS: Record<string, (arr: number[]) => SortingStep[]> = {
   insertion: insertionSortSteps,
   selection: selectionSortSteps,
@@ -110,6 +112,11 @@ export default function SortingVisualizer() {
 
     if (parsed.length === 0 || parsed.some(Number.isNaN)) {
       setInputError('Please enter valid numbers separated by commas.')
+      return
+    }
+
+    if (parsed.length > MAX_ARRAY_SIZE) {
+      setInputError(`Please enter at most ${MAX_ARRAY_SIZE} numbers.`)
       return
     }
 

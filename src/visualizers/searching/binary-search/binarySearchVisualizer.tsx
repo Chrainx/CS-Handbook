@@ -16,6 +16,8 @@ import { binarySearchReducer } from './state/reducer'
 import { binarySearchStateToArray } from './adapter/binarySearchToArray'
 import { useStepPlayer } from '@/visualizers/shared/useStepPlayer'
 
+const MAX_ARRAY_SIZE = 50
+
 export default function BinarySearchVisualizer() {
   /* ============================================================================
    * Base data
@@ -75,6 +77,11 @@ export default function BinarySearchVisualizer() {
 
     if (parsed.length === 0 || parsed.some(Number.isNaN)) {
       setInputError('Please enter valid numbers separated by commas.')
+      return
+    }
+
+    if (parsed.length > MAX_ARRAY_SIZE) {
+      setInputError(`Please enter at most ${MAX_ARRAY_SIZE} numbers.`)
       return
     }
 
