@@ -1,3 +1,10 @@
+## [1.5.6](https://github.com/Chrainx/CS-Handbook/compare/v1.5.5...v1.5.6) (2026-08-02)
+
+
+### Bug Fixes
+
+* replace blocking alert() with inline validation for array input ([#35](https://github.com/Chrainx/CS-Handbook/issues/35)) ([5ee5fc2](https://github.com/Chrainx/CS-Handbook/commit/5ee5fc2b74fc70a2f365610f4151f9c2ead1e102)), closes [#21](https://github.com/Chrainx/CS-Handbook/issues/21)
+
 ## [1.5.5](https://github.com/Chrainx/CS-Handbook/compare/v1.5.4...v1.5.5) (2026-08-02)
 
 
