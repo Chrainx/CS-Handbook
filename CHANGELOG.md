@@ -1,3 +1,10 @@
+## [1.5.9](https://github.com/Chrainx/CS-Handbook/compare/v1.5.8...v1.5.9) (2026-08-02)
+
+
+### Bug Fixes
+
+* use a real not-found.tsx instead of a client-redirecting catch-all ([#40](https://github.com/Chrainx/CS-Handbook/issues/40)) ([b56f23a](https://github.com/Chrainx/CS-Handbook/commit/b56f23a3ff7343bbbf7273c92a07ed823d71b044)), closes [#31](https://github.com/Chrainx/CS-Handbook/issues/31)
+
 ## [1.5.8](https://github.com/Chrainx/CS-Handbook/compare/v1.5.7...v1.5.8) (2026-08-02)
 
 
