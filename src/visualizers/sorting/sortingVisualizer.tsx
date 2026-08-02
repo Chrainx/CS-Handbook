@@ -71,6 +71,7 @@ export default function SortingVisualizer() {
   const [open, setOpen] = useState(true)
 
   const [input, setInput] = useState('')
+  const [inputError, setInputError] = useState<string | null>(null)
 
   const [baseArray, setBaseArray] = useState<number[]>(() =>
     generateRandomArray({ size: 5, unique: true })
@@ -110,15 +111,16 @@ export default function SortingVisualizer() {
       .map(Number)
 
     if (parsed.length === 0 || parsed.some(Number.isNaN)) {
-      alert('Please enter valid numbers separated by commas.')
+      setInputError('Please enter valid numbers separated by commas.')
       return
     }
 
     if (parsed.length > MAX_ARRAY_SIZE) {
-      alert(`Please enter at most ${MAX_ARRAY_SIZE} numbers.`)
+      setInputError(`Please enter at most ${MAX_ARRAY_SIZE} numbers.`)
       return
     }
 
+    setInputError(null)
     setBaseArray(parsed)
 
     // Reset reducer state
@@ -207,19 +209,33 @@ export default function SortingVisualizer() {
           </div>
 
           {/* Data input */}
-          <div className="mb-4 flex gap-2">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="w-64 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft transition"
-              placeholder="e.g. 5,3,8,1"
-            />
-            <button
-              onClick={loadInput}
-              className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
-            >
-              Load Data
-            </button>
+          <div className="mb-4">
+            <div className="flex gap-2">
+              <input
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value)
+                  setInputError(null)
+                }}
+                aria-invalid={inputError ? true : undefined}
+                className={`w-64 rounded-lg border bg-background px-3 py-2 text-sm text-foreground outline-none transition focus:ring-2 focus:ring-accent-soft ${
+                  inputError
+                    ? 'border-red-500 focus:border-red-500'
+                    : 'border-border focus:border-accent'
+                }`}
+                placeholder="e.g. 5,3,8,1"
+              />
+              <button
+                onClick={loadInput}
+                className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+              >
+                Load Data
+              </button>
+            </div>
+
+            {inputError && (
+              <p className="mt-1.5 text-xs text-red-500">{inputError}</p>
+            )}
           </div>
 
           {leftBuffer && rightBuffer && (

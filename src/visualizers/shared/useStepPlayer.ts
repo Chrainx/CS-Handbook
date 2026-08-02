@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function useStepPlayer<TStep, TAction, TContext = undefined>({
   steps,
@@ -16,10 +16,15 @@ export function useStepPlayer<TStep, TAction, TContext = undefined>({
   const [index, setIndex] = useState(0)
   const [text, setText] = useState('')
 
-  if (index > steps.length) {
-    setIndex(0)
-    dispatch(resetAction)
-  }
+  // steps can shrink out from under a stale index (e.g. switching
+  // algorithms) - resync in an effect rather than during render.
+  useEffect(() => {
+    if (index > steps.length) {
+      setIndex(0)
+      dispatch(resetAction)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [steps, index])
 
   function replay(upto: number) {
     dispatch(resetAction)

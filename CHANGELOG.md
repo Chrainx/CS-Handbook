@@ -1,3 +1,53 @@
+## [1.5.10](https://github.com/Chrainx/CS-Handbook/compare/v1.5.9...v1.5.10) (2026-08-02)
+
+
+### Bug Fixes
+
+* move useStepPlayer's out-of-range guard into an effect ([#38](https://github.com/Chrainx/CS-Handbook/issues/38)) ([f81a63f](https://github.com/Chrainx/CS-Handbook/commit/f81a63f7a0a4f52d9f0ce16637d88b9273b18ede)), closes [#20](https://github.com/Chrainx/CS-Handbook/issues/20)
+
+## [1.5.9](https://github.com/Chrainx/CS-Handbook/compare/v1.5.8...v1.5.9) (2026-08-02)
+
+
+### Bug Fixes
+
+* use a real not-found.tsx instead of a client-redirecting catch-all ([#40](https://github.com/Chrainx/CS-Handbook/issues/40)) ([b56f23a](https://github.com/Chrainx/CS-Handbook/commit/b56f23a3ff7343bbbf7273c92a07ed823d71b044)), closes [#31](https://github.com/Chrainx/CS-Handbook/issues/31)
+
+## [1.5.8](https://github.com/Chrainx/CS-Handbook/compare/v1.5.7...v1.5.8) (2026-08-02)
+
+
+### Bug Fixes
+
+* auto-expand sidebar categories while searching ([#39](https://github.com/Chrainx/CS-Handbook/issues/39)) ([c76e91e](https://github.com/Chrainx/CS-Handbook/commit/c76e91e69f3fb1d9e25ceef332f1c6230f64a882)), closes [#15](https://github.com/Chrainx/CS-Handbook/issues/15)
+
+## [1.5.7](https://github.com/Chrainx/CS-Handbook/compare/v1.5.6...v1.5.7) (2026-08-02)
+
+
+### Bug Fixes
+
+* guard against empty target input silently applying as 0 ([#36](https://github.com/Chrainx/CS-Handbook/issues/36)) ([5594eeb](https://github.com/Chrainx/CS-Handbook/commit/5594eebd38c5ed52b0825df46ec5dbfae1d1a017)), closes [#22](https://github.com/Chrainx/CS-Handbook/issues/22)
+
+## [1.5.6](https://github.com/Chrainx/CS-Handbook/compare/v1.5.5...v1.5.6) (2026-08-02)
+
+
+### Bug Fixes
+
+* replace blocking alert() with inline validation for array input ([#35](https://github.com/Chrainx/CS-Handbook/issues/35)) ([5ee5fc2](https://github.com/Chrainx/CS-Handbook/commit/5ee5fc2b74fc70a2f365610f4151f9c2ead1e102)), closes [#21](https://github.com/Chrainx/CS-Handbook/issues/21)
+
+## [1.5.5](https://github.com/Chrainx/CS-Handbook/compare/v1.5.4...v1.5.5) (2026-08-02)
+
+
+### Bug Fixes
+
+* add aria-expanded/aria-current to sidebar tree ([#33](https://github.com/Chrainx/CS-Handbook/issues/33)) ([8e19c4c](https://github.com/Chrainx/CS-Handbook/commit/8e19c4cf7564b62060f615a3a4855b435a1bfa38)), closes [#18](https://github.com/Chrainx/CS-Handbook/issues/18)
+* allow horizontal scroll for long bar arrays instead of clipping ([#34](https://github.com/Chrainx/CS-Handbook/issues/34)) ([56fd8a3](https://github.com/Chrainx/CS-Handbook/commit/56fd8a3b96c5bfa9739e1e5b6393c071e5068d8e)), closes [#19](https://github.com/Chrainx/CS-Handbook/issues/19)
+
+## [1.5.4](https://github.com/Chrainx/CS-Handbook/compare/v1.5.3...v1.5.4) (2026-08-02)
+
+
+### Bug Fixes
+
+* add Escape key, focus trap, and dialog semantics to Modal ([#32](https://github.com/Chrainx/CS-Handbook/issues/32)) ([7b2718d](https://github.com/Chrainx/CS-Handbook/commit/7b2718dd2f3cb0526bc98df3ec934a2913493d9e)), closes [#17](https://github.com/Chrainx/CS-Handbook/issues/17)
+
 ## [1.5.3](https://github.com/Chrainx/CS-Handbook/compare/v1.5.2...v1.5.3) (2026-08-02)
 
 

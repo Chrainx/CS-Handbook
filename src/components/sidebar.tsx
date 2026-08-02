@@ -37,6 +37,7 @@ export default function Sidebar({ nav }: { nav: NavItem[] }) {
   const [query, setQuery] = useState('')
   const filtered = useMemo(() => filterTree(nav, query), [nav, query])
   const pathname = usePathname()
+  const isSearching = query.trim().length > 0
 
   return (
     <aside className="h-full overflow-y-auto bg-sidebar border-r border-border px-4 py-6">
@@ -63,7 +64,13 @@ export default function Sidebar({ nav }: { nav: NavItem[] }) {
 
         <div className="pt-2 space-y-0.5">
           {filtered.map((item, i) => (
-            <TreeNode key={i} node={item} depth={0} pathname={pathname} />
+            <TreeNode
+              key={i}
+              node={item}
+              depth={0}
+              pathname={pathname}
+              forceOpen={isSearching}
+            />
           ))}
         </div>
       </nav>
@@ -75,10 +82,12 @@ function TreeNode({
   node,
   depth,
   pathname,
+  forceOpen = false,
 }: {
   node: NavItem
   depth: number
   pathname: string
+  forceOpen?: boolean
 }) {
   const isActive = node.path === pathname
   const isDescendantActive = node.children.some((child) =>
@@ -86,6 +95,7 @@ function TreeNode({
   )
   const [open, setOpen] = useState(isActive || isDescendantActive)
   const hasChildren = node.children.length > 0
+  const effectiveOpen = open || (forceOpen && hasChildren)
 
   const indent = depth === 0 ? 'ml-0' : 'ml-3'
   const textSize = depth === 0 ? 'text-sm font-semibold' : 'text-sm'
@@ -104,10 +114,11 @@ function TreeNode({
         {hasChildren ? (
           <button
             onClick={() => setOpen(!open)}
+            aria-expanded={open}
             className="w-4 shrink-0 text-[10px] text-muted-foreground hover:text-foreground"
             type="button"
           >
-            {open ? '▾' : '▸'}
+            {effectiveOpen ? '▾' : '▸'}
           </button>
         ) : (
           <span className="w-4 shrink-0" />
@@ -116,6 +127,7 @@ function TreeNode({
         {node.path ? (
           <Link
             href={node.path}
+            aria-current={isActive ? 'page' : undefined}
             className={`${textSize} ${baseColor} hover:text-accent transition-colors`}
           >
             {node.displayName ?? node.name}
@@ -127,11 +139,12 @@ function TreeNode({
         )}
       </div>
 
-      {open && hasChildren && (
+      {effectiveOpen && hasChildren && (
         <div className="mt-0.5 space-y-0.5">
           {node.path && (
             <Link
               href={node.path}
+              aria-current={isActive ? 'page' : undefined}
               className={`ml-6 block rounded-md px-2 py-1 text-xs hover:bg-accent-soft/60 ${
                 isActive ? 'text-accent font-semibold' : 'text-accent'
               }`}
@@ -146,6 +159,7 @@ function TreeNode({
               node={child}
               depth={depth + 1}
               pathname={pathname}
+              forceOpen={forceOpen}
             />
           ))}
         </div>

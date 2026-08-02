@@ -23,7 +23,7 @@ export default function Bars({
   const globalMaxHeight = Math.max(...barHeights)
 
   return (
-    <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+    <div className="overflow-x-auto rounded-xl border border-border bg-card p-6 shadow-sm">
       <div className="relative">
         {/* ================= SPLIT SEPARATORS ================= */}
         {splitStack.map((range, depth) => {
@@ -64,7 +64,7 @@ export default function Bars({
             return (
               <div
                 key={i}
-                className="relative flex flex-col items-center"
+                className="relative flex shrink-0 flex-col items-center"
                 style={{ width: BAR_WIDTH }}
               >
                 {/* ===== TOP MARKER (write, etc.) ===== */}
