@@ -16,7 +16,7 @@ export function sortingStateToBars(state: SortingVisualState): BarVisualProps {
     colorByIndex: (i) => {
       // ✅ swap always top priority
       if (state.swap && (i === state.swap.i || i === state.swap.j))
-        return 'bg-green-500'
+        return 'bg-state-swap'
 
       // ✅ last written (green) during merge
       if (
@@ -24,19 +24,19 @@ export function sortingStateToBars(state: SortingVisualState): BarVisualProps {
         lastWrittenIndex >= 0 &&
         i === lastWrittenIndex
       )
-        return 'bg-green-500'
+        return 'bg-state-swap'
 
       // ✅ base case
-      if (state.baseIndex === i) return 'bg-gray-400'
+      if (state.baseIndex === i) return 'bg-state-base'
 
       // ✅ write position (purple) during merge
-      if (state.writeIndex === i) return 'bg-purple-500'
+      if (state.writeIndex === i) return 'bg-state-pivot'
 
       // ✅ mark (selection min etc)
-      if (state.markedIndex === i) return 'bg-yellow-500'
+      if (state.markedIndex === i) return 'bg-state-mark'
 
       // ✅ pivot (quick)
-      if (state.pivotIndex === i) return 'bg-purple-500'
+      if (state.pivotIndex === i) return 'bg-state-pivot'
 
       // ✅ compare (ONLY when not merging)
       if (
@@ -44,7 +44,7 @@ export function sortingStateToBars(state: SortingVisualState): BarVisualProps {
         state.compare &&
         (i === state.compare.i || i === state.compare.j)
       )
-        return 'bg-red-500'
+        return 'bg-state-compare'
 
       // ✅ boundary committed (quick)
       if (
@@ -53,7 +53,7 @@ export function sortingStateToBars(state: SortingVisualState): BarVisualProps {
         i >= state.activeRange.l &&
         i < state.boundaryIndex
       )
-        return 'bg-orange-500'
+        return 'bg-state-boundary'
 
       // ✅ active range
       if (
@@ -61,9 +61,9 @@ export function sortingStateToBars(state: SortingVisualState): BarVisualProps {
         i >= state.activeRange.l &&
         i <= state.activeRange.r
       )
-        return 'bg-cyan-500'
+        return 'bg-state-active'
 
-      return 'bg-blue-500'
+      return 'bg-state-default'
     },
 
     // if your BarState supports these (you already had splitStack before):
