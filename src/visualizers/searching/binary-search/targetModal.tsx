@@ -1,7 +1,7 @@
 'use client'
 
 import Modal from '@/components/visualizer-ui/modal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type TargetModalProps = {
   open: boolean
@@ -16,8 +16,11 @@ export default function TargetModal({
   onClose,
   onApply,
 }: TargetModalProps) {
-  // state is initialized ONLY when component mounts
   const [value, setValue] = useState<string>(String(initialValue))
+
+  useEffect(() => {
+    if (open) setValue(String(initialValue))
+  }, [open, initialValue])
 
   function handleApply() {
     const parsed = Number(value)
