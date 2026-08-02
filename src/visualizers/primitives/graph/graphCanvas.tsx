@@ -25,7 +25,7 @@ export default function GraphCanvas({ nodes, edges }: Props) {
   return (
     <svg
       viewBox={`${minX - PADDING} ${minY - PADDING} ${viewWidth} ${viewHeight}`}
-      className="w-full max-h-80 border rounded bg-white"
+      className="w-full max-h-80 rounded-xl border border-border bg-card shadow-sm"
       preserveAspectRatio="xMidYMid meet"
     >
       {/* Edges */}

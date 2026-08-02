@@ -25,7 +25,9 @@ export default function AlgorithmSelectModal({
 }: AlgorithmSelectModalProps) {
   return (
     <Modal open={open} onClose={onClose}>
-      <h2 className="mb-4 text-lg font-semibold">Select Algorithm</h2>
+      <h2 className="mb-4 text-lg font-semibold text-foreground">
+        Select Algorithm
+      </h2>
 
       <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
         {algorithms.map((algo) => {
@@ -36,25 +38,25 @@ export default function AlgorithmSelectModal({
               key={algo.id}
               disabled={isCurrent}
               onClick={() => onSelect(algo.id)}
-              className={`w-full rounded border px-4 py-3 text-left transition
+              className={`w-full rounded-lg border px-4 py-3 text-left transition
                 ${
                   isCurrent
-                    ? 'cursor-not-allowed border-gray-300 bg-gray-100 text-gray-400'
-                    : 'hover:border-blue-500 hover:bg-blue-50'
+                    ? 'cursor-not-allowed border-border bg-muted text-muted-foreground'
+                    : 'border-border hover:border-accent hover:bg-accent-soft'
                 }`}
             >
               <div className="flex items-center justify-between">
-                <div className="font-medium">{algo.name}</div>
+                <div className="font-medium text-foreground">{algo.name}</div>
 
                 {isCurrent && (
-                  <span className="rounded bg-gray-300 px-2 py-0.5 text-xs">
+                  <span className="rounded bg-accent-soft px-2 py-0.5 text-xs text-accent">
                     Current
                   </span>
                 )}
               </div>
 
               {algo.description && (
-                <div className="mt-1 text-xs text-gray-500">
+                <div className="mt-1 text-xs text-muted-foreground">
                   {algo.description}
                 </div>
               )}
@@ -68,7 +70,7 @@ export default function AlgorithmSelectModal({
         <div className="mt-5 flex justify-end">
           <button
             onClick={onClose}
-            className="rounded border px-4 py-2 text-sm hover:bg-gray-100"
+            className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
           >
             Close
           </button>

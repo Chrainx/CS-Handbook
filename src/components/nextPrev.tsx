@@ -189,9 +189,12 @@ function NavBar({
   if (!prev && !next) return null
 
   return (
-    <div className="flex justify-between mt-12 pt-6 border-t border-(--border-soft)">
+    <div className="flex justify-between mt-12 pt-6 border-t border-border">
       {prev ? (
-        <Link className="text-blue-600 hover:underline" href={prev.href}>
+        <Link
+          className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:border-accent hover:text-accent transition-colors"
+          href={prev.href}
+        >
           ← {prev.label}
         </Link>
       ) : (
@@ -199,7 +202,10 @@ function NavBar({
       )}
 
       {next ? (
-        <Link className="text-blue-600 hover:underline" href={next.href}>
+        <Link
+          className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:border-accent hover:text-accent transition-colors"
+          href={next.href}
+        >
           {next.label} →
         </Link>
       ) : (

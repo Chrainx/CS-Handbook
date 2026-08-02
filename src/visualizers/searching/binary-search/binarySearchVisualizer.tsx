@@ -103,40 +103,42 @@ export default function BinarySearchVisualizer() {
         }}
       />
 
-      <div className="mb-6 rounded border bg-gray-50 px-4 py-3">
-        <div className="text-sm text-gray-500">Current Algorithm</div>
-        <div className="text-lg font-semibold">Binary Search</div>
-        <div className="text-sm">
+      <div className="mb-6 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
+        <div className="text-sm text-muted-foreground">Current Algorithm</div>
+        <div className="text-lg font-semibold text-foreground">
+          Binary Search
+        </div>
+        <div className="text-sm text-foreground">
           Step <strong>{player.index}</strong> /{' '}
           <strong>{player.length}</strong>
         </div>
       </div>
 
-      <div className="mb-4 flex items-center gap-2 rounded border bg-gray-50 px-4 py-3">
-        <label className="text-sm text-gray-600">Sorted array</label>
+      <div className="mb-4 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
+        <label className="text-sm text-muted-foreground">Sorted array</label>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-64 rounded border px-4 py-2 text-sm"
+          className="w-64 rounded-lg border border-border bg-background px-4 py-2 text-sm text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft transition"
         />
         <button
           onClick={loadArray}
-          className="rounded border px-4 py-2 text-sm hover:bg-gray-100"
+          className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
         >
           Load Array
         </button>
       </div>
 
-      <div className="mb-4 flex items-center gap-2 rounded border bg-gray-50 px-4 py-3">
-        <div className="text-sm">
+      <div className="mb-4 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
+        <div className="text-sm text-foreground">
           Target:
-          <span className="ml-2 rounded bg-blue-100 px-2 py-0.5 font-semibold text-blue-700">
+          <span className="ml-2 rounded-md bg-accent-soft px-2 py-0.5 font-semibold text-accent">
             {target}
           </span>
         </div>
         <button
           onClick={() => setIsTargetModalOpen(true)}
-          className="rounded border px-4 py-2 text-sm hover:bg-gray-100"
+          className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
         >
           Change Target
         </button>
@@ -147,7 +149,7 @@ export default function BinarySearchVisualizer() {
       <VisualizerLegend algorithm="binary-search" />
 
       {player.text && (
-        <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">
+        <div className="my-3 rounded-xl border border-border bg-accent-soft px-4 py-2 text-sm text-foreground">
           {player.text}
         </div>
       )}

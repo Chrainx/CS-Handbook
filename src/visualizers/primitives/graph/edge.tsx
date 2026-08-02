@@ -41,16 +41,22 @@ export default function Edge({
         y2={toNode.y}
         stroke={style.stroke}
         strokeWidth={style.strokeWidth}
+        strokeLinecap="round"
+        style={{ transition: 'stroke 250ms ease, stroke-width 200ms ease' }}
       />
 
       {/* Optional weight */}
       {edge.weight !== undefined && (
         <text
           x={(fromNode.x + toNode.x) / 2}
-          y={(fromNode.y + toNode.y) / 2 - 5}
+          y={(fromNode.y + toNode.y) / 2 - 6}
           textAnchor="middle"
-          fontSize="12"
+          fontSize="11"
+          fontWeight={600}
           fill="#334155"
+          stroke="white"
+          strokeWidth={3}
+          paintOrder="stroke"
         >
           {edge.weight}
         </text>

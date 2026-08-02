@@ -7,12 +7,14 @@ export default function PriorityQueueView({
   activeNode,
 }: PriorityQueueProps) {
   return (
-    <div className="rounded border bg-gray-50 px-4 py-3 mb-4 ">
-      <div className="mb-2 text-sm font-semibold">Priority Queue</div>
+    <div className="rounded-xl border border-border bg-card px-4 py-3 mb-4 shadow-sm">
+      <div className="mb-2 text-sm font-semibold text-foreground">
+        Priority Queue
+      </div>
 
       <div className="space-y-1">
         {items.length === 0 && (
-          <div className="text-xs text-gray-400 italic">empty</div>
+          <div className="text-xs text-muted-foreground italic">empty</div>
         )}
 
         {items.map((item, i) => {
@@ -22,8 +24,12 @@ export default function PriorityQueueView({
             <div
               key={`${item.node}-${i}`}
               className={`
-                flex justify-between rounded px-2 py-1 text-sm
-                ${isActive ? 'bg-purple-200 font-semibold' : 'bg-white'}
+                flex justify-between rounded-md px-2 py-1 text-sm transition-colors
+                ${
+                  isActive
+                    ? 'bg-accent-soft font-semibold text-accent border-l-2 border-accent'
+                    : 'bg-muted text-foreground'
+                }
                 ${item.stale ? 'opacity-40 line-through' : ''}
               `}
             >

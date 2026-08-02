@@ -226,12 +226,14 @@ export default function GraphVisualizer() {
       {algorithm && (
         <>
           {/* Header */}
-          <div className="mb-6 rounded border bg-gray-50 px-4 py-3">
-            <div className="text-sm text-gray-500">Current Algorithm</div>
-            <div className="text-lg font-semibold">
+          <div className="mb-6 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
+            <div className="text-sm text-muted-foreground">
+              Current Algorithm
+            </div>
+            <div className="text-lg font-semibold text-foreground">
               {GRAPH_ALGORITHMS.find((a) => a.id === algorithm)?.name}
             </div>
-            <div className="text-sm">
+            <div className="text-sm text-foreground">
               Step <strong>{safeIndex}</strong> /{' '}
               <strong>{player.length}</strong>
             </div>
@@ -243,7 +245,7 @@ export default function GraphVisualizer() {
               onClick={() => {
                 setOpen(true)
               }}
-              className="rounded border px-3 py-1 text-sm"
+              className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition-colors"
             >
               Change Algorithm
             </button>
@@ -271,7 +273,7 @@ export default function GraphVisualizer() {
           )}
 
           {currentBfPass !== null && (
-            <div className="mb-2 text-sm font-semibold text-purple-600">
+            <div className="mb-2 text-sm font-semibold text-accent">
               Pass {currentBfPass} of Bellman–Ford
             </div>
           )}
@@ -281,15 +283,15 @@ export default function GraphVisualizer() {
           <VisualizerLegend algorithm={algorithm} />
 
           {player.text && (
-            <div className="my-3 rounded border bg-blue-50 px-4 py-2 text-sm">
+            <div className="my-3 rounded-xl border border-border bg-accent-soft px-4 py-2 text-sm text-foreground">
               {player.text}
             </div>
           )}
 
           {/* OUTPUT PANEL */}
           {output.type === 'order' && (
-            <div className="my-4 rounded border border-green-500 bg-green-50 px-4 py-3 text-sm">
-              <div className="mb-2 font-semibold text-green-700">
+            <div className="my-4 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm">
+              <div className="mb-2 font-semibold text-green-600 dark:text-green-400">
                 Topological Order
               </div>
 
@@ -297,7 +299,7 @@ export default function GraphVisualizer() {
                 {output.nodes.map((n, i) => (
                   <span
                     key={i}
-                    className="rounded bg-green-500 px-2 py-1 font-mono text-white"
+                    className="rounded-md bg-green-500 px-2 py-1 font-mono text-white shadow-sm"
                   >
                     {n}
                   </span>
@@ -307,10 +309,12 @@ export default function GraphVisualizer() {
           )}
 
           {output.type === 'distances' && (
-            <div className="my-4 rounded border border-green-500 bg-green-50 px-4 py-3 text-sm">
-              <div className="mb-2 font-semibold text-green-700">Distances</div>
+            <div className="my-4 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm">
+              <div className="mb-2 font-semibold text-green-600 dark:text-green-400">
+                Distances
+              </div>
 
-              <ul className="font-mono text-green-800">
+              <ul className="font-mono text-green-700 dark:text-green-300">
                 {Object.entries(output.values).map(([node, dist]) => (
                   <li key={node}>
                     {node}: {dist}

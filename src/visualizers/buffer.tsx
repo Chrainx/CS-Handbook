@@ -13,7 +13,7 @@ export default function MergeBuffer({
 }: MergeBufferProps) {
   return (
     <div>
-      <div className="font-medium mb-1">{label}</div>
+      <div className="mb-1 font-medium text-foreground">{label}</div>
       <div className="flex gap-2">
         {values.map((v, i) => {
           const isCompare = activeIndex === i
@@ -22,12 +22,12 @@ export default function MergeBuffer({
           return (
             <div
               key={i}
-              className={`rounded px-2 py-1 ${
+              className={`rounded-md px-2 py-1 font-mono text-sm transition-colors ${
                 isCompare
-                  ? 'bg-red-500 text-white'
+                  ? 'bg-accent text-accent-foreground'
                   : isUsed
-                  ? 'bg-gray-200 text-gray-400 line-through opacity-60'
-                  : 'bg-gray-200'
+                  ? 'bg-muted text-muted-foreground line-through opacity-60'
+                  : 'bg-muted text-foreground'
               }`}
             >
               {v}
