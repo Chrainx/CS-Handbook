@@ -15,6 +15,8 @@ import { binarySearchReducer } from './state/reducer'
 
 import { binarySearchStateToArray } from './adapter/binarySearchToArray'
 import { useStepPlayer } from '@/visualizers/shared/useStepPlayer'
+import { AlgorithmHeaderCard } from '@/visualizers/shared/algorithmHeaderCard'
+import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
 
 const MAX_ARRAY_SIZE = 50
 
@@ -112,16 +114,11 @@ export default function BinarySearchVisualizer() {
         }}
       />
 
-      <div className="mb-6 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
-        <div className="text-sm text-muted-foreground">Current Algorithm</div>
-        <div className="text-lg font-semibold text-foreground">
-          Binary Search
-        </div>
-        <div className="text-sm text-foreground">
-          Step <strong>{player.index}</strong> /{' '}
-          <strong>{player.length}</strong>
-        </div>
-      </div>
+      <AlgorithmHeaderCard
+        name="Binary Search"
+        stepIndex={player.index}
+        stepLength={player.length}
+      />
 
       <div className="mb-4 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
         <div className="flex items-center gap-2">
@@ -171,11 +168,7 @@ export default function BinarySearchVisualizer() {
 
       <VisualizerLegend algorithm="binary-search" />
 
-      {player.text && (
-        <div className="my-3 rounded-xl border border-border bg-accent-soft px-4 py-2 text-sm text-foreground">
-          {player.text}
-        </div>
-      )}
+      <StepTextPanel text={player.text} />
 
       <StepControls
         canStepBack={player.index > 0}

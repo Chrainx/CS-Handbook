@@ -36,8 +36,9 @@ import { graphStateToPriorityQueue } from './adapter/graphToPriorityQueue'
 import { GRAPH_PRESETS } from './preset'
 
 import { useStepPlayer } from '../shared/useStepPlayer'
-
-import { useSearchParams } from 'next/navigation'
+import { useAlgorithmSelectUrlSync } from '../shared/useAlgorithmSelectUrlSync'
+import { AlgorithmHeaderCard } from '../shared/algorithmHeaderCard'
+import { StepTextPanel } from '../shared/stepTextPanel'
 
 export const GRAPH_ALGORITHMS: {
   id: GraphAlgorithmId
@@ -109,7 +110,7 @@ export const GRAPH_ALGO_META: Record<
 }
 
 const GRAPH_STEP_GENERATORS: Record<
-  string,
+  GraphAlgorithmId,
   (graph: GraphData, start: string) => GraphStep[]
 > = {
   bfs: bfsSteps,
@@ -135,17 +136,20 @@ const GRAPH_PRESET_BY_ALGO: Record<
 }
 
 export default function GraphVisualizer() {
-  const searchParams = useSearchParams()
-  const algoFromUrl = searchParams.get('algo') as GraphAlgorithmId | null
-
-  const [algorithm, setAlgorithm] = useState<GraphAlgorithmId | null>(null)
-  const [open, setOpen] = useState(true)
-
   const [graph, setGraph] = useState<GraphData>(GRAPH_PRESETS.tree)
-
   const [steps, setSteps] = useState<GraphStep[]>([])
 
   const [state, dispatch] = useReducer(graphReducer, initialGraphState)
+
+  const { algorithm, open, setOpen, selectAlgorithm, closeModal } =
+    useAlgorithmSelectUrlSync<GraphAlgorithmId>({
+      validIds: Object.keys(GRAPH_STEP_GENERATORS) as GraphAlgorithmId[],
+      onAlgorithmChosen: (algo) => {
+        const presetGraph = GRAPH_PRESETS[GRAPH_PRESET_BY_ALGO[algo]]
+        setGraph(presetGraph)
+        setSteps(GRAPH_STEP_GENERATORS[algo](presetGraph, 'A'))
+      },
+    })
 
   const player = useStepPlayer<
     GraphStep,
@@ -159,6 +163,13 @@ export default function GraphVisualizer() {
     resetAction: { type: 'reset' },
   })
 
+  // Reset the player whenever a (new) algorithm is loaded, once `steps` and
+  // `algorithm` have both settled from the same selection.
+  useEffect(() => {
+    player.reset()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [algorithm, steps])
+
   const safeIndex = Math.min(player.index, steps.length)
 
   const { output, currentBfPass, kruskalEdges, kruskalActiveIndex } =
@@ -168,90 +179,25 @@ export default function GraphVisualizer() {
       algorithm,
     })
 
-  function generateSteps(algo: string, graph: GraphData) {
-    const generator = GRAPH_STEP_GENERATORS[algo]
-    if (!generator) return
-
-    player.reset()
-    const generated = generator(graph, 'A') // start node hardcoded for now
-    setSteps(generated)
-  }
-
-  useEffect(() => {
-    if (!algoFromUrl) return
-    if (!GRAPH_STEP_GENERATORS[algoFromUrl]) return
-
-    const presetKey = GRAPH_PRESET_BY_ALGO[algoFromUrl]
-    const presetGraph = GRAPH_PRESETS[presetKey]
-
-    setGraph(presetGraph)
-    setAlgorithm(algoFromUrl)
-    setOpen(false)
-
-    const generated = GRAPH_STEP_GENERATORS[algoFromUrl](presetGraph, 'A')
-    setSteps(generated)
-
-    dispatch({ type: 'reset' })
-    player.reset()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
     <>
       <AlgorithmSelectModal
         open={open}
         algorithms={GRAPH_ALGORITHMS}
         currentAlgorithm={algorithm}
-        onSelect={(id) => {
-          const algo = id as GraphAlgorithmId
-          const presetKey = GRAPH_PRESET_BY_ALGO[algo]
-          const presetGraph = GRAPH_PRESETS[presetKey]
-          setGraph(presetGraph)
-          setAlgorithm(algo)
-          setOpen(false)
-          generateSteps(id, presetGraph)
-
-          const params = new URLSearchParams(window.location.search)
-          params.set('algo', algo)
-          window.history.replaceState(null, '', `?${params.toString()}`)
-        }}
-        onClose={() => {
-          if (algorithm !== null) {
-            setOpen(false)
-          }
-        }}
+        onSelect={(id) => selectAlgorithm(id as GraphAlgorithmId)}
+        onClose={closeModal}
       />
 
       {algorithm && (
         <>
-          {/* Header */}
-          <div className="mb-6 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
-            <div className="text-sm text-muted-foreground">
-              Current Algorithm
-            </div>
-            <div className="text-lg font-semibold text-foreground">
-              {GRAPH_ALGORITHMS.find((a) => a.id === algorithm)?.name}
-            </div>
-            <div className="text-sm text-foreground">
-              Step <strong>{safeIndex}</strong> /{' '}
-              <strong>{player.length}</strong>
-            </div>
-          </div>
+          <AlgorithmHeaderCard
+            name={GRAPH_ALGORITHMS.find((a) => a.id === algorithm)!.name}
+            stepIndex={safeIndex}
+            stepLength={player.length}
+            onChangeAlgorithm={() => setOpen(true)}
+          />
 
-          {/* Controls */}
-          <div className="mb-4 flex gap-4">
-            <button
-              onClick={() => {
-                setOpen(true)
-              }}
-              className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition-colors"
-            >
-              Change Algorithm
-            </button>
-          </div>
-
-          {/* Graph */}
           {/* Data structure visualization */}
           {GRAPH_ALGO_META[algorithm]?.structure === 'queue' && (
             <QueueView queue={state.queue ?? []} />
@@ -282,11 +228,7 @@ export default function GraphVisualizer() {
 
           <VisualizerLegend algorithm={algorithm} />
 
-          {player.text && (
-            <div className="my-3 rounded-xl border border-border bg-accent-soft px-4 py-2 text-sm text-foreground">
-              {player.text}
-            </div>
-          )}
+          <StepTextPanel text={player.text} />
 
           {/* OUTPUT PANEL */}
           {output.type === 'order' && (
@@ -324,7 +266,6 @@ export default function GraphVisualizer() {
             </div>
           )}
 
-          {/* Controls */}
           <StepControls
             canStepBack={safeIndex > 0}
             canStepForward={safeIndex < player.length}

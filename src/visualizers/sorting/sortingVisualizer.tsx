@@ -23,7 +23,9 @@ import { quickSortSteps } from './steps/quick'
 
 import { sortingStateToBars } from './adapters/sortingToBar'
 import { useStepPlayer } from '../shared/useStepPlayer'
-import { useSearchParams } from 'next/navigation'
+import { useAlgorithmSelectUrlSync } from '../shared/useAlgorithmSelectUrlSync'
+import { AlgorithmHeaderCard } from '../shared/algorithmHeaderCard'
+import { StepTextPanel } from '../shared/stepTextPanel'
 
 export const SORTING_ALGORITHMS: {
   id: SortingAlgorithmId
@@ -56,7 +58,10 @@ export const SORTING_ALGORITHMS: {
 
 const MAX_ARRAY_SIZE = 50
 
-const STEP_GENERATORS: Record<string, (arr: number[]) => SortingStep[]> = {
+const STEP_GENERATORS: Record<
+  SortingAlgorithmId,
+  (arr: number[]) => SortingStep[]
+> = {
   insertion: insertionSortSteps,
   selection: selectionSortSteps,
   merge: mergeSortSteps,
@@ -64,12 +69,6 @@ const STEP_GENERATORS: Record<string, (arr: number[]) => SortingStep[]> = {
 }
 
 export default function SortingVisualizer() {
-  const searchParams = useSearchParams()
-  const algoFromUrl = searchParams.get('algo') as SortingAlgorithmId | null
-
-  const [algorithm, setAlgorithm] = useState<SortingAlgorithmId | null>(null)
-  const [open, setOpen] = useState(true)
-
   const [input, setInput] = useState('')
   const [inputError, setInputError] = useState<string | null>(null)
 
@@ -86,15 +85,6 @@ export default function SortingVisualizer() {
 
   const { leftBuffer, rightBuffer, leftPtr, rightPtr } = state
 
-  function generateSteps(algo: string) {
-    const generator = STEP_GENERATORS[algo]
-    if (!generator) return
-
-    player.reset()
-    const generated = generator(baseArray)
-    setSteps(generated)
-  }
-
   const player = useStepPlayer<SortingStep, SortingStep, undefined>({
     steps,
     dispatch,
@@ -102,6 +92,15 @@ export default function SortingVisualizer() {
     describeContext: undefined,
     resetAction: { type: 'reset', array: baseArray },
   })
+
+  const { algorithm, open, setOpen, selectAlgorithm, closeModal } =
+    useAlgorithmSelectUrlSync<SortingAlgorithmId>({
+      validIds: Object.keys(STEP_GENERATORS) as SortingAlgorithmId[],
+      onAlgorithmChosen: (algo) => {
+        player.reset()
+        setSteps(STEP_GENERATORS[algo](baseArray))
+      },
+    })
 
   function loadInput() {
     const parsed = input
@@ -128,30 +127,13 @@ export default function SortingVisualizer() {
 
     // Regenerate steps if algorithm already chosen
     if (algorithm) {
-      const generator = STEP_GENERATORS[algorithm]
-      if (generator) {
-        setSteps(generator(parsed))
-      }
+      setSteps(STEP_GENERATORS[algorithm](parsed))
     }
   }
 
   useEffect(() => {
     setInput(baseArray.join(','))
   }, [baseArray])
-
-  useEffect(() => {
-    if (!algoFromUrl) return
-    if (!STEP_GENERATORS[algoFromUrl]) return
-
-    dispatch({ type: 'reset', array: baseArray })
-    player.reset()
-
-    setAlgorithm(algoFromUrl)
-    setOpen(false)
-    generateSteps(algoFromUrl)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   /* ---------------------------------- */
   /* Render                             */
@@ -162,51 +144,18 @@ export default function SortingVisualizer() {
         open={open}
         algorithms={SORTING_ALGORITHMS}
         currentAlgorithm={algorithm}
-        onSelect={(id) => {
-          const algo = id as SortingAlgorithmId
-
-          setAlgorithm(algo)
-          setOpen(false)
-          generateSteps(algo)
-
-          const params = new URLSearchParams(window.location.search)
-          params.set('algo', algo)
-          window.history.replaceState(null, '', `?${params.toString()}`)
-        }}
-        onClose={() => {
-          // ❗ Prevent closing if no algorithm is selected
-          if (algorithm !== null) {
-            setOpen(false)
-          }
-        }}
+        onSelect={(id) => selectAlgorithm(id as SortingAlgorithmId)}
+        onClose={closeModal}
       />
 
       {algorithm && (
         <>
-          <div className="mb-6 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
-            <div className="text-sm text-muted-foreground">
-              Current Algorithm
-            </div>
-            <div className="text-lg font-semibold text-foreground">
-              {SORTING_ALGORITHMS.find((a) => a.id === algorithm)?.name}
-            </div>
-            <div className="text-sm text-foreground">
-              Step <strong>{player.index}</strong> /{' '}
-              <strong>{player.length}</strong>
-            </div>
-          </div>
-
-          {/* Controls */}
-          <div className="mb-4 flex gap-4">
-            <button
-              onClick={() => {
-                setOpen(true)
-              }}
-              className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition-colors"
-            >
-              Change Algorithm
-            </button>
-          </div>
+          <AlgorithmHeaderCard
+            name={SORTING_ALGORITHMS.find((a) => a.id === algorithm)!.name}
+            stepIndex={player.index}
+            stepLength={player.length}
+            onChangeAlgorithm={() => setOpen(true)}
+          />
 
           {/* Data input */}
           <div className="mb-4">
@@ -259,11 +208,7 @@ export default function SortingVisualizer() {
 
           <VisualizerLegend algorithm={algorithm} />
 
-          {player.text && (
-            <div className="my-3 rounded-xl border border-border bg-accent-soft px-4 py-2 text-sm text-foreground">
-              {player.text}
-            </div>
-          )}
+          <StepTextPanel text={player.text} />
 
           <StepControls
             canStepBack={player.index > 0}
