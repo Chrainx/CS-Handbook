@@ -1,3 +1,11 @@
+## [1.5.5](https://github.com/Chrainx/CS-Handbook/compare/v1.5.4...v1.5.5) (2026-08-02)
+
+
+### Bug Fixes
+
+* add aria-expanded/aria-current to sidebar tree ([#33](https://github.com/Chrainx/CS-Handbook/issues/33)) ([8e19c4c](https://github.com/Chrainx/CS-Handbook/commit/8e19c4cf7564b62060f615a3a4855b435a1bfa38)), closes [#18](https://github.com/Chrainx/CS-Handbook/issues/18)
+* allow horizontal scroll for long bar arrays instead of clipping ([#34](https://github.com/Chrainx/CS-Handbook/issues/34)) ([56fd8a3](https://github.com/Chrainx/CS-Handbook/commit/56fd8a3b96c5bfa9739e1e5b6393c071e5068d8e)), closes [#19](https://github.com/Chrainx/CS-Handbook/issues/19)
+
 ## [1.5.4](https://github.com/Chrainx/CS-Handbook/compare/v1.5.3...v1.5.4) (2026-08-02)
 
 
