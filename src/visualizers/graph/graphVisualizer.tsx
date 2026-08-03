@@ -7,8 +7,8 @@ import VisualizerLegend from '../legend/legend'
 
 import { GraphAlgorithmId } from './state/types'
 
-import QueueView from './components/queueView'
-import StackView from './components/stackView'
+import QueueView from '../shared/queueView'
+import StackView from '../shared/stackView'
 import SortedEdgesView from './components/sortedEdgeView'
 import PriorityQueueView from '../primitives/priorityQueue/priorityQueueView'
 

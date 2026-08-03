@@ -53,6 +53,10 @@ export const sections: Record<string, SectionConfig> = {
       'tree',
       'graph',
     ],
+    subOrder: {
+      stack: ['visualizer'],
+      queue: ['visualizer'],
+    },
   },
 
   'operating-systems': {
