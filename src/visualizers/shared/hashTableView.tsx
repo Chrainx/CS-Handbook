@@ -2,19 +2,11 @@
 
 import { Entry } from '@/visualizers/hashTable/steps'
 
-function ChainNode({ entryKey, value }: { entryKey: string; value: string }) {
+function DrawerTab({ entryKey, value }: { entryKey: string; value: string }) {
   return (
-    <div className="ds-pop-in flex h-10 shrink-0 overflow-hidden rounded-md shadow-sm">
-      <div className="flex items-center justify-center bg-accent px-2 font-mono text-xs font-semibold text-accent-foreground">
-        {entryKey}
-      </div>
-      <div className="flex items-center justify-center border-l border-border/60 bg-accent-soft px-2 font-mono text-xs text-accent">
-        {value}
-      </div>
-      <div className="flex h-10 w-5 items-center justify-center border-l border-border/60 bg-muted text-muted-foreground">
-        •
-      </div>
-    </div>
+    <span className="ds-pop-in rounded-md bg-accent px-2 py-1 text-xs font-semibold text-accent-foreground shadow-sm">
+      {entryKey}: {value}
+    </span>
   )
 }
 
@@ -66,45 +58,43 @@ export default function HashTableView({
         )}
       </div>
 
-      {/* Bucket-level view: an array of slots, each slot a small linked
-       * list (separate chaining) - the same key|value|next node style the
-       * Linked List visualizer uses, so a bucket with a collision reads
-       * exactly like a chain of nodes ending in NULL. */}
+      {/* Bucket-level view: each bucket is a drawer - a labeled index,
+       * a handle, and a tab sticking out for every chained entry - so a
+       * bucket with a collision reads as "this drawer has two things in
+       * it" rather than needing the linked-list chain metaphor repeated
+       * here too. */}
       <div className="overflow-x-auto rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
         <div className="mb-3 text-sm font-medium text-foreground">
-          Buckets ({buckets.length}) - array of chains, separate chaining
+          Buckets ({buckets.length})
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           {buckets.map((bucket, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <div
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xs font-semibold transition-colors ${
-                  index === highlightIndex
-                    ? 'bg-state-active text-white ring-2 ring-state-active ring-offset-1 ring-offset-card'
-                    : 'border border-border bg-muted text-muted-foreground'
-                }`}
-              >
+            <div
+              key={index}
+              className={`flex items-center gap-3 rounded-lg border px-3.5 py-2 transition-colors ${
+                index === highlightIndex
+                  ? 'border-accent bg-accent-soft'
+                  : 'border-border bg-muted'
+              }`}
+            >
+              <span className="w-4 shrink-0 font-mono text-xs font-bold text-muted-foreground">
                 {index}
-              </div>
-              <span className="shrink-0 text-muted-foreground">→</span>
+              </span>
+              <span className="h-1.5 w-7 shrink-0 rounded bg-border-strong" />
 
               {bucket.length === 0 ? (
-                <span className="shrink-0 rounded-md border border-dashed border-border px-2 py-1 text-xs text-muted-foreground">
-                  NULL
+                <span className="text-xs italic text-muted-foreground">
+                  empty
                 </span>
               ) : (
-                <div className="flex items-center gap-1">
-                  {bucket.map((entry, i) => (
-                    <div key={entry.key} className="flex items-center gap-1">
-                      <ChainNode entryKey={entry.key} value={entry.value} />
-                      <span className="shrink-0 text-muted-foreground">→</span>
-                      {i === bucket.length - 1 && (
-                        <span className="shrink-0 rounded-md border border-dashed border-border px-2 py-1 text-xs text-muted-foreground">
-                          NULL
-                        </span>
-                      )}
-                    </div>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {bucket.map((entry) => (
+                    <DrawerTab
+                      key={entry.key}
+                      entryKey={entry.key}
+                      value={entry.value}
+                    />
                   ))}
                 </div>
               )}
