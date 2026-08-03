@@ -69,7 +69,7 @@ export const sections: Record<string, SectionConfig> = {
 
   networks: {
     path: '/networks',
-    order: ['networking-models'],
+    order: ['networking-models', 'addressing'],
   },
 
   security: {
