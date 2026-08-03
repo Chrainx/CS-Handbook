@@ -83,8 +83,10 @@ export function linkedListDeleteSteps(
     for (let i = 1; i < list.length; i++) {
       steps.push({ type: 'traverse', index: i })
     }
+    // No trailing 'done' step here - 'not-found' must stay the last step
+    // so its message (and error styling) isn't immediately overwritten by
+    // a generic "Done." once the animation finishes.
     steps.push({ type: 'not-found' })
-    steps.push({ type: 'done' })
     return steps
   }
 

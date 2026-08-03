@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import HashTableView from '@/visualizers/shared/hashTableView'
-import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { StepTextPanel, StepTextVariant } from '@/visualizers/shared/stepTextPanel'
 import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import {
@@ -14,16 +14,25 @@ import {
 import { hashTableReducer, initialHashTableState } from './state'
 import { hashKey } from './hash'
 
+function stepVariant(step: HashTableStep | null): StepTextVariant {
+  if (!step) return 'default'
+  if (step.type === 'insert' && step.kind === 'update') return 'warning'
+  if (step.type === 'delete' && !step.found) return 'error'
+  return 'default'
+}
+
 export default function HashTableVisualizer() {
   const [keyInput, setKeyInput] = useState('')
   const [valueInput, setValueInput] = useState('')
   const [deleteKeyInput, setDeleteKeyInput] = useState('')
   const [searchKeyInput, setSearchKeyInput] = useState('')
   const [searchResult, setSearchResult] = useState<string | null>(null)
+  const [searchFound, setSearchFound] = useState<boolean | null>(null)
 
   const {
     state,
     text,
+    lastStep,
     index,
     length,
     playing,
@@ -58,6 +67,7 @@ export default function HashTableVisualizer() {
     if (searchKeyInput.trim() === '') return
     const index = hashKey(searchKeyInput)
     const found = state.buckets[index].find((e) => e.key === searchKeyInput)
+    setSearchFound(!!found)
     setSearchResult(
       found
         ? `Hashed "${searchKeyInput}" to bucket ${index} - found value "${found.value}".`
@@ -143,8 +153,13 @@ export default function HashTableVisualizer() {
 
       <HashTableView buckets={state.buckets} highlightIndex={state.highlightIndex} />
 
-      {searchResult && <StepTextPanel text={searchResult} />}
-      <StepTextPanel text={text} />
+      {searchResult && (
+        <StepTextPanel
+          text={searchResult}
+          variant={searchFound === false ? 'error' : 'default'}
+        />
+      )}
+      <StepTextPanel text={text} variant={stepVariant(lastStep)} />
 
       <OperationControls
         playing={playing}

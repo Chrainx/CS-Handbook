@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import LinkedListView from '@/visualizers/shared/linkedListView'
-import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { StepTextPanel, StepTextVariant } from '@/visualizers/shared/stepTextPanel'
 import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import {
@@ -15,16 +15,23 @@ import {
   LinkedListStep,
 } from './types'
 
+function stepVariant(step: LinkedListStep | null): StepTextVariant {
+  if (step?.type === 'not-found') return 'error'
+  return 'default'
+}
+
 export default function LinkedListVisualizer() {
   const [input, setInput] = useState('')
   const [deleteInput, setDeleteInput] = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [searchResult, setSearchResult] = useState<string | null>(null)
+  const [searchFound, setSearchFound] = useState<boolean | null>(null)
   const [highlightValue, setHighlightValue] = useState<number | null>(null)
 
   const {
     state,
     text,
+    lastStep,
     index,
     length,
     playing,
@@ -42,6 +49,7 @@ export default function LinkedListVisualizer() {
 
   function clearSearch() {
     setSearchResult(null)
+    setSearchFound(null)
     setHighlightValue(null)
   }
 
@@ -74,6 +82,7 @@ export default function LinkedListVisualizer() {
     if (searchInput.trim() === '' || Number.isNaN(value)) return
     const foundIndex = state.list.indexOf(value)
     setHighlightValue(foundIndex === -1 ? null : value)
+    setSearchFound(foundIndex !== -1)
     setSearchResult(
       foundIndex === -1
         ? `${value} was not found in the list.`
@@ -170,8 +179,13 @@ export default function LinkedListVisualizer() {
         pendingNode={state.pendingNode}
       />
 
-      {searchResult && <StepTextPanel text={searchResult} />}
-      <StepTextPanel text={text} />
+      {searchResult && (
+        <StepTextPanel
+          text={searchResult}
+          variant={searchFound === false ? 'error' : 'default'}
+        />
+      )}
+      <StepTextPanel text={text} variant={stepVariant(lastStep)} />
 
       <OperationControls
         playing={playing}
