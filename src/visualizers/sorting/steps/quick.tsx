@@ -15,12 +15,22 @@ export function quickSortSteps(arr: number[]): SortingStep[] {
 
     for (let j = l; j < r; j++) {
       // 1️⃣ compare j with pivot
-      steps.push({ type: 'compare', i: j, j: pivotIndex })
+      steps.push({
+        type: 'compare',
+        i: j,
+        j: pivotIndex,
+        reason: `Checking whether ${a[j]} is ≤ the pivot ${pivot}.`,
+      })
 
       if (a[j] <= pivot) {
         // 2️⃣ commit element to left side
         if (i !== j) {
-          steps.push({ type: 'swap', i, j })
+          steps.push({
+            type: 'swap',
+            i,
+            j,
+            reason: `${a[j]} is ≤ the pivot, so it moves into the left partition.`,
+          })
           ;[a[i], a[j]] = [a[j], a[i]]
         }
 
@@ -33,7 +43,12 @@ export function quickSortSteps(arr: number[]): SortingStep[] {
 
     // 3️⃣ final pivot swap
     if (i !== pivotIndex) {
-      steps.push({ type: 'swap', i, j: pivotIndex })
+      steps.push({
+        type: 'swap',
+        i,
+        j: pivotIndex,
+        reason: `Placing the pivot ${pivot} into its correct sorted position.`,
+      })
       ;[a[i], a[pivotIndex]] = [a[pivotIndex], a[i]]
     }
 

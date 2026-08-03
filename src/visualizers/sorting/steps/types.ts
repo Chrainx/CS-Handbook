@@ -1,7 +1,7 @@
 export type SortingStep =
-  | { type: 'compare'; i: number; j: number }
-  | { type: 'swap'; i: number; j: number }
-  | { type: 'mark'; index: number }
+  | { type: 'compare'; i: number; j: number; reason?: string }
+  | { type: 'swap'; i: number; j: number; reason?: string }
+  | { type: 'mark'; index: number; reason?: string }
   | { type: 'reset'; array: number[] }
   | { type: 'done' }
   | { type: 'split'; l: number; r: number; mid: number }
@@ -24,6 +24,7 @@ export type SortingStep =
       value: number
       writeIndex: number
       from: 'left' | 'right'
+      reason?: string
     }
   | {
       type: 'merge-done'
