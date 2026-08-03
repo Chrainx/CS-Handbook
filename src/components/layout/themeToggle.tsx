@@ -4,31 +4,42 @@ import { useEffect, useState } from 'react'
 
 type Theme = 'light' | 'dark'
 
-function getSystemTheme(): Theme {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light'
-}
-
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme | null>(null)
+  // null = no explicit user choice yet - the OS preference (via the
+  // prefers-color-scheme media query in globals.css) should keep driving
+  // the actual colors, live, until the user picks one.
+  const [explicitTheme, setExplicitTheme] = useState<Theme | null>(null)
+  const [systemTheme, setSystemTheme] = useState<Theme | null>(null)
 
   useEffect(() => {
     const stored = localStorage.getItem('theme')
-    setTheme(stored === 'light' || stored === 'dark' ? stored : getSystemTheme())
+    if (stored === 'light' || stored === 'dark') setExplicitTheme(stored)
+
+    const mql = window.matchMedia('(prefers-color-scheme: dark)')
+    setSystemTheme(mql.matches ? 'dark' : 'light')
+
+    const onChange = (e: MediaQueryListEvent) =>
+      setSystemTheme(e.matches ? 'dark' : 'light')
+    mql.addEventListener('change', onChange)
+    return () => mql.removeEventListener('change', onChange)
   }, [])
 
   useEffect(() => {
-    if (theme === null) return
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
+    // Only pin an explicit override - with none, leave the attribute
+    // unset so prefers-color-scheme keeps driving colors reactively.
+    if (explicitTheme) {
+      document.documentElement.setAttribute('data-theme', explicitTheme)
+    } else {
+      document.documentElement.removeAttribute('data-theme')
+    }
+  }, [explicitTheme])
+
+  const effectiveTheme = explicitTheme ?? systemTheme
 
   function toggleTheme() {
-    setTheme((current) => {
-      const next: Theme = current === 'dark' ? 'light' : 'dark'
-      localStorage.setItem('theme', next)
-      return next
-    })
+    const next: Theme = effectiveTheme === 'dark' ? 'light' : 'dark'
+    localStorage.setItem('theme', next)
+    setExplicitTheme(next)
   }
 
   return (
@@ -39,7 +50,7 @@ export default function ThemeToggle() {
       className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-foreground hover:bg-muted"
     >
       <span className="sr-only">Toggle dark mode</span>
-      {theme === 'dark' ? (
+      {effectiveTheme === 'dark' ? (
         <svg
           viewBox="0 0 24 24"
           fill="none"
