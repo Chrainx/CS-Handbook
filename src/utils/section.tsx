@@ -64,7 +64,7 @@ export const sections: Record<string, SectionConfig> = {
 
   'operating-systems': {
     path: '/operating-systems',
-    order: ['processes-threads'],
+    order: ['processes-threads', 'cpu-scheduling'],
   },
 
   networks: {
