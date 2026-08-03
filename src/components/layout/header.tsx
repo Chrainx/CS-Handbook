@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import ThemeToggle from './themeToggle'
 
 export default function GlobalHeader({
   onMenuClick,
@@ -55,6 +56,10 @@ export default function GlobalHeader({
         <span className="hidden truncate text-sm text-muted-foreground sm:inline">
           Interactive CS Reference
         </span>
+      </div>
+
+      <div className="ml-auto flex items-center">
+        <ThemeToggle />
       </div>
     </header>
   )
