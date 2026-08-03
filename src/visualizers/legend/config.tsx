@@ -180,9 +180,14 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node has not been discovered yet',
     },
     {
-      colorClass: 'fill-yellow-500',
+      colorClass: 'fill-orange-500',
       label: 'In Queue',
-      description: 'Node waiting in the BFS queue',
+      description: 'Node discovered and waiting in the BFS queue',
+    },
+    {
+      colorClass: 'fill-yellow-500',
+      label: 'Processing',
+      description: 'Node just dequeued, currently being explored',
     },
     {
       colorClass: 'fill-green-500',
@@ -203,9 +208,14 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node has not been discovered yet',
     },
     {
-      colorClass: 'fill-yellow-500',
+      colorClass: 'fill-orange-500',
       label: 'In Stack',
-      description: 'Node waiting on the DFS stack',
+      description: 'Node discovered and waiting on the DFS stack',
+    },
+    {
+      colorClass: 'fill-yellow-500',
+      label: 'Processing',
+      description: 'Node just popped, currently being explored',
     },
     {
       colorClass: 'fill-green-500',
@@ -226,9 +236,14 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node has not been processed yet',
     },
     {
-      colorClass: 'fill-yellow-500',
+      colorClass: 'fill-orange-500',
       label: 'Ready',
-      description: 'Node has zero in-degree and is ready to be output',
+      description: 'Node has zero in-degree and is waiting to be output',
+    },
+    {
+      colorClass: 'fill-yellow-500',
+      label: 'Processing',
+      description: 'Node just dequeued, currently reducing its neighbors',
     },
     {
       colorClass: 'fill-green-500',
@@ -249,9 +264,14 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node not finalized yet',
     },
     {
+      colorClass: 'fill-orange-500',
+      label: 'In Priority Queue',
+      description: 'Node discovered and waiting to be processed',
+    },
+    {
       colorClass: 'fill-yellow-500',
       label: 'Processing',
-      description: 'Node popped from priority queue',
+      description: 'Node just popped from the priority queue',
     },
     {
       colorClass: 'fill-green-500',
@@ -290,9 +310,14 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node not yet included in the MST',
     },
     {
+      colorClass: 'fill-orange-500',
+      label: 'In Priority Queue',
+      description: 'Node discovered and waiting to be processed',
+    },
+    {
       colorClass: 'fill-yellow-500',
       label: 'Processing',
-      description: 'Node popped from PQ',
+      description: 'Node just popped from the priority queue',
     },
     {
       colorClass: 'fill-green-500',

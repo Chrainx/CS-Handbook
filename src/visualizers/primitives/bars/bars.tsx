@@ -10,6 +10,7 @@ const SEP_WIDTH = 2
 export default function Bars({
   values,
   colorByIndex,
+  isComparing,
   splitStack = [],
   activeRange,
   markers,
@@ -58,6 +59,7 @@ export default function Bars({
           {values.map((v, i) => {
             const barHeight = barHeights[i]
             const barColor = colorByIndex(i)
+            const comparing = isComparing?.(i) ?? false
 
             const topMarker = markers?.top?.find((m) => m.index === i)
 
@@ -78,7 +80,9 @@ export default function Bars({
 
                 {/* ===== BAR ===== */}
                 <div
-                  className={`relative w-full overflow-hidden rounded-t-md shadow-sm transition-all duration-300 ease-out ${barColor}`}
+                  className={`relative w-full overflow-hidden rounded-t-md shadow-sm transition-all duration-300 ease-out ${barColor} ${
+                    comparing ? 'ring-2 ring-state-compare ring-offset-1' : ''
+                  }`}
                   style={{ height: barHeight }}
                 >
                   {/* glossy depth overlay, works over any bar color */}
@@ -99,6 +103,19 @@ export default function Bars({
 
         {/* baseline */}
         <div className="mt-1 h-px w-full bg-border" />
+
+        {/* ================= INDEX LABELS ================= */}
+        <div className="mt-1 flex gap-3">
+          {values.map((_, i) => (
+            <div
+              key={i}
+              className="shrink-0 text-center text-[10px] text-muted-foreground"
+              style={{ width: BAR_WIDTH }}
+            >
+              {i}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
