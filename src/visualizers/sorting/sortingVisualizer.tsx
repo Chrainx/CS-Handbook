@@ -24,7 +24,9 @@ import { heapSortSteps } from './steps/heap'
 
 import { sortingStateToBars } from './adapters/sortingToBar'
 import { useStepPlayer } from '../shared/useStepPlayer'
-import { useSearchParams } from 'next/navigation'
+import { useAlgorithmSelectUrlSync } from '../shared/useAlgorithmSelectUrlSync'
+import { AlgorithmHeaderCard } from '../shared/algorithmHeaderCard'
+import { StepTextPanel } from '../shared/stepTextPanel'
 
 export const SORTING_ALGORITHMS: {
   id: SortingAlgorithmId
@@ -66,7 +68,10 @@ const MAX_ARRAY_SIZE = 50
 // render; a fresh random array replaces this right after mount.
 const DEFAULT_ARRAY = [5, 3, 8, 1, 9]
 
-const STEP_GENERATORS: Record<string, (arr: number[]) => SortingStep[]> = {
+const STEP_GENERATORS: Record<
+  SortingAlgorithmId,
+  (arr: number[]) => SortingStep[]
+> = {
   insertion: insertionSortSteps,
   selection: selectionSortSteps,
   merge: mergeSortSteps,
@@ -75,12 +80,6 @@ const STEP_GENERATORS: Record<string, (arr: number[]) => SortingStep[]> = {
 }
 
 export default function SortingVisualizer() {
-  const searchParams = useSearchParams()
-  const algoFromUrl = searchParams.get('algo') as SortingAlgorithmId | null
-
-  const [algorithm, setAlgorithm] = useState<SortingAlgorithmId | null>(null)
-  const [open, setOpen] = useState(true)
-
   const [input, setInput] = useState('')
   const [inputError, setInputError] = useState<string | null>(null)
 
@@ -95,14 +94,15 @@ export default function SortingVisualizer() {
 
   const { leftBuffer, rightBuffer, leftPtr, rightPtr } = state
 
-  function generateSteps(algo: string) {
-    const generator = STEP_GENERATORS[algo]
-    if (!generator) return
-
-    player.reset()
-    const generated = generator(baseArray)
-    setSteps(generated)
-  }
+  const { algorithm, open, setOpen, selectAlgorithm, closeModal } =
+    useAlgorithmSelectUrlSync<SortingAlgorithmId>({
+      validIds: Object.keys(STEP_GENERATORS) as SortingAlgorithmId[],
+      // Step generation happens reactively below (keyed on [algorithm,
+      // baseArray]) rather than here, so it always uses the up-to-date
+      // baseArray even when an algorithm is auto-selected from the URL in
+      // the same initial commit as the mount-time randomize effect.
+      onAlgorithmChosen: () => {},
+    })
 
   const player = useStepPlayer<
     SortingStep,
@@ -115,6 +115,16 @@ export default function SortingVisualizer() {
     describeContext: { algorithm },
     resetAction: { type: 'reset', array: baseArray },
   })
+
+  // Regenerate steps and reset the player whenever the selected algorithm
+  // or the base array changes - covers manual algorithm switches, loading
+  // new data, and picking up the freshly-randomized array after mount.
+  useEffect(() => {
+    if (!algorithm) return
+    player.reset()
+    setSteps(STEP_GENERATORS[algorithm](baseArray))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [algorithm, baseArray])
 
   function loadInput() {
     const parsed = input
@@ -135,17 +145,6 @@ export default function SortingVisualizer() {
 
     setInputError(null)
     setBaseArray(parsed)
-
-    // Reset reducer state
-    player.hardReset({ type: 'reset', array: parsed })
-
-    // Regenerate steps if algorithm already chosen
-    if (algorithm) {
-      const generator = STEP_GENERATORS[algorithm]
-      if (generator) {
-        setSteps(generator(parsed))
-      }
-    }
   }
 
   useEffect(() => {
@@ -158,13 +157,6 @@ export default function SortingVisualizer() {
     const randomArray = generateRandomArray({ size: 5, unique: true })
     setBaseArray(randomArray)
     dispatch({ type: 'reset', array: randomArray })
-
-    if (algoFromUrl && STEP_GENERATORS[algoFromUrl]) {
-      setAlgorithm(algoFromUrl)
-      setOpen(false)
-      setSteps(STEP_GENERATORS[algoFromUrl](randomArray))
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -177,51 +169,18 @@ export default function SortingVisualizer() {
         open={open}
         algorithms={SORTING_ALGORITHMS}
         currentAlgorithm={algorithm}
-        onSelect={(id) => {
-          const algo = id as SortingAlgorithmId
-
-          setAlgorithm(algo)
-          setOpen(false)
-          generateSteps(algo)
-
-          const params = new URLSearchParams(window.location.search)
-          params.set('algo', algo)
-          window.history.replaceState(null, '', `?${params.toString()}`)
-        }}
-        onClose={() => {
-          // ❗ Prevent closing if no algorithm is selected
-          if (algorithm !== null) {
-            setOpen(false)
-          }
-        }}
+        onSelect={(id) => selectAlgorithm(id as SortingAlgorithmId)}
+        onClose={closeModal}
       />
 
       {algorithm && (
         <>
-          <div className="mb-6 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
-            <div className="text-sm text-muted-foreground">
-              Current Algorithm
-            </div>
-            <div className="text-lg font-semibold text-foreground">
-              {SORTING_ALGORITHMS.find((a) => a.id === algorithm)?.name}
-            </div>
-            <div className="text-sm text-foreground">
-              Step <strong>{player.index}</strong> /{' '}
-              <strong>{player.length}</strong>
-            </div>
-          </div>
-
-          {/* Controls */}
-          <div className="mb-4 flex gap-4">
-            <button
-              onClick={() => {
-                setOpen(true)
-              }}
-              className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition-colors"
-            >
-              Change Algorithm
-            </button>
-          </div>
+          <AlgorithmHeaderCard
+            name={SORTING_ALGORITHMS.find((a) => a.id === algorithm)!.name}
+            stepIndex={player.index}
+            stepLength={player.length}
+            onChangeAlgorithm={() => setOpen(true)}
+          />
 
           {/* Data input */}
           <div className="mb-4">
@@ -274,11 +233,7 @@ export default function SortingVisualizer() {
 
           <VisualizerLegend algorithm={algorithm} />
 
-          {player.text && (
-            <div className="my-3 rounded-xl border border-border bg-accent-soft px-4 py-2 text-sm text-foreground">
-              {player.text}
-            </div>
-          )}
+          <StepTextPanel text={player.text} />
 
           <StepControls
             canStepBack={player.index > 0}
