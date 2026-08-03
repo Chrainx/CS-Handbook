@@ -1,3 +1,10 @@
+## [1.5.17](https://github.com/Chrainx/CS-Handbook/compare/v1.5.16...v1.5.17) (2026-08-03)
+
+
+### Bug Fixes
+
+* graph legend swatches didn't match actual rendered edge colors ([#64](https://github.com/Chrainx/CS-Handbook/issues/64)) ([53bc047](https://github.com/Chrainx/CS-Handbook/commit/53bc0476546819a59f01b23c1c652b5c0a51d86f)), closes [#f97316](https://github.com/Chrainx/CS-Handbook/issues/f97316) [#22c55e](https://github.com/Chrainx/CS-Handbook/issues/22c55e)
+
 ## [1.5.16](https://github.com/Chrainx/CS-Handbook/compare/v1.5.15...v1.5.16) (2026-08-03)
 
 
