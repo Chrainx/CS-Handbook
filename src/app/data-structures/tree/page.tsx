@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import NextPrev from '@/components/nextPrev'
 
 export default function TreePage() {
@@ -133,6 +134,24 @@ export default function TreePage() {
         performance and usefulness depend heavily on how well-balanced the tree
         remains during operations.
       </p>
+
+      {/* Visualization */}
+      <h2 className="text-xl font-medium mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-2 text-(--text-secondary)">
+        Try inserting values and running each traversal order yourself with
+        the interactive binary search tree visualizer, stepping through the
+        comparisons or visits one at a time.
+      </p>
+
+      <Link
+        href="/data-structures/tree/visualizer"
+        className="inline-block mb-6 text-accent underline"
+      >
+        Open Tree Visualizer →
+      </Link>
 
       <NextPrev />
     </div>
