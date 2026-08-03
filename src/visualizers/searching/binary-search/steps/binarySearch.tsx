@@ -1,6 +1,6 @@
 // visualizers/binary-search/steps.ts
 
-import { BinarySearchStep } from '@/visualizers/steps/types'
+import { BinarySearchStep } from './types'
 
 export function binarySearchSteps(
   arr: number[],

@@ -1,4 +1,4 @@
-import { SortingStep } from '../../steps/types'
+import { SortingStep } from './types'
 
 export function heapSortSteps(arr: number[]): SortingStep[] {
   const steps: SortingStep[] = []

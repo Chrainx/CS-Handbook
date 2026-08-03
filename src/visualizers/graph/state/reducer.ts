@@ -1,4 +1,4 @@
-import { GraphStep } from '@/visualizers/steps/types'
+import { GraphStep } from '@/visualizers/graph/steps/types'
 import { GraphState, initialGraphState, GraphAlgorithmId } from './types'
 
 /**

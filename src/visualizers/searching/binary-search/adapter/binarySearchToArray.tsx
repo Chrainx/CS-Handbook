@@ -10,17 +10,17 @@ export function binarySearchStateToArray(
     values: state.array,
 
     colorByIndex: (i) => {
-      if (state.foundIndex === i) return 'bg-green-500 text-white'
-      if (state.mid === i) return 'bg-red-500 text-white'
+      if (state.foundIndex === i) return 'bg-state-swap text-white'
+      if (state.mid === i) return 'bg-state-compare text-white'
 
       if (
         state.low !== null &&
         state.high !== null &&
         (i < state.low || i > state.high)
       )
-        return 'bg-gray-200 text-gray-400'
+        return 'bg-state-eliminated text-state-eliminated-foreground'
 
-      return 'bg-blue-500 text-black'
+      return 'bg-state-default text-white'
     },
 
     markers: {

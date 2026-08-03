@@ -1,4 +1,5 @@
 import NextPrev from '@/components/nextPrev'
+import Link from 'next/link'
 
 export default function HeapSortPage() {
   return (
@@ -77,6 +78,22 @@ function heapify(arr, i, heapSize):
         <li>When memory usage must be minimal</li>
         <li>When predictable O(n log n) behavior is desired</li>
       </ul>
+
+      <h2 className="text-xl font-medium mt-6 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="text-(--text-secondary)">
+        Explore how Heap Sort works step by step using the interactive
+        sorting visualizer.
+      </p>
+
+      <Link
+        href="/algorithms/sorting/visualizer?algo=heap"
+        className="inline-block mt-2 text-blue-600 underline"
+      >
+        Open Sorting Visualizer →
+      </Link>
 
       <NextPrev />
     </div>

@@ -9,9 +9,9 @@ import MergeBuffer from '../buffer'
 
 import { SortingAlgorithmId } from './state/types'
 
-import { SortingStep } from '@/visualizers/steps/types'
+import { SortingStep } from './steps/types'
 import { generateRandomArray } from '@/utils/random'
-import { describeStep } from '@/visualizers/describeStep'
+import { describeSortingStep } from './describeStep'
 
 import { sortingReducer } from './state/reducer'
 import { initialSortingVisualState } from './state/types'
@@ -20,6 +20,7 @@ import { insertionSortSteps } from './steps/insertion'
 import { selectionSortSteps } from './steps/selection'
 import { mergeSortSteps } from './steps/merge'
 import { quickSortSteps } from './steps/quick'
+import { heapSortSteps } from './steps/heap'
 
 import { sortingStateToBars } from './adapters/sortingToBar'
 import { useStepPlayer } from '../shared/useStepPlayer'
@@ -54,9 +55,18 @@ export const SORTING_ALGORITHMS: {
     name: 'Quick Sort',
     description: 'Partitions the array around a pivot element',
   },
+  {
+    id: 'heap',
+    name: 'Heap Sort',
+    description: 'Builds a max heap and repeatedly extracts the largest element',
+  },
 ]
 
 const MAX_ARRAY_SIZE = 50
+
+// Deterministic so the server-rendered markup matches the client's first
+// render; a fresh random array replaces this right after mount.
+const DEFAULT_ARRAY = [5, 3, 8, 1, 9]
 
 const STEP_GENERATORS: Record<
   SortingAlgorithmId,
@@ -66,15 +76,14 @@ const STEP_GENERATORS: Record<
   selection: selectionSortSteps,
   merge: mergeSortSteps,
   quick: quickSortSteps,
+  heap: heapSortSteps,
 }
 
 export default function SortingVisualizer() {
   const [input, setInput] = useState('')
   const [inputError, setInputError] = useState<string | null>(null)
 
-  const [baseArray, setBaseArray] = useState<number[]>(() =>
-    generateRandomArray({ size: 5, unique: true })
-  )
+  const [baseArray, setBaseArray] = useState<number[]>(DEFAULT_ARRAY)
 
   const [steps, setSteps] = useState<SortingStep[]>([])
 
@@ -85,22 +94,37 @@ export default function SortingVisualizer() {
 
   const { leftBuffer, rightBuffer, leftPtr, rightPtr } = state
 
-  const player = useStepPlayer<SortingStep, SortingStep, undefined>({
-    steps,
-    dispatch,
-    describeStep,
-    describeContext: undefined,
-    resetAction: { type: 'reset', array: baseArray },
-  })
-
   const { algorithm, open, setOpen, selectAlgorithm, closeModal } =
     useAlgorithmSelectUrlSync<SortingAlgorithmId>({
       validIds: Object.keys(STEP_GENERATORS) as SortingAlgorithmId[],
-      onAlgorithmChosen: (algo) => {
-        player.reset()
-        setSteps(STEP_GENERATORS[algo](baseArray))
-      },
+      // Step generation happens reactively below (keyed on [algorithm,
+      // baseArray]) rather than here, so it always uses the up-to-date
+      // baseArray even when an algorithm is auto-selected from the URL in
+      // the same initial commit as the mount-time randomize effect.
+      onAlgorithmChosen: () => {},
     })
+
+  const player = useStepPlayer<
+    SortingStep,
+    SortingStep,
+    { algorithm: SortingAlgorithmId | null }
+  >({
+    steps,
+    dispatch,
+    describeStep: describeSortingStep,
+    describeContext: { algorithm },
+    resetAction: { type: 'reset', array: baseArray },
+  })
+
+  // Regenerate steps and reset the player whenever the selected algorithm
+  // or the base array changes - covers manual algorithm switches, loading
+  // new data, and picking up the freshly-randomized array after mount.
+  useEffect(() => {
+    if (!algorithm) return
+    player.reset()
+    setSteps(STEP_GENERATORS[algorithm](baseArray))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [algorithm, baseArray])
 
   function loadInput() {
     const parsed = input
@@ -121,19 +145,20 @@ export default function SortingVisualizer() {
 
     setInputError(null)
     setBaseArray(parsed)
-
-    // Reset reducer state
-    player.hardReset({ type: 'reset', array: parsed })
-
-    // Regenerate steps if algorithm already chosen
-    if (algorithm) {
-      setSteps(STEP_GENERATORS[algorithm](parsed))
-    }
   }
 
   useEffect(() => {
     setInput(baseArray.join(','))
   }, [baseArray])
+
+  useEffect(() => {
+    // Randomize on mount rather than in the initial useState so the
+    // server-rendered markup and the client's first render agree.
+    const randomArray = generateRandomArray({ size: 5, unique: true })
+    setBaseArray(randomArray)
+    dispatch({ type: 'reset', array: randomArray })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   /* ---------------------------------- */
   /* Render                             */

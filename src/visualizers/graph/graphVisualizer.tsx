@@ -14,8 +14,8 @@ import PriorityQueueView from '../primitives/priorityQueue/priorityQueueView'
 
 import GraphCanvas from '../primitives/graph/graphCanvas'
 import { GraphData } from '../primitives/graph/data'
-import { GraphStep } from '@/visualizers/steps/types'
-import { describeStep } from '../describeStep'
+import { GraphStep } from './steps/types'
+import { describeGraphStep } from './describeStep'
 
 import { useGraphDerivedState } from './hooks/useGraphDerivedState'
 
@@ -158,7 +158,7 @@ export default function GraphVisualizer() {
   >({
     steps,
     dispatch,
-    describeStep,
+    describeStep: describeGraphStep,
     describeContext: { algorithm },
     resetAction: { type: 'reset' },
   })

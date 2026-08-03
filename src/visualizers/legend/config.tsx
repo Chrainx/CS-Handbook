@@ -121,6 +121,31 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
     },
   ],
 
+  /* ================= HEAP SORT ================= */
+
+  heap: [
+    {
+      colorClass: 'bg-blue-500',
+      label: 'Normal',
+      description: 'Element not involved in the current step',
+    },
+    {
+      colorClass: 'bg-red-500',
+      label: 'Compare',
+      description: 'Elements currently being compared while sifting the heap',
+    },
+    {
+      colorClass: 'bg-green-500',
+      label: 'Swap',
+      description: 'Elements being swapped during heapify or extraction',
+    },
+    {
+      colorClass: 'bg-yellow-500',
+      label: 'Sorted',
+      description: 'Element placed into its final sorted position',
+    },
+  ],
+
   /* ================= BINARY SEARCH ================= */
 
   'binary-search': [

@@ -22,6 +22,18 @@
 
   --code-bg: #f4f4f5;
 
+  /* semantic state colors for algorithm visualizers (bars, array cells) */
+  --state-default: #3b82f6;
+  --state-compare: #ef4444;
+  --state-swap: #22c55e;
+  --state-mark: #eab308;
+  --state-pivot: #a855f7;
+  --state-boundary: #f97316;
+  --state-active: #06b6d4;
+  --state-base: #9ca3af;
+  --state-eliminated: #e4e4e7;
+  --state-eliminated-foreground: #a1a1aa;
+
   --radius: 0.75rem;
   --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.04);
   --shadow-md: 0 4px 12px rgba(24, 24, 27, 0.06);
@@ -57,6 +69,17 @@
 
     --code-bg: #1f1f23;
 
+    --state-default: #60a5fa;
+    --state-compare: #f87171;
+    --state-swap: #4ade80;
+    --state-mark: #facc15;
+    --state-pivot: #c084fc;
+    --state-boundary: #fb923c;
+    --state-active: #22d3ee;
+    --state-base: #71717a;
+    --state-eliminated: #27272a;
+    --state-eliminated-foreground: #71717a;
+
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   }
@@ -83,6 +106,17 @@
   --color-accent-soft: var(--accent-soft);
 
   --color-code-bg: var(--code-bg);
+
+  --color-state-default: var(--state-default);
+  --color-state-compare: var(--state-compare);
+  --color-state-swap: var(--state-swap);
+  --color-state-mark: var(--state-mark);
+  --color-state-pivot: var(--state-pivot);
+  --color-state-boundary: var(--state-boundary);
+  --color-state-active: var(--state-active);
+  --color-state-base: var(--state-base);
+  --color-state-eliminated: var(--state-eliminated);
+  --color-state-eliminated-foreground: var(--state-eliminated-foreground);
 
   --radius-DEFAULT: var(--radius);
 

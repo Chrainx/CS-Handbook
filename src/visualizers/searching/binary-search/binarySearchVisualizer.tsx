@@ -4,9 +4,9 @@ import { useEffect, useReducer, useState } from 'react'
 import StepControls from '@/visualizers/stepControls'
 import ArrayView from '../../primitives/arrayView/arrayView'
 import TargetModal from './targetModal'
-import { BinarySearchStep } from '@/visualizers/steps/types'
+import { BinarySearchStep } from './steps/types'
 import { binarySearchSteps } from './steps/binarySearch'
-import { describeStep } from '@/visualizers/describeStep'
+import { describeBinarySearchStep } from './describeStep'
 import { generateRandomArray } from '@/utils/random'
 import VisualizerLegend from '@/visualizers/legend/legend'
 
@@ -20,20 +20,16 @@ import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
 
 const MAX_ARRAY_SIZE = 50
 
+// Deterministic so the server-rendered markup matches the client's first
+// render; a fresh random array replaces this right after mount.
+const DEFAULT_ARRAY = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+
 export default function BinarySearchVisualizer() {
   /* ============================================================================
    * Base data
    * ========================================================================== */
-  const [array, setArray] = useState<number[]>(() =>
-    generateRandomArray({
-      size: 10,
-      min: 0,
-      max: 20,
-      unique: true,
-    }).sort((a, b) => a - b)
-  )
-
-  const [target, setTarget] = useState<number>(() => array[0])
+  const [array, setArray] = useState<number[]>(DEFAULT_ARRAY)
+  const [target, setTarget] = useState<number>(DEFAULT_ARRAY[0])
   const [isTargetModalOpen, setIsTargetModalOpen] = useState(false)
 
   /* ============================================================================
@@ -62,7 +58,7 @@ export default function BinarySearchVisualizer() {
   >({
     steps,
     dispatch,
-    describeStep,
+    describeStep: describeBinarySearchStep,
     describeContext: { target },
     resetAction: { type: 'reset', array },
   })
@@ -97,6 +93,22 @@ export default function BinarySearchVisualizer() {
   useEffect(() => {
     setInput(array.join(','))
   }, [array])
+
+  useEffect(() => {
+    // Randomize on mount rather than in the initial useState so the
+    // server-rendered markup and the client's first render agree.
+    const randomArray = generateRandomArray({
+      size: 10,
+      min: 0,
+      max: 20,
+      unique: true,
+    }).sort((a, b) => a - b)
+
+    setArray(randomArray)
+    setTarget(randomArray[0])
+    dispatch({ type: 'reset', array: randomArray })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   /* ============================================================================
    * Render

@@ -1,4 +1,4 @@
-import { BinarySearchStep } from '@/visualizers/steps/types'
+import { BinarySearchStep } from '@/visualizers/searching/binary-search/steps/types'
 import { BinarySearchVisualState, initialBinarySearchState } from './types'
 
 export function binarySearchReducer(

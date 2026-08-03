@@ -1,3 +1,27 @@
+## [1.5.14](https://github.com/Chrainx/CS-Handbook/compare/v1.5.13...v1.5.14) (2026-08-03)
+
+
+### Bug Fixes
+
+* remove ssr:false from the three algorithm visualizers ([#45](https://github.com/Chrainx/CS-Handbook/issues/45)) ([8bd1b2d](https://github.com/Chrainx/CS-Handbook/commit/8bd1b2d2da675deadf2d7b3b518cc7a7fe7b3406)), closes [#27](https://github.com/Chrainx/CS-Handbook/issues/27)
+* wire up Heap Sort in the visualizer, sidebar, and legend ([#41](https://github.com/Chrainx/CS-Handbook/issues/41)) ([1b75c1d](https://github.com/Chrainx/CS-Handbook/commit/1b75c1d743b2dde48951a1ed44361515ddb7b8be)), closes [#29](https://github.com/Chrainx/CS-Handbook/issues/29)
+
+## [1.5.13](https://github.com/Chrainx/CS-Handbook/compare/v1.5.12...v1.5.13) (2026-08-03)
+
+
+### Bug Fixes
+
+* honor edge direction consistently across graph algorithms ([#46](https://github.com/Chrainx/CS-Handbook/issues/46)) ([4d706c6](https://github.com/Chrainx/CS-Handbook/commit/4d706c6979e49cda2d59a4a5b88736ea6e2ca1df)), closes [#30](https://github.com/Chrainx/CS-Handbook/issues/30)
+
+## [1.5.12](https://github.com/Chrainx/CS-Handbook/compare/v1.5.11...v1.5.12) (2026-08-03)
+
+
+### Bug Fixes
+
+* make the sidebar collapsible/off-canvas on small screens ([#44](https://github.com/Chrainx/CS-Handbook/issues/44)) ([302bf91](https://github.com/Chrainx/CS-Handbook/commit/302bf91544f3a3a1439c2862a5ef2f8e88f60690)), closes [#16](https://github.com/Chrainx/CS-Handbook/issues/16)
+* memoize useGraphDerivedState instead of recomputing every render ([#43](https://github.com/Chrainx/CS-Handbook/issues/43)) ([6103bed](https://github.com/Chrainx/CS-Handbook/commit/6103bede758426151d2b32f39db90ed4713df239)), closes [#26](https://github.com/Chrainx/CS-Handbook/issues/26) [#23](https://github.com/Chrainx/CS-Handbook/issues/23)
+* move sorting/binary-search state colors onto design tokens ([#42](https://github.com/Chrainx/CS-Handbook/issues/42)) ([4def120](https://github.com/Chrainx/CS-Handbook/commit/4def12035187a2cba7402026a363308dc0f3685f)), closes [#28](https://github.com/Chrainx/CS-Handbook/issues/28)
+
 ## [1.5.11](https://github.com/Chrainx/CS-Handbook/compare/v1.5.10...v1.5.11) (2026-08-02)
 
 

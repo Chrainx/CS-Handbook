@@ -1,5 +1,6 @@
 import { GraphData } from '@/visualizers/primitives/graph/data'
-import { GraphStep } from '@/visualizers/steps/types'
+import { GraphStep } from './types'
+import { buildAdjacency } from '../adjacency'
 
 type PQItem = {
   node: string
@@ -13,6 +14,7 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
   const prev: Record<string, string | null> = {}
   const visited = new Set<string>()
   const pq: PQItem[] = []
+  const adjacency = buildAdjacency(graph)
 
   // ---------- INIT ----------
   for (const node of graph.nodes) {
@@ -48,17 +50,13 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
     // ---- PROCESS NODE ----
     steps.push({ type: 'visit-node', node: u })
 
-    for (const edge of graph.edges) {
-      if (edge.from !== u) continue
-
-      const v = edge.to
-      const w = edge.weight ?? 1
+    for (const { to: v, weight: w, edge } of adjacency[u]) {
       if (visited.has(v)) continue
 
       steps.push({
         type: 'activate-edge',
-        from: u,
-        to: v,
+        from: edge.from,
+        to: edge.to,
       })
 
       const alt = dist[u] + w
@@ -69,8 +67,8 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
 
         steps.push({
           type: 'relax-edge',
-          from: u,
-          to: v,
+          from: edge.from,
+          to: edge.to,
           newDist: alt,
         } as GraphStep)
 
