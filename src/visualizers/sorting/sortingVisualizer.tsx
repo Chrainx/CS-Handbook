@@ -62,6 +62,10 @@ export const SORTING_ALGORITHMS: {
 
 const MAX_ARRAY_SIZE = 50
 
+// Deterministic so the server-rendered markup matches the client's first
+// render; a fresh random array replaces this right after mount.
+const DEFAULT_ARRAY = [5, 3, 8, 1, 9]
+
 const STEP_GENERATORS: Record<string, (arr: number[]) => SortingStep[]> = {
   insertion: insertionSortSteps,
   selection: selectionSortSteps,
@@ -80,9 +84,7 @@ export default function SortingVisualizer() {
   const [input, setInput] = useState('')
   const [inputError, setInputError] = useState<string | null>(null)
 
-  const [baseArray, setBaseArray] = useState<number[]>(() =>
-    generateRandomArray({ size: 5, unique: true })
-  )
+  const [baseArray, setBaseArray] = useState<number[]>(DEFAULT_ARRAY)
 
   const [steps, setSteps] = useState<SortingStep[]>([])
 
@@ -151,15 +153,17 @@ export default function SortingVisualizer() {
   }, [baseArray])
 
   useEffect(() => {
-    if (!algoFromUrl) return
-    if (!STEP_GENERATORS[algoFromUrl]) return
+    // Randomize on mount rather than in the initial useState so the
+    // server-rendered markup and the client's first render agree.
+    const randomArray = generateRandomArray({ size: 5, unique: true })
+    setBaseArray(randomArray)
+    dispatch({ type: 'reset', array: randomArray })
 
-    dispatch({ type: 'reset', array: baseArray })
-    player.reset()
-
-    setAlgorithm(algoFromUrl)
-    setOpen(false)
-    generateSteps(algoFromUrl)
+    if (algoFromUrl && STEP_GENERATORS[algoFromUrl]) {
+      setAlgorithm(algoFromUrl)
+      setOpen(false)
+      setSteps(STEP_GENERATORS[algoFromUrl](randomArray))
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
