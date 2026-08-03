@@ -53,6 +53,9 @@ export const sections: Record<string, SectionConfig> = {
       'tree',
       'graph',
     ],
+    subOrder: {
+      'hash-table': ['visualizer'],
+    },
   },
 
   'operating-systems': {
