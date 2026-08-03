@@ -85,7 +85,7 @@ function partition(arr, low, high):
 
       <Link
         href="/algorithms/sorting/visualizer?algo=quick"
-        className="inline-block mt-2 text-blue-600 underline"
+        className="inline-block mt-2 text-accent underline"
       >
         Open Sorting Visualizer →
       </Link>

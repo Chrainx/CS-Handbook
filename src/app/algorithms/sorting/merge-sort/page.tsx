@@ -88,7 +88,7 @@ function merge(left, right):
 
       <a
         href="/algorithms/sorting/visualizer?algo=merge"
-        className="inline-block mt-2 text-blue-600 underline"
+        className="inline-block mt-2 text-accent underline"
       >
         Open Sorting Visualizer →
       </a>

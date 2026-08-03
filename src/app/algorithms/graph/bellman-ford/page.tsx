@@ -83,7 +83,7 @@ export default function BellmanFordPage() {
 
       <Link
         href="/algorithms/graph/visualizer?algo=bellman-ford"
-        className="inline-block text-blue-600 underline"
+        className="inline-block text-accent underline"
       >
         Open Graph Visualizer →
       </Link>
