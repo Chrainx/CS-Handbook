@@ -54,4 +54,24 @@ export const sections: Record<string, SectionConfig> = {
       'graph',
     ],
   },
+
+  'operating-systems': {
+    path: '/operating-systems',
+    order: ['processes-threads'],
+  },
+
+  networks: {
+    path: '/networks',
+    order: ['networking-models'],
+  },
+
+  security: {
+    path: '/security',
+    order: ['cryptography-fundamentals'],
+  },
+
+  'machine-learning': {
+    path: '/machine-learning',
+    order: ['introduction-to-ml'],
+  },
 }
