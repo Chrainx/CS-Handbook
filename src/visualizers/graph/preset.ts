@@ -14,12 +14,12 @@ export const GRAPH_PRESETS: Record<string, GraphData> = {
       { id: 'G', x: 520, y: 260 },
     ],
     edges: [
-      { from: 'A', to: 'B' },
-      { from: 'A', to: 'C' },
-      { from: 'B', to: 'D' },
-      { from: 'B', to: 'E' },
-      { from: 'C', to: 'F' },
-      { from: 'C', to: 'G' },
+      { from: 'A', to: 'B', directed: true },
+      { from: 'A', to: 'C', directed: true },
+      { from: 'B', to: 'D', directed: true },
+      { from: 'B', to: 'E', directed: true },
+      { from: 'C', to: 'F', directed: true },
+      { from: 'C', to: 'G', directed: true },
     ],
   },
 
@@ -84,12 +84,12 @@ export const GRAPH_PRESETS: Record<string, GraphData> = {
       { id: 'F', x: 300, y: 360 }, // final task
     ],
     edges: [
-      { from: 'A', to: 'B' },
-      { from: 'A', to: 'C' },
-      { from: 'B', to: 'D' },
-      { from: 'C', to: 'E' },
-      { from: 'D', to: 'F' },
-      { from: 'E', to: 'F' },
+      { from: 'A', to: 'B', directed: true },
+      { from: 'A', to: 'C', directed: true },
+      { from: 'B', to: 'D', directed: true },
+      { from: 'C', to: 'E', directed: true },
+      { from: 'D', to: 'F', directed: true },
+      { from: 'E', to: 'F', directed: true },
     ],
   },
 }

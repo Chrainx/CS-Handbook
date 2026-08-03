@@ -1,5 +1,6 @@
-import { GraphData } from '@/visualizers/primitives/graph/data'
+import { GraphData, GraphEdge } from '@/visualizers/primitives/graph/data'
 import { GraphStep } from '@/visualizers/steps/types'
+import { buildAdjacency } from '../adjacency'
 
 type PQItem = {
   node: string
@@ -11,13 +12,14 @@ export function primSteps(graph: GraphData, start: string): GraphStep[] {
 
   const visited = new Set<string>()
   const key: Record<string, number> = {}
-  const parent: Record<string, string | null> = {}
+  const parentEdge: Record<string, GraphEdge | null> = {}
   const pq: PQItem[] = []
+  const adjacency = buildAdjacency(graph)
 
   // ---------- INIT ----------
   for (const node of graph.nodes) {
     key[node.id] = Infinity
-    parent[node.id] = null
+    parentEdge[node.id] = null
   }
 
   key[start] = 0
@@ -43,11 +45,11 @@ export function primSteps(graph: GraphData, start: string): GraphStep[] {
     if (visited.has(u) || ku !== key[u]) continue
 
     // accept node
-    if (parent[u]) {
+    if (parentEdge[u]) {
       steps.push({
         type: 'choose-edge',
-        from: parent[u]!,
-        to: u,
+        from: parentEdge[u]!.from,
+        to: parentEdge[u]!.to,
       })
     }
 
@@ -55,28 +57,24 @@ export function primSteps(graph: GraphData, start: string): GraphStep[] {
     visited.add(u)
     steps.push({ type: 'mark-visited', node: u })
 
-    // relax outgoing edges
-    for (const e of graph.edges) {
-      if (e.from !== u) continue
-
-      const v = e.to
-      const w = e.weight ?? 1
+    // relax edges to unvisited neighbors
+    for (const { to: v, weight: w, edge } of adjacency[u]) {
       if (visited.has(v)) continue
 
       steps.push({
         type: 'activate-edge',
-        from: u,
-        to: v,
+        from: edge.from,
+        to: edge.to,
       })
 
       if (w < key[v]) {
         key[v] = w
-        parent[v] = u
+        parentEdge[v] = edge
 
         steps.push({
           type: 'relax-edge',
-          from: u,
-          to: v,
+          from: edge.from,
+          to: edge.to,
           newDist: w,
         })
 
