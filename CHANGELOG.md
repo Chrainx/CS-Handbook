@@ -1,3 +1,11 @@
+## [1.5.14](https://github.com/Chrainx/CS-Handbook/compare/v1.5.13...v1.5.14) (2026-08-03)
+
+
+### Bug Fixes
+
+* remove ssr:false from the three algorithm visualizers ([#45](https://github.com/Chrainx/CS-Handbook/issues/45)) ([8bd1b2d](https://github.com/Chrainx/CS-Handbook/commit/8bd1b2d2da675deadf2d7b3b518cc7a7fe7b3406)), closes [#27](https://github.com/Chrainx/CS-Handbook/issues/27)
+* wire up Heap Sort in the visualizer, sidebar, and legend ([#41](https://github.com/Chrainx/CS-Handbook/issues/41)) ([1b75c1d](https://github.com/Chrainx/CS-Handbook/commit/1b75c1d743b2dde48951a1ed44361515ddb7b8be)), closes [#29](https://github.com/Chrainx/CS-Handbook/issues/29)
+
 ## [1.5.13](https://github.com/Chrainx/CS-Handbook/compare/v1.5.12...v1.5.13) (2026-08-03)
 
 
