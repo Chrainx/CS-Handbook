@@ -1,5 +1,5 @@
 import { GraphData } from '@/visualizers/primitives/graph/data'
-import { GraphStep } from '@/visualizers/steps/types'
+import { GraphStep } from './types'
 import { buildAdjacency } from '../adjacency'
 
 type PQItem = {

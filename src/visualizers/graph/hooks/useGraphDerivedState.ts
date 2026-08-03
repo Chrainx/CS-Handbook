@@ -4,7 +4,7 @@ import {
   GraphOutput,
   GRAPH_ALGO_CATEGORY,
 } from '../state/types'
-import { GraphStep } from '@/visualizers/steps/types'
+import { GraphStep } from '@/visualizers/graph/steps/types'
 
 export function useGraphDerivedState({
   steps,

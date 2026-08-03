@@ -1,4 +1,4 @@
-import { SortingStep } from '@/visualizers/steps/types'
+import { SortingStep } from './types'
 
 export function quickSortSteps(arr: number[]): SortingStep[] {
   const a = [...arr]

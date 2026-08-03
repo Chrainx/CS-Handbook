@@ -9,9 +9,9 @@ import MergeBuffer from '../buffer'
 
 import { SortingAlgorithmId } from './state/types'
 
-import { SortingStep } from '@/visualizers/steps/types'
+import { SortingStep } from './steps/types'
 import { generateRandomArray } from '@/utils/random'
-import { describeStep } from '@/visualizers/describeStep'
+import { describeSortingStep } from './describeStep'
 
 import { sortingReducer } from './state/reducer'
 import { initialSortingVisualState } from './state/types'
@@ -95,11 +95,15 @@ export default function SortingVisualizer() {
     setSteps(generated)
   }
 
-  const player = useStepPlayer<SortingStep, SortingStep, undefined>({
+  const player = useStepPlayer<
+    SortingStep,
+    SortingStep,
+    { algorithm: SortingAlgorithmId | null }
+  >({
     steps,
     dispatch,
-    describeStep,
-    describeContext: undefined,
+    describeStep: describeSortingStep,
+    describeContext: { algorithm },
     resetAction: { type: 'reset', array: baseArray },
   })
 
