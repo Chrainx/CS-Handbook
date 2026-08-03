@@ -1,10 +1,37 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 
-export default function GlobalHeader() {
+export default function GlobalHeader({
+  onMenuClick,
+}: {
+  onMenuClick?: () => void
+}) {
   return (
-    <header className="h-14 shrink-0 border-b border-border bg-background/95 backdrop-blur flex items-center px-6">
-      <div className="flex items-center gap-3">
+    <header className="h-14 shrink-0 border-b border-border bg-background/95 backdrop-blur flex items-center gap-3 px-4 sm:px-6">
+      {onMenuClick && (
+        <button
+          onClick={onMenuClick}
+          aria-label="Toggle navigation menu"
+          className="-ml-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-foreground hover:bg-muted md:hidden"
+          type="button"
+        >
+          <span className="sr-only">Toggle navigation menu</span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            className="h-5 w-5"
+          >
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      )}
+
+      <div className="flex min-w-0 items-center gap-3">
         {/* Logo + wordmark (clickable) */}
         <Link
           href="/"
@@ -22,10 +49,10 @@ export default function GlobalHeader() {
         </Link>
 
         {/* Divider */}
-        <span className="text-border-strong">·</span>
+        <span className="hidden text-border-strong sm:inline">·</span>
 
         {/* Subtitle */}
-        <span className="text-sm text-muted-foreground">
+        <span className="hidden truncate text-sm text-muted-foreground sm:inline">
           Interactive CS Reference
         </span>
       </div>

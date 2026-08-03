@@ -1,3 +1,12 @@
+## [1.5.12](https://github.com/Chrainx/CS-Handbook/compare/v1.5.11...v1.5.12) (2026-08-03)
+
+
+### Bug Fixes
+
+* make the sidebar collapsible/off-canvas on small screens ([#44](https://github.com/Chrainx/CS-Handbook/issues/44)) ([302bf91](https://github.com/Chrainx/CS-Handbook/commit/302bf91544f3a3a1439c2862a5ef2f8e88f60690)), closes [#16](https://github.com/Chrainx/CS-Handbook/issues/16)
+* memoize useGraphDerivedState instead of recomputing every render ([#43](https://github.com/Chrainx/CS-Handbook/issues/43)) ([6103bed](https://github.com/Chrainx/CS-Handbook/commit/6103bede758426151d2b32f39db90ed4713df239)), closes [#26](https://github.com/Chrainx/CS-Handbook/issues/26) [#23](https://github.com/Chrainx/CS-Handbook/issues/23)
+* move sorting/binary-search state colors onto design tokens ([#42](https://github.com/Chrainx/CS-Handbook/issues/42)) ([4def120](https://github.com/Chrainx/CS-Handbook/commit/4def12035187a2cba7402026a363308dc0f3685f)), closes [#28](https://github.com/Chrainx/CS-Handbook/issues/28)
+
 ## [1.5.11](https://github.com/Chrainx/CS-Handbook/compare/v1.5.10...v1.5.11) (2026-08-02)
 
 

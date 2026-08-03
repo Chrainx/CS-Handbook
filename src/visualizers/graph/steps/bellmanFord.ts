@@ -68,15 +68,18 @@ export function bellmanFordSteps(graph: GraphData, start: string): GraphStep[] {
         }
 
         if (!directed) {
-          steps.push({ type: 'activate-edge', from: v, to: u })
+          // Reuse the edge's own stored from/to (not the v->u traversal
+          // order) so the edge-state key here matches the key the canvas
+          // looks up when rendering this same edge.
+          steps.push({ type: 'activate-edge', from: edge.from, to: edge.to })
 
           if (dist[v] !== Infinity && dist[v] + w < dist[u]) {
             dist[u] = dist[v] + w
 
             steps.push({
               type: 'relax-edge',
-              from: v,
-              to: u,
+              from: edge.from,
+              to: edge.to,
               newDist: dist[u],
             })
 
