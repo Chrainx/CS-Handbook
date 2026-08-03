@@ -15,6 +15,10 @@ export type BarVisualProps = {
   // coloring
   colorByIndex: (i: number) => string
 
+  // true when this index is part of the current comparison, even if its
+  // fill color is already "claimed" by a higher-priority state (e.g. pivot)
+  isComparing?: (i: number) => boolean
+
   // overlays
   splitStack?: BarRange[]
   activeRange?: BarRange | null

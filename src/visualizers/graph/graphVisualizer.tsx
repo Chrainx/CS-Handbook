@@ -231,7 +231,7 @@ export default function GraphVisualizer() {
           <StepTextPanel text={player.text} />
 
           {/* OUTPUT PANEL */}
-          {output.type === 'order' && (
+          {output.type === 'order' && output.nodes.length > 0 && (
             <div className="my-4 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm">
               <div className="mb-2 font-semibold text-green-600 dark:text-green-400">
                 Topological Order
@@ -250,21 +250,22 @@ export default function GraphVisualizer() {
             </div>
           )}
 
-          {output.type === 'distances' && (
-            <div className="my-4 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm">
-              <div className="mb-2 font-semibold text-green-600 dark:text-green-400">
-                Distances
-              </div>
+          {output.type === 'distances' &&
+            Object.keys(output.values).length > 0 && (
+              <div className="my-4 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm">
+                <div className="mb-2 font-semibold text-green-600 dark:text-green-400">
+                  Distances
+                </div>
 
-              <ul className="font-mono text-green-700 dark:text-green-300">
-                {Object.entries(output.values).map(([node, dist]) => (
-                  <li key={node}>
-                    {node}: {dist}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                <ul className="font-mono text-green-700 dark:text-green-300">
+                  {Object.entries(output.values).map(([node, dist]) => (
+                    <li key={node}>
+                      {node}: {dist}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
           <StepControls
             canStepBack={safeIndex > 0}

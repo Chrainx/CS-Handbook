@@ -66,6 +66,13 @@ export function sortingStateToBars(state: SortingVisualState): BarVisualProps {
       return 'bg-state-default'
     },
 
+    // Compare is often "masked" by a higher-priority fill color (e.g. the
+    // pivot is almost always one side of every comparison in quicksort) -
+    // surface it as a ring so the cell that's already purple/orange/etc.
+    // still visibly shows it's part of the current comparison.
+    isComparing: (i) =>
+      !inMerge && !!state.compare && (i === state.compare.i || i === state.compare.j),
+
     // if your BarState supports these (you already had splitStack before):
     splitStack: state.splitStack,
     activeRange: state.activeRange,

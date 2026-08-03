@@ -87,6 +87,10 @@ export function graphReducer(
       return {
         ...state,
         queue: [...state.queue, step.node],
+        nodes: {
+          ...state.nodes,
+          [step.node]: 'active',
+        },
       }
 
     case 'dequeue':
@@ -99,6 +103,10 @@ export function graphReducer(
       return {
         ...state,
         stack: [...state.stack, step.node],
+        nodes: {
+          ...state.nodes,
+          [step.node]: 'active',
+        },
       }
 
     case 'pop-stack':
@@ -113,6 +121,10 @@ export function graphReducer(
       return {
         ...state,
         pq: [...(state.pq ?? []), step.item],
+        nodes: {
+          ...state.nodes,
+          [step.item.node]: 'active',
+        },
       }
 
     case 'pq-pop':
