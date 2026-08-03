@@ -46,8 +46,14 @@
   --border-soft: var(--border);
 }
 
+/*
+ * Dark values apply either as the OS default (via the media query, when the
+ * user hasn't made an explicit choice) or via an explicit data-theme
+ * attribute set by the manual toggle, which always wins over the OS
+ * preference in either direction.
+ */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --background: #0a0a0b;
     --foreground: #f4f4f5;
 
@@ -83,6 +89,43 @@
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   }
+}
+
+:root[data-theme='dark'] {
+  --background: #0a0a0b;
+  --foreground: #f4f4f5;
+
+  --card: #18181b;
+  --card-foreground: #f4f4f5;
+
+  --sidebar: #111113;
+  --sidebar-foreground: #d4d4d8;
+
+  --border: #27272a;
+  --border-strong: #3f3f46;
+
+  --muted: #1f1f23;
+  --muted-foreground: #a1a1aa;
+
+  --accent: #818cf8;
+  --accent-foreground: #0a0a0b;
+  --accent-soft: rgba(129, 140, 248, 0.14);
+
+  --code-bg: #1f1f23;
+
+  --state-default: #60a5fa;
+  --state-compare: #f87171;
+  --state-swap: #4ade80;
+  --state-mark: #facc15;
+  --state-pivot: #c084fc;
+  --state-boundary: #fb923c;
+  --state-active: #22d3ee;
+  --state-base: #71717a;
+  --state-eliminated: #27272a;
+  --state-eliminated-foreground: #71717a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 @theme inline {
