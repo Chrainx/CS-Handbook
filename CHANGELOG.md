@@ -1,3 +1,11 @@
+## [1.5.16](https://github.com/Chrainx/CS-Handbook/compare/v1.5.15...v1.5.16) (2026-08-03)
+
+
+### Bug Fixes
+
+* binary-search content page unreadable in dark mode ([#60](https://github.com/Chrainx/CS-Handbook/issues/60)) ([1f4a84f](https://github.com/Chrainx/CS-Handbook/commit/1f4a84ff0738e1fa82333709ac84db3842a70f13))
+* replace hardcoded blue link color with the accent design token ([#62](https://github.com/Chrainx/CS-Handbook/issues/62)) ([fe9faf9](https://github.com/Chrainx/CS-Handbook/commit/fe9faf9bb03e382b7b60d05bb2d759458b2e9892)), closes [#60](https://github.com/Chrainx/CS-Handbook/issues/60)
+
 ## [1.5.15](https://github.com/Chrainx/CS-Handbook/compare/v1.5.14...v1.5.15) (2026-08-03)
 
 
