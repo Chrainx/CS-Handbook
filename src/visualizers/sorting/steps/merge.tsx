@@ -46,6 +46,7 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
           value: left[i],
           writeIndex: k,
           from: 'left',
+          reason: `${left[i]} ≤ ${right[j]}, so the left buffer's next value is written first.`,
         })
         a[k++] = left[i++]
       } else {
@@ -54,6 +55,7 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
           value: right[j],
           writeIndex: k,
           from: 'right',
+          reason: `${right[j]} is smaller than ${left[i]}, so the right buffer's next value is written first.`,
         })
         a[k++] = right[j++]
       }
@@ -65,6 +67,7 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
         value: left[i],
         writeIndex: k,
         from: 'left',
+        reason: `The right buffer is exhausted, so the rest of the left buffer is copied over in order.`,
       })
       a[k++] = left[i++]
     }
@@ -75,6 +78,7 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
         value: right[j],
         writeIndex: k,
         from: 'right',
+        reason: `The left buffer is exhausted, so the rest of the right buffer is copied over in order.`,
       })
       a[k++] = right[j++]
     }

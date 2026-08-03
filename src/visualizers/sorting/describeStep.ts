@@ -1,26 +1,42 @@
 import { SortingStep } from './steps/types'
 
+function withReason(text: string, reason?: string): string {
+  return reason ? `${text} ${reason}` : text
+}
+
 export function describeSortingStep(
   step: SortingStep,
   context?: { algorithm?: string | null }
 ): string {
   switch (step.type) {
     case 'compare':
-      return `Comparing elements at indices ${step.i} and ${step.j}.`
+      return withReason(
+        `Comparing elements at indices ${step.i} and ${step.j}.`,
+        step.reason
+      )
 
     case 'swap':
-      return `Swapping elements at indices ${step.i} and ${step.j}.`
+      return withReason(
+        `Swapping elements at indices ${step.i} and ${step.j}.`,
+        step.reason
+      )
 
     case 'mark': {
       if (context?.algorithm === 'quick') {
-        return `Marking index ${step.index} relative to pivot.`
+        return withReason(
+          `Marking index ${step.index} relative to pivot.`,
+          step.reason
+        )
       }
 
       if (context?.algorithm === 'selection') {
-        return `Marking index ${step.index} as current minimum.`
+        return withReason(
+          `Marking index ${step.index} as current minimum.`,
+          step.reason
+        )
       }
 
-      return `Marking index ${step.index}.`
+      return withReason(`Marking index ${step.index}.`, step.reason)
     }
 
     case 'split':
@@ -44,7 +60,10 @@ export function describeSortingStep(
       return `Comparing next elements from left and right buffers.`
 
     case 'buffer-write':
-      return `Writing value ${step.value} from ${step.from} buffer into index ${step.writeIndex}.`
+      return withReason(
+        `Writing value ${step.value} from ${step.from} buffer into index ${step.writeIndex}.`,
+        step.reason
+      )
 
     case 'merge-done':
       return `Successfully merged range [${step.l}, ${step.r}].`
