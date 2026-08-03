@@ -185,3 +185,21 @@ body {
   background: var(--accent-soft);
   color: var(--accent);
 }
+
+/* Used by interactive data-structure visualizers (stack, queue, linked
+ * list, hash table, ...) so a value appearing/moving reads as a change
+ * happening, not a sudden DOM snap. */
+@keyframes ds-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.ds-pop-in {
+  animation: ds-pop-in 260ms ease-out;
+}

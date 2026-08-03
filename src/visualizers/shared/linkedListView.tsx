@@ -29,7 +29,7 @@ export default function LinkedListView({
                 <span className="text-xs text-muted-foreground">head</span>
               )}
               <div
-                className={`flex h-10 w-10 items-center justify-center rounded-md font-semibold shadow-sm ${
+                className={`ds-pop-in flex h-10 w-10 items-center justify-center rounded-md font-semibold shadow-sm ${
                   value === highlightValue
                     ? 'bg-state-active text-white'
                     : 'bg-accent text-accent-foreground'
