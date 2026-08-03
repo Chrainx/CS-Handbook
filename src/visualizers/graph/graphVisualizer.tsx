@@ -39,6 +39,8 @@ import { useStepPlayer } from '../shared/useStepPlayer'
 import { useAlgorithmSelectUrlSync } from '../shared/useAlgorithmSelectUrlSync'
 import { AlgorithmHeaderCard } from '../shared/algorithmHeaderCard'
 import { StepTextPanel } from '../shared/stepTextPanel'
+import { ComplexityBadge } from '../shared/complexityBadge'
+import { GRAPH_COMPLEXITY } from './complexity'
 
 export const GRAPH_ALGORITHMS: {
   id: GraphAlgorithmId
@@ -197,6 +199,8 @@ export default function GraphVisualizer() {
             stepLength={player.length}
             onChangeAlgorithm={() => setOpen(true)}
           />
+
+          <ComplexityBadge complexity={GRAPH_COMPLEXITY[algorithm]} />
 
           {/* Data structure visualization */}
           {GRAPH_ALGO_META[algorithm]?.structure === 'queue' && (

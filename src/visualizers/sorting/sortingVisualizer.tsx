@@ -27,6 +27,8 @@ import { useStepPlayer } from '../shared/useStepPlayer'
 import { useAlgorithmSelectUrlSync } from '../shared/useAlgorithmSelectUrlSync'
 import { AlgorithmHeaderCard } from '../shared/algorithmHeaderCard'
 import { StepTextPanel } from '../shared/stepTextPanel'
+import { ComplexityBadge } from '../shared/complexityBadge'
+import { SORTING_COMPLEXITY } from './complexity'
 
 export const SORTING_ALGORITHMS: {
   id: SortingAlgorithmId
@@ -181,6 +183,8 @@ export default function SortingVisualizer() {
             stepLength={player.length}
             onChangeAlgorithm={() => setOpen(true)}
           />
+
+          <ComplexityBadge complexity={SORTING_COMPLEXITY[algorithm]} />
 
           {/* Data input */}
           <div className="mb-4">
