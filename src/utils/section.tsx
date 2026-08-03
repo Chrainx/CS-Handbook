@@ -18,7 +18,7 @@ export const sections: Record<string, SectionConfig> = {
         'heap-sort',
         'visualizer',
       ],
-      searching: ['binary-search'],
+      searching: ['binary-search', 'visualizer'],
       graph: [
         'bfs',
         'dfs',
