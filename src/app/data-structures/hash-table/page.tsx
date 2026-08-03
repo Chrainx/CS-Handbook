@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import NextPrev from '@/components/nextPrev'
 
 export default function HashTablePage() {
@@ -107,6 +108,25 @@ export default function HashTablePage() {
         on a good hash function and proper resizing strategies. In adversarial
         scenarios, performance can degrade to linear time.
       </p>
+
+      {/* Visualization */}
+      <h2 className="text-xl font-medium mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-2 text-(--text-secondary)">
+        Try inserting, deleting, and searching key-value pairs yourself with
+        the interactive hash table visualizer, and watch the hash function
+        compute each key&apos;s bucket before the change lands - including
+        what happens when two keys collide.
+      </p>
+
+      <Link
+        href="/data-structures/hash-table/visualizer"
+        className="inline-block mb-6 text-accent underline"
+      >
+        Open Hash Table Visualizer →
+      </Link>
 
       <NextPrev />
     </div>

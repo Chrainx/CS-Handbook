@@ -31,6 +31,14 @@ export function useOperationHistory<TStep, TState>({
     setIndex(next.length)
   }
 
+  /** Appends a whole batch of steps (e.g. every compare/swap of a single
+   * heap insert) without advancing past them, so the caller can step
+   * through the batch one sub-step at a time via forward(). */
+  function commitMany(steps: TStep[]) {
+    const next = [...history.slice(0, index), ...steps]
+    setHistory(next)
+  }
+
   function back() {
     setIndex((i) => Math.max(0, i - 1))
   }
@@ -50,6 +58,7 @@ export function useOperationHistory<TStep, TState>({
     index,
     length: history.length,
     commit,
+    commitMany,
     back,
     forward,
     reset,
