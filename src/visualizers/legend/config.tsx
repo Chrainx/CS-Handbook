@@ -195,7 +195,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node dequeued and processed',
     },
     {
-      colorClass: 'stroke-red-500',
+      colorClass: 'stroke-orange-500',
       label: 'Active Edge',
       description: 'Edge currently being explored',
     },
@@ -223,7 +223,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node popped and processed',
     },
     {
-      colorClass: 'stroke-red-500',
+      colorClass: 'stroke-orange-500',
       label: 'Active Edge',
       description: 'Edge currently being explored',
     },
@@ -251,7 +251,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node already placed in the topological order',
     },
     {
-      colorClass: 'stroke-red-500',
+      colorClass: 'stroke-orange-500',
       label: 'Active Edge',
       description: 'Edge being considered when reducing in-degrees',
     },
@@ -279,7 +279,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Shortest distance finalized',
     },
     {
-      colorClass: 'stroke-red-500',
+      colorClass: 'stroke-orange-500',
       label: 'Active Edge',
       description: 'Edge being examined',
     },
@@ -292,7 +292,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
 
   'bellman-ford': [
     {
-      colorClass: 'stroke-red-500',
+      colorClass: 'stroke-orange-500',
       label: 'Active Edge',
       description: 'Edge currently being checked during this pass',
     },
@@ -325,7 +325,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
       description: 'Node included in MST',
     },
     {
-      colorClass: 'stroke-red-500',
+      colorClass: 'stroke-orange-500',
       label: 'Active Edge',
       description: 'Edge being considered',
     },
@@ -336,7 +336,7 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
         'Edge currently giving a node its lowest known connection cost to the MST',
     },
     {
-      colorClass: 'stroke-green-600',
+      colorClass: 'stroke-green-500',
       label: 'Chosen Edge',
       description: 'Edge selected into the MST',
     },
@@ -344,12 +344,12 @@ export const LEGEND_CONFIG: Record<string, LegendItem[]> = {
 
   kruskal: [
     {
-      colorClass: 'stroke-red-500',
+      colorClass: 'stroke-orange-500',
       label: 'Active Edge',
       description: 'Current edge in sorted order',
     },
     {
-      colorClass: 'stroke-green-600',
+      colorClass: 'stroke-green-500',
       label: 'Chosen Edge',
       description: 'Edge accepted into the MST',
     },
