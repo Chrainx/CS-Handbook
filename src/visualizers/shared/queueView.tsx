@@ -13,7 +13,7 @@ export default function QueueView({ queue }: { queue: string[] }) {
         {queue.map((node, index) => (
           <div
             key={index}
-            className="rounded-md bg-accent-soft px-2 py-1 font-medium text-accent"
+            className="ds-pop-in rounded-md bg-accent-soft px-2 py-1 font-medium text-accent"
           >
             {node}
           </div>

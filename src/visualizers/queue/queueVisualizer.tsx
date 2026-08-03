@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import StepControls from '@/visualizers/stepControls'
 import QueueView from '@/visualizers/shared/queueView'
 import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import {
   queueReducer,
@@ -15,31 +15,48 @@ import {
 export default function QueueVisualizer() {
   const [input, setInput] = useState('')
 
-  const { state, text, index, length, commit, back, forward, reset } =
-    useOperationHistory<QueueStep, typeof initialQueueState>({
-      reducer: queueReducer,
-      initialState: initialQueueState,
-      describeStep: describeQueueStep,
-    })
+  const {
+    state,
+    text,
+    index,
+    length,
+    playing,
+    run,
+    play,
+    pause,
+    back,
+    forward,
+    reset,
+  } = useOperationHistory<QueueStep, typeof initialQueueState>({
+    reducer: queueReducer,
+    initialState: initialQueueState,
+    describeStep: describeQueueStep,
+  })
 
   function enqueue() {
     const value = Number(input)
     if (input.trim() === '' || Number.isNaN(value)) return
-    commit({ type: 'enqueue', value })
+    run([{ type: 'enqueue', value }])
     setInput('')
   }
 
   function dequeue() {
     if (state.array.length === 0) return
     const value = state.array[0]
-    commit({ type: 'dequeue', value })
+    run([{ type: 'dequeue', value }])
   }
 
   return (
     <>
       <div className="mb-6 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
         <div className="text-sm text-muted-foreground">Queue Visualizer</div>
-        <div className="text-sm text-foreground">
+        <p className="mt-1 text-sm text-foreground">
+          <strong>Enqueue</strong> adds a value to the rear of the queue;{' '}
+          <strong>Dequeue</strong> removes whatever is at the front
+          (First-In, First-Out). Each action animates automatically - use
+          Pause to stop and inspect, or Step Back/Forward to move manually.
+        </p>
+        <div className="mt-2 text-sm text-muted-foreground">
           Step <strong>{index}</strong> / <strong>{length}</strong>
         </div>
       </div>
@@ -72,9 +89,12 @@ export default function QueueVisualizer() {
 
       <StepTextPanel text={text} />
 
-      <StepControls
+      <OperationControls
+        playing={playing}
         canStepBack={index > 0}
         canStepForward={index < length}
+        onPlay={play}
+        onPause={pause}
         onStepBack={back}
         onStepForward={forward}
         onReset={reset}

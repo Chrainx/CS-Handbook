@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import StepControls from '@/visualizers/stepControls'
 import LinkedListView from '@/visualizers/shared/linkedListView'
 import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import {
   linkedListReducer,
@@ -19,12 +19,23 @@ export default function LinkedListVisualizer() {
   const [searchResult, setSearchResult] = useState<string | null>(null)
   const [highlightValue, setHighlightValue] = useState<number | null>(null)
 
-  const { state, text, index, length, commit, back, forward, reset } =
-    useOperationHistory<LinkedListStep, typeof initialLinkedListState>({
-      reducer: linkedListReducer,
-      initialState: initialLinkedListState,
-      describeStep: describeLinkedListStep,
-    })
+  const {
+    state,
+    text,
+    index,
+    length,
+    playing,
+    run,
+    play,
+    pause,
+    back,
+    forward,
+    reset,
+  } = useOperationHistory<LinkedListStep, typeof initialLinkedListState>({
+    reducer: linkedListReducer,
+    initialState: initialLinkedListState,
+    describeStep: describeLinkedListStep,
+  })
 
   function clearSearch() {
     setSearchResult(null)
@@ -34,7 +45,7 @@ export default function LinkedListVisualizer() {
   function insertHead() {
     const value = Number(input)
     if (input.trim() === '' || Number.isNaN(value)) return
-    commit({ type: 'insert-head', value })
+    run([{ type: 'insert-head', value }])
     setInput('')
     clearSearch()
   }
@@ -42,7 +53,7 @@ export default function LinkedListVisualizer() {
   function insertTail() {
     const value = Number(input)
     if (input.trim() === '' || Number.isNaN(value)) return
-    commit({ type: 'insert-tail', value })
+    run([{ type: 'insert-tail', value }])
     setInput('')
     clearSearch()
   }
@@ -50,7 +61,7 @@ export default function LinkedListVisualizer() {
   function deleteValue() {
     const value = Number(deleteInput)
     if (deleteInput.trim() === '' || Number.isNaN(value)) return
-    commit({ type: 'delete', value })
+    run([{ type: 'delete', value }])
     setDeleteInput('')
     clearSearch()
   }
@@ -73,7 +84,14 @@ export default function LinkedListVisualizer() {
         <div className="text-sm text-muted-foreground">
           Linked List Visualizer
         </div>
-        <div className="text-sm text-foreground">
+        <p className="mt-1 text-sm text-foreground">
+          Insert at the head or tail, or delete by value - each change
+          animates automatically and redraws the connecting arrows, so you
+          can see pointers update. Search highlights a value without
+          changing the list. Use Pause to stop and inspect, or Step
+          Back/Forward to move manually.
+        </p>
+        <div className="mt-2 text-sm text-muted-foreground">
           Step <strong>{index}</strong> / <strong>{length}</strong>
         </div>
       </div>
@@ -142,9 +160,12 @@ export default function LinkedListVisualizer() {
       {searchResult && <StepTextPanel text={searchResult} />}
       <StepTextPanel text={text} />
 
-      <StepControls
+      <OperationControls
+        playing={playing}
         canStepBack={index > 0}
         canStepForward={index < length}
+        onPlay={play}
+        onPause={pause}
         onStepBack={() => {
           clearSearch()
           back()
