@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import NextPrev from '@/components/nextPrev'
 
 export default function HeapPage() {
@@ -112,6 +113,24 @@ export default function HeapPage() {
         not support fast searching for arbitrary values. They are best used when
         priority-based access is required.
       </p>
+
+      {/* Visualization */}
+      <h2 className="text-xl font-medium mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-2 text-(--text-secondary)">
+        Try inserting values and extracting the maximum yourself with the
+        interactive max-heap visualizer, and step through each sift-up or
+        sift-down comparison and swap.
+      </p>
+
+      <Link
+        href="/data-structures/heap/visualizer"
+        className="inline-block mb-6 text-accent underline"
+      >
+        Open Heap Visualizer →
+      </Link>
 
       <NextPrev />
     </div>

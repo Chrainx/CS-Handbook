@@ -40,10 +40,10 @@ export default function SecurityOverviewPage() {
 
       <p className="mt-4 text-sm text-muted-foreground">
         This section is being built out incrementally - Cryptography
-        Fundamentals is live today, with the rest of the curriculum above
-        coming in follow-up updates. All content here is educational and
-        defensive in framing: how mechanisms and vulnerabilities work, and
-        how to guard against them.
+        Fundamentals and Hashing &amp; Integrity are live today, with the
+        rest of the curriculum above coming in follow-up updates. All
+        content here is educational and defensive in framing: how
+        mechanisms and vulnerabilities work, and how to guard against them.
       </p>
 
       <NextPrev />

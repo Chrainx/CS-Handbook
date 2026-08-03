@@ -55,6 +55,7 @@ export const sections: Record<string, SectionConfig> = {
     ],
     subOrder: {
       tree: ['visualizer'],
+      heap: ['visualizer'],
       'hash-table': ['visualizer'],
       'linked-lists': ['visualizer'],
       stack: ['visualizer'],
@@ -64,21 +65,21 @@ export const sections: Record<string, SectionConfig> = {
 
   'operating-systems': {
     path: '/operating-systems',
-    order: ['processes-threads'],
+    order: ['processes-threads', 'cpu-scheduling'],
   },
 
   networks: {
     path: '/networks',
-    order: ['networking-models'],
+    order: ['networking-models', 'addressing'],
   },
 
   security: {
     path: '/security',
-    order: ['cryptography-fundamentals'],
+    order: ['cryptography-fundamentals', 'hashing-integrity'],
   },
 
   'machine-learning': {
     path: '/machine-learning',
-    order: ['introduction-to-ml'],
+    order: ['introduction-to-ml', 'linear-regression'],
   },
 }

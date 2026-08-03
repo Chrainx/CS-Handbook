@@ -38,9 +38,9 @@ export default function NetworksOverviewPage() {
       </ul>
 
       <p className="mt-4 text-sm text-muted-foreground">
-        This section is being built out incrementally - Networking Models is
-        live today, with the rest of the curriculum above coming in
-        follow-up updates.
+        This section is being built out incrementally - Networking Models and
+        Addressing are live today, with the rest of the curriculum above
+        coming in follow-up updates.
       </p>
 
       <NextPrev />

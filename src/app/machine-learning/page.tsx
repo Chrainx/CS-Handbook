@@ -42,8 +42,8 @@ export default function MachineLearningOverviewPage() {
 
       <p className="mt-4 text-sm text-muted-foreground">
         This section is being built out incrementally - Introduction to ML
-        is live today, with the rest of the curriculum above coming in
-        follow-up updates.
+        and Linear Regression are live today, with the rest of the
+        curriculum above coming in follow-up updates.
       </p>
 
       <NextPrev />
