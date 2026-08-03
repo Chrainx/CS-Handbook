@@ -38,21 +38,24 @@ export default function HomePage() {
             description="Arrays, linked lists, stacks, queues, trees, graphs."
           />
 
-          {/* Coming soon */}
-          <ComingSoonCard
+          <CategoryCard
             title="Operating Systems"
+            href="/operating-systems"
             description="Processes, threads, memory management, scheduling."
           />
-          <ComingSoonCard
+          <CategoryCard
             title="Networks"
+            href="/networks"
             description="TCP/IP, routing, congestion control, protocols."
           />
-          <ComingSoonCard
+          <CategoryCard
             title="Security"
+            href="/security"
             description="Cryptography, TLS, attacks, system security."
           />
-          <ComingSoonCard
+          <CategoryCard
             title="Machine Learning"
+            href="/machine-learning"
             description="Regression, classification, neural networks."
           />
         </div>
@@ -82,25 +85,5 @@ function CategoryCard({
       <h3 className="text-xl font-semibold mb-2 text-foreground">{title}</h3>
       <p className="text-muted-foreground">{description}</p>
     </Link>
-  )
-}
-
-function ComingSoonCard({
-  title,
-  description,
-}: {
-  title: string
-  description: string
-}) {
-  return (
-    <div className="p-6 rounded-xl border border-dashed border-border bg-muted opacity-70 cursor-not-allowed">
-      <h3 className="text-xl font-semibold mb-2 text-foreground">
-        {title}{' '}
-        <span className="ml-2 text-xs text-muted-foreground align-middle">
-          (Coming soon)
-        </span>
-      </h3>
-      <p className="text-muted-foreground">{description}</p>
-    </div>
   )
 }
