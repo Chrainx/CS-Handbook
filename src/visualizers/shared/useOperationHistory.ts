@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const STEP_DELAY_MS = 550
+const STEP_DELAY_MS = 1000
 
 /**
  * Drives an interactive (user-triggered, not precomputed) data structure
