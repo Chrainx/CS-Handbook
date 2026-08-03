@@ -20,6 +20,7 @@ import { insertionSortSteps } from './steps/insertion'
 import { selectionSortSteps } from './steps/selection'
 import { mergeSortSteps } from './steps/merge'
 import { quickSortSteps } from './steps/quick'
+import { heapSortSteps } from './steps/heap'
 
 import { sortingStateToBars } from './adapters/sortingToBar'
 import { useStepPlayer } from '../shared/useStepPlayer'
@@ -52,6 +53,11 @@ export const SORTING_ALGORITHMS: {
     name: 'Quick Sort',
     description: 'Partitions the array around a pivot element',
   },
+  {
+    id: 'heap',
+    name: 'Heap Sort',
+    description: 'Builds a max heap and repeatedly extracts the largest element',
+  },
 ]
 
 const MAX_ARRAY_SIZE = 50
@@ -61,6 +67,7 @@ const STEP_GENERATORS: Record<string, (arr: number[]) => SortingStep[]> = {
   selection: selectionSortSteps,
   merge: mergeSortSteps,
   quick: quickSortSteps,
+  heap: heapSortSteps,
 }
 
 export default function SortingVisualizer() {
