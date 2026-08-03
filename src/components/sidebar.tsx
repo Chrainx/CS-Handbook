@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { NavItem } from '@/utils/getNavigation'
 import { usePathname } from 'next/navigation'
 
@@ -90,11 +90,26 @@ function TreeNode({
   forceOpen?: boolean
 }) {
   const isActive = node.path === pathname
-  const isDescendantActive = node.children.some((child) =>
-    pathname.startsWith(child.path ?? '')
+  const isDescendantActive = node.children.some(
+    (child) => child.path !== null && pathname.startsWith(child.path)
   )
-  const [open, setOpen] = useState(isActive || isDescendantActive)
   const hasChildren = node.children.length > 0
+
+  // Auto-open while this node is on the current path. Re-evaluated on every
+  // navigation (unlike a useState initializer, which would only run once and
+  // then stay stuck open forever after the first time this node was active).
+  const autoOpen = isActive || isDescendantActive
+
+  // A manual toggle click overrides the auto-open state until the active
+  // path changes again, so "peek at a section while browsing elsewhere"
+  // still works without permanently pinning it open.
+  const [manualOpen, setManualOpen] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    setManualOpen(null)
+  }, [autoOpen])
+
+  const open = manualOpen ?? autoOpen
   const effectiveOpen = open || (forceOpen && hasChildren)
 
   const indent = depth === 0 ? 'ml-0' : 'ml-3'
@@ -113,8 +128,8 @@ function TreeNode({
       >
         {hasChildren ? (
           <button
-            onClick={() => setOpen(!open)}
-            aria-expanded={open}
+            onClick={() => setManualOpen(!effectiveOpen)}
+            aria-expanded={effectiveOpen}
             className="w-4 shrink-0 text-[10px] text-muted-foreground hover:text-foreground"
             type="button"
           >
