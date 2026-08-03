@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import StepControls from '@/visualizers/stepControls'
 import GraphCanvas from '@/visualizers/primitives/graph/graphCanvas'
 import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import {
   bstInsertSteps,
@@ -24,23 +24,34 @@ const TRAVERSAL_LABELS: Record<TraversalOrder, string> = {
 export default function TreeVisualizer() {
   const [input, setInput] = useState('')
 
-  const { state, text, index, length, commitMany, back, forward, reset } =
-    useOperationHistory<TreeStep, typeof initialTreeVisualState>({
-      reducer: treeReducer,
-      initialState: initialTreeVisualState,
-      describeStep: describeTreeStep,
-    })
+  const {
+    state,
+    text,
+    index,
+    length,
+    playing,
+    run,
+    play,
+    pause,
+    back,
+    forward,
+    reset,
+  } = useOperationHistory<TreeStep, typeof initialTreeVisualState>({
+    reducer: treeReducer,
+    initialState: initialTreeVisualState,
+    describeStep: describeTreeStep,
+  })
 
   function insert() {
     const value = Number(input)
     if (input.trim() === '' || Number.isNaN(value)) return
-    commitMany(bstInsertSteps(state.root, value))
+    run(bstInsertSteps(state.root, value))
     setInput('')
   }
 
   function traverse(order: TraversalOrder) {
     if (!state.root) return
-    commitMany(bstTraverseSteps(state.root, order))
+    run(bstTraverseSteps(state.root, order))
   }
 
   return (
@@ -49,7 +60,14 @@ export default function TreeVisualizer() {
         <div className="text-sm text-muted-foreground">
           Binary Search Tree Visualizer
         </div>
-        <div className="text-sm text-foreground">
+        <p className="mt-1 text-sm text-foreground">
+          <strong>Insert</strong> walks down comparing against each node
+          until it finds an empty spot; the traversal buttons walk the
+          whole tree in that order. Each comparison or visit plays
+          automatically - use Pause to stop and inspect, or Step
+          Back/Forward to move manually.
+        </p>
+        <div className="mt-2 text-sm text-muted-foreground">
           Step <strong>{index}</strong> / <strong>{length}</strong>
         </div>
       </div>
@@ -83,11 +101,6 @@ export default function TreeVisualizer() {
             {TRAVERSAL_LABELS[order]}
           </button>
         ))}
-
-        <p className="w-full text-xs text-muted-foreground">
-          Each Insert or Traverse queues its comparisons/visits - use Next
-          Step to watch them play out one at a time.
-        </p>
       </div>
 
       {!state.root ? (
@@ -100,9 +113,12 @@ export default function TreeVisualizer() {
 
       <StepTextPanel text={text} />
 
-      <StepControls
+      <OperationControls
+        playing={playing}
         canStepBack={index > 0}
         canStepForward={index < length}
+        onPlay={play}
+        onPause={pause}
         onStepBack={back}
         onStepForward={forward}
         onReset={reset}
