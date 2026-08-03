@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import Bars from '@/visualizers/primitives/bars/bars'
+import GraphCanvas from '@/visualizers/primitives/graph/graphCanvas'
 import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
 import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import { heapInsertSteps, heapExtractMaxSteps, describeHeapStep, HeapStep } from './steps'
 import { heapVisualReducer, initialHeapVisualState } from './state'
-import { heapStateToBars } from './heapToBars'
+import { heapStateToGraph } from './heapToGraph'
 
 export default function HeapVisualizer() {
   const [input, setInput] = useState('')
@@ -89,7 +89,7 @@ export default function HeapVisualizer() {
           Heap is empty
         </div>
       ) : (
-        <Bars {...heapStateToBars(state)} />
+        <GraphCanvas {...heapStateToGraph(state)} />
       )}
 
       <StepTextPanel text={text} />
