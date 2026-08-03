@@ -178,9 +178,9 @@ export default function BinarySearchVisualizer() {
 
       <ArrayView {...binarySearchStateToArray(state)} />
 
-      <VisualizerLegend algorithm="binary-search" />
-
       <StepTextPanel text={player.text} />
+
+      <VisualizerLegend algorithm="binary-search" />
 
       <StepControls
         canStepBack={player.index > 0}
