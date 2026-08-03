@@ -71,7 +71,7 @@ export const sections: Record<string, SectionConfig> = {
 
   security: {
     path: '/security',
-    order: ['cryptography-fundamentals'],
+    order: ['cryptography-fundamentals', 'hashing-integrity'],
   },
 
   'machine-learning': {
