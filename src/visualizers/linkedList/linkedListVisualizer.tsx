@@ -7,6 +7,9 @@ import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import {
   linkedListReducer,
+  linkedListInsertHeadSteps,
+  linkedListInsertTailSteps,
+  linkedListDeleteSteps,
   initialLinkedListState,
   describeLinkedListStep,
   LinkedListStep,
@@ -45,7 +48,7 @@ export default function LinkedListVisualizer() {
   function insertHead() {
     const value = Number(input)
     if (input.trim() === '' || Number.isNaN(value)) return
-    run([{ type: 'insert-head', value }])
+    run(linkedListInsertHeadSteps(state.list, value))
     setInput('')
     clearSearch()
   }
@@ -53,7 +56,7 @@ export default function LinkedListVisualizer() {
   function insertTail() {
     const value = Number(input)
     if (input.trim() === '' || Number.isNaN(value)) return
-    run([{ type: 'insert-tail', value }])
+    run(linkedListInsertTailSteps(state.list, value))
     setInput('')
     clearSearch()
   }
@@ -61,7 +64,7 @@ export default function LinkedListVisualizer() {
   function deleteValue() {
     const value = Number(deleteInput)
     if (deleteInput.trim() === '' || Number.isNaN(value)) return
-    run([{ type: 'delete', value }])
+    run(linkedListDeleteSteps(state.list, value))
     setDeleteInput('')
     clearSearch()
   }
@@ -85,11 +88,15 @@ export default function LinkedListVisualizer() {
           Linked List Visualizer
         </div>
         <p className="mt-1 text-sm text-foreground">
-          Insert at the head or tail, or delete by value - each change
-          animates automatically and redraws the connecting arrows, so you
-          can see pointers update. Search highlights a value without
-          changing the list. Use Pause to stop and inspect, or Step
-          Back/Forward to move manually.
+          Each node is drawn as two cells: its <strong>value</strong> and its{' '}
+          <strong>next</strong> pointer. <strong>Insert at Head</strong>{' '}
+          creates a node, points it at the current head, then moves head to
+          it - no traversal needed.{' '}
+          <strong>Insert at Tail</strong> and <strong>Delete</strong> walk
+          the list node-by-node first (there&apos;s no direct reference to
+          the tail or to an arbitrary value), shown as the cursor moving
+          along the next pointers, before relinking. Use Pause to stop and
+          inspect, or Step Back/Forward to move manually.
         </p>
         <div className="mt-2 text-sm text-muted-foreground">
           Step <strong>{index}</strong> / <strong>{length}</strong>
@@ -155,7 +162,13 @@ export default function LinkedListVisualizer() {
         </button>
       </div>
 
-      <LinkedListView list={state.list} highlightValue={highlightValue} />
+      <LinkedListView
+        list={state.list}
+        highlightValue={highlightValue}
+        cursorIndex={state.cursorIndex}
+        targetIndex={state.targetIndex}
+        pendingNode={state.pendingNode}
+      />
 
       {searchResult && <StepTextPanel text={searchResult} />}
       <StepTextPanel text={text} />
