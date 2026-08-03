@@ -76,6 +76,6 @@ export const sections: Record<string, SectionConfig> = {
 
   'machine-learning': {
     path: '/machine-learning',
-    order: ['introduction-to-ml'],
+    order: ['introduction-to-ml', 'linear-regression'],
   },
 }
