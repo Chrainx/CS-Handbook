@@ -69,7 +69,7 @@ export default function BinarySearchPage() {
 
       <Link
         href="/algorithms/searching/visualizer"
-        className="inline-block mt-2 text-blue-600 underline"
+        className="inline-block mt-2 text-accent underline"
       >
         Open Searching Visualizer →
       </Link>
