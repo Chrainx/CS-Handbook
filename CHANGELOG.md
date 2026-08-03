@@ -1,3 +1,16 @@
+# [1.6.0](https://github.com/Chrainx/CS-Handbook/compare/v1.5.17...v1.6.0) (2026-08-03)
+
+
+### Bug Fixes
+
+* move step description above the legend in all three visualizers ([#66](https://github.com/Chrainx/CS-Handbook/issues/66)) ([b9bb222](https://github.com/Chrainx/CS-Handbook/commit/b9bb222d4b6ed305903787154917f742f27ac4e0)), closes [#53](https://github.com/Chrainx/CS-Handbook/issues/53)
+
+
+### Features
+
+* add why-reasoning to Sorting visualizer step descriptions ([#67](https://github.com/Chrainx/CS-Handbook/issues/67)) ([41c6cca](https://github.com/Chrainx/CS-Handbook/commit/41c6ccaba745cf334fb99382ad38b98ea2c63644)), closes [#54](https://github.com/Chrainx/CS-Handbook/issues/54)
+* show Big-O complexity on each algorithm visualizer ([#68](https://github.com/Chrainx/CS-Handbook/issues/68)) ([9bf0fc8](https://github.com/Chrainx/CS-Handbook/commit/9bf0fc8ac13979c18584b4fecf946c6e473d7b14)), closes [#9](https://github.com/Chrainx/CS-Handbook/issues/9)
+
 ## [1.5.17](https://github.com/Chrainx/CS-Handbook/compare/v1.5.16...v1.5.17) (2026-08-03)
 
 
