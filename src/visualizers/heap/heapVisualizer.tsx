@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import StepControls from '@/visualizers/stepControls'
 import Bars from '@/visualizers/primitives/bars/bars'
 import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import { heapInsertSteps, heapExtractMaxSteps, describeHeapStep, HeapStep } from './steps'
 import { heapVisualReducer, initialHeapVisualState } from './state'
@@ -12,23 +12,34 @@ import { heapStateToBars } from './heapToBars'
 export default function HeapVisualizer() {
   const [input, setInput] = useState('')
 
-  const { state, text, index, length, commitMany, back, forward, reset } =
-    useOperationHistory<HeapStep, typeof initialHeapVisualState>({
-      reducer: heapVisualReducer,
-      initialState: initialHeapVisualState,
-      describeStep: describeHeapStep,
-    })
+  const {
+    state,
+    text,
+    index,
+    length,
+    playing,
+    run,
+    play,
+    pause,
+    back,
+    forward,
+    reset,
+  } = useOperationHistory<HeapStep, typeof initialHeapVisualState>({
+    reducer: heapVisualReducer,
+    initialState: initialHeapVisualState,
+    describeStep: describeHeapStep,
+  })
 
   function insert() {
     const value = Number(input)
     if (input.trim() === '' || Number.isNaN(value)) return
-    commitMany(heapInsertSteps(state.array, value))
+    run(heapInsertSteps(state.array, value))
     setInput('')
   }
 
   function extractMax() {
     if (state.array.length === 0) return
-    commitMany(heapExtractMaxSteps(state.array))
+    run(heapExtractMaxSteps(state.array))
   }
 
   return (
@@ -37,7 +48,14 @@ export default function HeapVisualizer() {
         <div className="text-sm text-muted-foreground">
           Max-Heap Visualizer
         </div>
-        <div className="text-sm text-foreground">
+        <p className="mt-1 text-sm text-foreground">
+          <strong>Insert</strong> adds a value and sifts it up until the
+          heap property holds; <strong>Extract Max</strong> removes the
+          root and sifts the last leaf down to replace it. Each comparison
+          and swap plays automatically - use Pause to stop and inspect, or
+          Step Back/Forward to move manually.
+        </p>
+        <div className="mt-2 text-sm text-muted-foreground">
           Step <strong>{index}</strong> / <strong>{length}</strong>
         </div>
       </div>
@@ -64,12 +82,6 @@ export default function HeapVisualizer() {
         >
           Extract Max
         </button>
-
-        <p className="w-full text-xs text-muted-foreground">
-          Each operation queues its compare/swap steps - use Next Step to
-          watch the sift-up or sift-down animation play out one step at a
-          time.
-        </p>
       </div>
 
       {state.array.length === 0 ? (
@@ -82,9 +94,12 @@ export default function HeapVisualizer() {
 
       <StepTextPanel text={text} />
 
-      <StepControls
+      <OperationControls
+        playing={playing}
         canStepBack={index > 0}
         canStepForward={index < length}
+        onPlay={play}
+        onPause={pause}
         onStepBack={back}
         onStepForward={forward}
         onReset={reset}
