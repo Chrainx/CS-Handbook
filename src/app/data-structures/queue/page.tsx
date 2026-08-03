@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import NextPrev from '@/components/nextPrev'
 
 export default function QueuePage() {
@@ -114,6 +115,23 @@ export default function QueuePage() {
         However, like stacks, they do not allow random access to elements and
         are best suited for sequential processing.
       </p>
+
+      {/* Visualization */}
+      <h2 className="text-xl font-medium mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-2 text-(--text-secondary)">
+        Try enqueuing and dequeuing values yourself with the interactive queue
+        visualizer.
+      </p>
+
+      <Link
+        href="/data-structures/queue/visualizer"
+        className="inline-block mb-6 text-accent underline"
+      >
+        Open Queue Visualizer →
+      </Link>
 
       <NextPrev />
     </div>
