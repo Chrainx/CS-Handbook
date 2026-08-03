@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import GraphCanvas from '@/visualizers/primitives/graph/graphCanvas'
-import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { StepTextPanel, StepTextVariant } from '@/visualizers/shared/stepTextPanel'
 import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import {
@@ -21,12 +21,18 @@ const TRAVERSAL_LABELS: Record<TraversalOrder, string> = {
   post: 'Post-order',
 }
 
+function stepVariant(step: TreeStep | null): StepTextVariant {
+  if (step?.type === 'duplicate') return 'warning'
+  return 'default'
+}
+
 export default function TreeVisualizer() {
   const [input, setInput] = useState('')
 
   const {
     state,
     text,
+    lastStep,
     index,
     length,
     playing,
@@ -111,7 +117,7 @@ export default function TreeVisualizer() {
         <GraphCanvas {...treeStateToGraph(state)} />
       )}
 
-      <StepTextPanel text={text} />
+      <StepTextPanel text={text} variant={stepVariant(lastStep)} />
 
       <OperationControls
         playing={playing}

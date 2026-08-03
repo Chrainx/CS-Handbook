@@ -32,7 +32,8 @@ export function useOperationHistory<TStep, TState>({
   const [playing, setPlaying] = useState(false)
 
   const state = history.slice(0, index).reduce(reducer, initialState)
-  const text = index > 0 ? describeStep(history[index - 1]) : ''
+  const lastStep = index > 0 ? history[index - 1] : null
+  const text = lastStep !== null ? describeStep(lastStep) : ''
 
   // Reaching the end of the queued steps naturally stops the timer below
   // from ever being scheduled again, so `playing` doesn't need to be
@@ -92,6 +93,7 @@ export function useOperationHistory<TStep, TState>({
   return {
     state,
     text,
+    lastStep,
     index,
     length: history.length,
     playing: isPlaying,

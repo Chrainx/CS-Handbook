@@ -32,8 +32,10 @@ export function bstInsertSteps(root: BSTNode | null, value: number): TreeStep[] 
     steps.push({ type: 'compare', current: node.value, value })
 
     if (value === node.value) {
+      // No trailing 'done' step here - 'duplicate' must stay the last
+      // step so its message (and warning styling) isn't immediately
+      // overwritten by a generic "Done." once the animation finishes.
       steps.push({ type: 'duplicate', value })
-      steps.push({ type: 'done' })
       return steps
     }
 

@@ -51,11 +51,11 @@ describe('bstInsertSteps', () => {
     expect(steps[steps.length - 1]).toEqual({ type: 'done' })
   })
 
-  it('ends with a duplicate + done step for an existing value, without an insert step', () => {
+  it('ends with a duplicate step (no trailing done) for an existing value, without an insert step', () => {
     const tree = insertNode(insertNode(null, 5), 3)
     const steps = bstInsertSteps(tree, 3)
     expect(steps.some((s) => s.type === 'insert')).toBe(false)
-    expect(steps[steps.length - 2]).toEqual({ type: 'duplicate', value: 3 })
+    expect(steps[steps.length - 1]).toEqual({ type: 'duplicate', value: 3 })
   })
 
   it('compares against every node on the path to the insertion point', () => {
