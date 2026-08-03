@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import StepControls from '@/visualizers/stepControls'
 import HashTableView from '@/visualizers/shared/hashTableView'
 import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { OperationControls } from '@/visualizers/shared/operationControls'
 import { useOperationHistory } from '@/visualizers/shared/useOperationHistory'
 import {
   hashTableInsertSteps,
@@ -21,16 +21,27 @@ export default function HashTableVisualizer() {
   const [searchKeyInput, setSearchKeyInput] = useState('')
   const [searchResult, setSearchResult] = useState<string | null>(null)
 
-  const { state, text, index, length, commitMany, back, forward, reset } =
-    useOperationHistory<HashTableStep, typeof initialHashTableState>({
-      reducer: hashTableReducer,
-      initialState: initialHashTableState,
-      describeStep: describeHashTableStep,
-    })
+  const {
+    state,
+    text,
+    index,
+    length,
+    playing,
+    run,
+    play,
+    pause,
+    back,
+    forward,
+    reset,
+  } = useOperationHistory<HashTableStep, typeof initialHashTableState>({
+    reducer: hashTableReducer,
+    initialState: initialHashTableState,
+    describeStep: describeHashTableStep,
+  })
 
   function insert() {
     if (keyInput.trim() === '') return
-    commitMany(hashTableInsertSteps(state.buckets, keyInput, valueInput))
+    run(hashTableInsertSteps(state.buckets, keyInput, valueInput))
     setKeyInput('')
     setValueInput('')
     setSearchResult(null)
@@ -38,7 +49,7 @@ export default function HashTableVisualizer() {
 
   function deleteKey() {
     if (deleteKeyInput.trim() === '') return
-    commitMany(hashTableDeleteSteps(state.buckets, deleteKeyInput))
+    run(hashTableDeleteSteps(state.buckets, deleteKeyInput))
     setDeleteKeyInput('')
     setSearchResult(null)
   }
@@ -60,7 +71,14 @@ export default function HashTableVisualizer() {
         <div className="text-sm text-muted-foreground">
           Hash Table Visualizer (separate chaining)
         </div>
-        <div className="text-sm text-foreground">
+        <p className="mt-1 text-sm text-foreground">
+          Enter a key and value, then click <strong>Insert</strong> - watch
+          the key get hashed to a bucket first, then the entry land there
+          (chained onto whatever&apos;s already in that bucket, if
+          anything). <strong>Delete</strong> works the same way. Use Pause
+          to stop and inspect, or Step Back/Forward to move manually.
+        </p>
+        <div className="mt-2 text-sm text-muted-foreground">
           Step <strong>{index}</strong> / <strong>{length}</strong>
         </div>
       </div>
@@ -123,20 +141,17 @@ export default function HashTableVisualizer() {
         </button>
       </div>
 
-      <p className="mb-4 text-xs text-muted-foreground">
-        Each Insert/Delete queues a hash step followed by the actual bucket
-        change - use Next Step to watch the key get hashed to its bucket
-        before the change lands.
-      </p>
-
       <HashTableView buckets={state.buckets} highlightIndex={state.highlightIndex} />
 
       {searchResult && <StepTextPanel text={searchResult} />}
       <StepTextPanel text={text} />
 
-      <StepControls
+      <OperationControls
+        playing={playing}
         canStepBack={index > 0}
         canStepForward={index < length}
+        onPlay={play}
+        onPause={pause}
         onStepBack={back}
         onStepForward={forward}
         onReset={reset}
