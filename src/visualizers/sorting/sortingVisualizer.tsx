@@ -231,9 +231,9 @@ export default function SortingVisualizer() {
 
           <Bars {...sortingStateToBars(state)} />
 
-          <VisualizerLegend algorithm={algorithm} />
-
           <StepTextPanel text={player.text} />
+
+          <VisualizerLegend algorithm={algorithm} />
 
           <StepControls
             canStepBack={player.index > 0}

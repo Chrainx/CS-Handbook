@@ -226,9 +226,9 @@ export default function GraphVisualizer() {
 
           <GraphCanvas {...graphStateToCanvas(graph, state)} />
 
-          <VisualizerLegend algorithm={algorithm} />
-
           <StepTextPanel text={player.text} />
+
+          <VisualizerLegend algorithm={algorithm} />
 
           {/* OUTPUT PANEL */}
           {output.type === 'order' && output.nodes.length > 0 && (
