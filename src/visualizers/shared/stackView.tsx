@@ -23,7 +23,7 @@ export default function StackView({ stack }: Props) {
         {[...stack].reverse().map((item, index) => (
           <div
             key={index}
-            className="flex h-10 w-10 items-center justify-center rounded-md bg-accent text-accent-foreground font-semibold shadow-sm"
+            className="ds-pop-in flex h-10 w-10 items-center justify-center rounded-md bg-accent text-accent-foreground font-semibold shadow-sm"
           >
             {item}
           </div>
