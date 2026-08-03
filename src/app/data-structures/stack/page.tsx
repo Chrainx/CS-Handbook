@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import NextPrev from '@/components/nextPrev'
 
 export default function StackPage() {
@@ -90,6 +91,23 @@ export default function StackPage() {
         efficient, and predictable. However, they are not suitable when random
         access to elements is required.
       </p>
+
+      {/* Visualization */}
+      <h2 className="text-xl font-medium mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-2 text-(--text-secondary)">
+        Try pushing and popping values yourself with the interactive stack
+        visualizer.
+      </p>
+
+      <Link
+        href="/data-structures/stack/visualizer"
+        className="inline-block mb-6 text-accent underline"
+      >
+        Open Stack Visualizer →
+      </Link>
 
       <NextPrev />
     </div>
