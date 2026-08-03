@@ -1,3 +1,10 @@
+## [1.5.13](https://github.com/Chrainx/CS-Handbook/compare/v1.5.12...v1.5.13) (2026-08-03)
+
+
+### Bug Fixes
+
+* honor edge direction consistently across graph algorithms ([#46](https://github.com/Chrainx/CS-Handbook/issues/46)) ([4d706c6](https://github.com/Chrainx/CS-Handbook/commit/4d706c6979e49cda2d59a4a5b88736ea6e2ca1df)), closes [#30](https://github.com/Chrainx/CS-Handbook/issues/30)
+
 ## [1.5.12](https://github.com/Chrainx/CS-Handbook/compare/v1.5.11...v1.5.12) (2026-08-03)
 
 
