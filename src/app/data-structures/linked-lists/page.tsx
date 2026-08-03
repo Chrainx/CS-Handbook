@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import NextPrev from '@/components/nextPrev'
 
 export default function LinkedListsPage() {
@@ -109,6 +110,23 @@ export default function LinkedListsPage() {
         <li>Dynamic memory allocation scenarios</li>
         <li>Maintaining ordered collections with frequent updates</li>
       </ul>
+
+      {/* Visualization */}
+      <h2 className="text-xl font-medium mb-2 text-(--text-secondary)">
+        Visualization
+      </h2>
+
+      <p className="mb-2 text-(--text-secondary)">
+        Try inserting, deleting, and searching values yourself with the
+        interactive linked list visualizer.
+      </p>
+
+      <Link
+        href="/data-structures/linked-lists/visualizer"
+        className="inline-block mb-6 text-accent underline"
+      >
+        Open Linked List Visualizer →
+      </Link>
 
       <NextPrev />
     </div>
