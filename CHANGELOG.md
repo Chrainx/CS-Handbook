@@ -1,3 +1,11 @@
+## [1.5.15](https://github.com/Chrainx/CS-Handbook/compare/v1.5.14...v1.5.15) (2026-08-03)
+
+
+### Bug Fixes
+
+* make step-by-step state visible and legend-accurate in the visualizers ([#49](https://github.com/Chrainx/CS-Handbook/issues/49)) ([208c8a0](https://github.com/Chrainx/CS-Handbook/commit/208c8a049ea783afe1caa37fbf4e710bab74fe92))
+* sidebar categories never re-collapse after client-side navigation ([#51](https://github.com/Chrainx/CS-Handbook/issues/51)) ([cde749b](https://github.com/Chrainx/CS-Handbook/commit/cde749bd70a320d5bfe4c5475ea20b7489885992))
+
 ## [1.5.14](https://github.com/Chrainx/CS-Handbook/compare/v1.5.13...v1.5.14) (2026-08-03)
 
 
