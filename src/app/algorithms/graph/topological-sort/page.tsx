@@ -86,7 +86,7 @@ export default function TopologicalSortPage() {
 
       <Link
         href="/algorithms/graph/visualizer?algo=topological"
-        className="inline-block text-blue-600 underline"
+        className="inline-block text-accent underline"
       >
         Open Graph Visualizer →
       </Link>

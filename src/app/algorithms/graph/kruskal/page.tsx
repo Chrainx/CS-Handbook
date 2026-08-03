@@ -84,7 +84,7 @@ export default function KruskalPage() {
 
       <Link
         href="/algorithms/graph/visualizer?algo=kruskal"
-        className="inline-block text-blue-600 underline"
+        className="inline-block text-accent underline"
       >
         Open Graph Visualizer →
       </Link>

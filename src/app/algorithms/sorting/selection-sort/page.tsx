@@ -72,7 +72,7 @@ export default function SelectionSortPage() {
 
       <Link
         href="/algorithms/sorting/visualizer?algo=selection"
-        className="inline-block mt-2 text-blue-600 underline"
+        className="inline-block mt-2 text-accent underline"
       >
         Open Sorting Visualizer →
       </Link>

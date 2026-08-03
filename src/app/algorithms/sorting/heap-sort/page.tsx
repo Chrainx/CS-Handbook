@@ -90,7 +90,7 @@ function heapify(arr, i, heapSize):
 
       <Link
         href="/algorithms/sorting/visualizer?algo=heap"
-        className="inline-block mt-2 text-blue-600 underline"
+        className="inline-block mt-2 text-accent underline"
       >
         Open Sorting Visualizer →
       </Link>

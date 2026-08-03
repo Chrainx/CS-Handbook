@@ -92,7 +92,7 @@ export default function PrimPage() {
 
       <Link
         href="/algorithms/graph/visualizer?algo=prim"
-        className="inline-block text-blue-600 underline"
+        className="inline-block text-accent underline"
       >
         Open Graph Visualizer →
       </Link>
