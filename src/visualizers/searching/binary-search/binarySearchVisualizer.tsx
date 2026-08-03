@@ -17,8 +17,16 @@ import { binarySearchStateToArray } from './adapter/binarySearchToArray'
 import { useStepPlayer } from '@/visualizers/shared/useStepPlayer'
 import { AlgorithmHeaderCard } from '@/visualizers/shared/algorithmHeaderCard'
 import { StepTextPanel } from '@/visualizers/shared/stepTextPanel'
+import { ComplexityBadge } from '@/visualizers/shared/complexityBadge'
 
 const MAX_ARRAY_SIZE = 50
+
+const BINARY_SEARCH_COMPLEXITY = {
+  best: 'O(1)',
+  average: 'O(log n)',
+  worst: 'O(log n)',
+  space: 'O(1)',
+}
 
 // Deterministic so the server-rendered markup matches the client's first
 // render; a fresh random array replaces this right after mount.
@@ -131,6 +139,8 @@ export default function BinarySearchVisualizer() {
         stepIndex={player.index}
         stepLength={player.length}
       />
+
+      <ComplexityBadge complexity={BINARY_SEARCH_COMPLEXITY} />
 
       <div className="mb-4 rounded-xl border border-border bg-card px-4 py-3 shadow-sm">
         <div className="flex items-center gap-2">
