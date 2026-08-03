@@ -86,7 +86,9 @@ export function mergeSortSteps(arr: number[]): SortingStep[] {
     steps.push({ type: 'merge-done', l, r })
   }
 
-  mergeSort(0, a.length - 1)
+  if (a.length > 0) {
+    mergeSort(0, a.length - 1)
+  }
   steps.push({ type: 'done' })
   return steps
 }

@@ -26,6 +26,13 @@ export function dijkstraSteps(graph: GraphData, start: string): GraphStep[] {
   pq.push({ node: start, priority: 0 })
 
   steps.push({
+    type: 'set-distance',
+    node: start,
+    distance: 0,
+    from: null,
+  })
+
+  steps.push({
     type: 'pq-push',
     item: { node: start, priority: 0 },
   })
